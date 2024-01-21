@@ -1,8 +1,9 @@
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Noto_Sans as FontSans } from "next/font/google";
-import { cn } from "@/lib/utils"
 
-import "./globals.css";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import "../styles/globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"], variable: "--font-sans",
@@ -23,7 +24,16 @@ export default function RootLayout({
       <body className={cn(
         "min-h-screen bg-background font-sans antialiased",
         fontSans.variable
-      )}>{children}</body>
+      )}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
