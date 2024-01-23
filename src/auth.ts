@@ -8,7 +8,7 @@ import type { NextAuthConfig } from 'next-auth';
 
 export const config = {
   theme: {
-    logo: 'http://localhost:3000/logo-white-transparent.png',
+    logo: 'https://versioning.app/logo-white-transparent.png',
   },
   adapter: DrizzleAdapter(db),
   providers: [
