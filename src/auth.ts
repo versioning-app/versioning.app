@@ -3,7 +3,7 @@ import NextAuth from 'next-auth';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import Email from 'next-auth/providers/email';
 
-import { db } from '@/database';
+import { db } from '@/database/db';
 import type { NextAuthConfig } from 'next-auth';
 
 export const config = {
