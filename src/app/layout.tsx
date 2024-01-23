@@ -5,7 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Noto_Sans as FontSans } from 'next/font/google';
 
-import { ThemeProvider } from '../../providers/theme-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 import '../styles/globals.css';
 
 const fontSans = FontSans({
