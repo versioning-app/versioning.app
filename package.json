@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "next build && yarn db:migrate",
     "start": "next start",
     "lint": "next lint",
+    "db:migrate": "tsx src/database/migrate.ts",
     "db:generate": "drizzle-kit generate:pg"
   },
   "dependencies": {
@@ -44,12 +46,14 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/parser": "^6.19.0",
     "autoprefixer": "^10.0.1",
+    "dotenv": "^16.4.0",
     "drizzle-kit": "^0.20.13",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
     "prettier": "^2.8.8",
     "tailwindcss": "^3.3.0",
+    "tsx": "^4.7.0",
     "typescript": "^5"
   }
 }
