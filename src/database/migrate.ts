@@ -4,12 +4,11 @@ import { migrate } from 'drizzle-orm/neon-http/migrator';
 
 import 'dotenv/config';
 
-const databaseUrl =
-  process.env.DATABASE_URL ?? process.env.DRIZZLE_DATABASE_URL;
+const databaseUrl = process.env.DATABASE_URL;
 
 async function runMigrate() {
   if (!databaseUrl) {
-    throw new Error('DRIZZLE_DATABASE_URL is not defined');
+    throw new Error('DATABASE_URL is not defined');
   }
 
   const sql = neon(databaseUrl);

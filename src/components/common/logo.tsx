@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib';
 import Image, { ImageProps } from 'next/image';
 
 export const Logo = ({
@@ -10,7 +10,7 @@ export const Logo = ({
     alt="versioning.app Logo"
     width={60}
     height={60}
-    className={cn('dark:invert inline-block align-middle')}
+    className={cn('dark:invert inline-block align-middle', className)}
     {...props}
   />
 );

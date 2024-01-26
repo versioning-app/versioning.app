@@ -1,9 +1,12 @@
-import { SiteHeader } from '@/components/ui/site-header';
+import { auth, signIn } from '@/auth';
+import { DashboardComponent } from '@/components/dashboard/dashboard';
 
-export default function Home() {
-  return (
-    <div className="flex">
-      <SiteHeader />
-    </div>
-  );
+export default async function Home() {
+  const session = await auth();
+
+  if (!session?.user) {
+    signIn();
+  }
+
+  return <DashboardComponent />;
 }
