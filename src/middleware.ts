@@ -1,6 +1,9 @@
-export { auth as default } from '@/auth';
+import { authMiddleware } from '@clerk/nextjs';
 
-// Optionally, don't invoke Middleware on some paths
+export default authMiddleware({
+  publicRoutes: ['/', '/pricing'],
+});
+
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };

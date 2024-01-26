@@ -1,4 +1,4 @@
-import { cn } from '@/lib';
+import { cn } from '@/lib/utils';
 import Image, { ImageProps } from 'next/image';
 
 export const Logo = ({

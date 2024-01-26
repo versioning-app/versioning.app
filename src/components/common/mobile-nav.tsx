@@ -8,7 +8,7 @@ import { Logo } from '@/components/common/logo';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { appConfig } from '@/config/app';
-import { cn } from '@/lib';
+import { cn } from '@/lib/utils';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 
