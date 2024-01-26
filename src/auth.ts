@@ -1,10 +1,9 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthConfig } from 'next-auth';
 
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import Email from 'next-auth/providers/email';
+import Credentials from 'next-auth/providers/credentials';
 
 import { db } from '@/database/db';
-import type { NextAuthConfig } from 'next-auth';
 
 export const config = {
   theme: {
@@ -12,9 +11,12 @@ export const config = {
   },
   adapter: DrizzleAdapter(db),
   providers: [
-    Email({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
+    Credentials({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text', placeholder: 'Email' },
+        password: { label: 'Password', type: 'password' },
+      },
     }),
   ],
 } satisfies NextAuthConfig;

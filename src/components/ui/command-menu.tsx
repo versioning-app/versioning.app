@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
 import { LaptopIcon, MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
