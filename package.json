@@ -12,8 +12,8 @@
     "db:generate": "drizzle-kit generate:pg"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^0.3.16",
     "@clerk/nextjs": "^4.29.5",
+    "@clerk/themes": "^1.7.9",
     "@neondatabase/serverless": "^0.7.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -25,7 +25,6 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toggle": "^1.0.3",
     "@vercel/analytics": "^1.1.2",
-    "@vercel/postgres": "^0.5.1",
     "@vercel/speed-insights": "^1.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -33,7 +32,6 @@
     "drizzle-orm": "^0.29.3",
     "lucide-react": "^0.314.0",
     "next": "14.1.0",
-    "next-auth": "^5.0.0-beta.5",
     "next-themes": "^0.2.1",
     "nodemailer": "^6.9.8",
     "postgres": "^3.4.3",
@@ -44,7 +42,6 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@clerk/themes": "^1.7.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
