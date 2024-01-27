@@ -10,7 +10,7 @@ export const Logo = ({
     alt="versioning.app Logo"
     width={60}
     height={60}
-    className={cn('dark:invert inline-block align-middle')}
+    className={cn('dark:invert inline-block align-middle', className)}
     {...props}
   />
 );
