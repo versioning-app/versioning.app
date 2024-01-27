@@ -35,8 +35,11 @@ export function CommandMenu({ ...props }: DialogProps) {
     openUserProfile,
     openCreateOrganization,
     openOrganizationProfile,
+    mountOrganizationList,
     organization,
   } = useClerk();
+
+  const commandRoot = React.useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = React.useState(false);
   const { setTheme, resolvedTheme } = useTheme();
@@ -72,7 +75,7 @@ export function CommandMenu({ ...props }: DialogProps) {
   }, []);
 
   return (
-    <>
+    <div ref={commandRoot}>
       <Button
         variant="outline"
         className={cn(
@@ -148,6 +151,6 @@ export function CommandMenu({ ...props }: DialogProps) {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
-    </>
+    </div>
   );
 }
