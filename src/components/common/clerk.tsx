@@ -11,10 +11,10 @@ import { dark } from '@clerk/themes';
 import { useTheme } from 'next-themes';
 
 export const ClerkOrganization = () => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const appearance = {
-    baseTheme: theme === 'dark' ? dark : undefined,
+    baseTheme: resolvedTheme === 'dark' ? dark : undefined,
   };
 
   return (
@@ -33,10 +33,10 @@ export const ClerkOrganization = () => {
 };
 
 export const ClerkUser = () => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const appearance = {
-    baseTheme: theme === 'dark' ? dark : undefined,
+    baseTheme: resolvedTheme === 'dark' ? dark : undefined,
   };
 
   return (
