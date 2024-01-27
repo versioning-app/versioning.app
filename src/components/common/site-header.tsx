@@ -1,8 +1,8 @@
+import { MainNav } from '@/components/common/main-nav';
+import { MobileNav } from '@/components/common/mobile-nav';
+import { ThemeToggle } from '@/components/common/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
-import { CommandMenu } from '@/components/ui/command-menu';
-import { MainNav } from '@/components/ui/main-nav';
-import { MobileNav } from '@/components/ui/mobile-nav';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { CommandMenu } from '@/components/dashboard/command-menu';
 import { appConfig } from '@/config/app';
 import { cn } from '@/lib/utils';
 import { TwitterLogoIcon } from '@radix-ui/react-icons';
