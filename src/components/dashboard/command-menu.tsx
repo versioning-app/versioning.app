@@ -112,6 +112,7 @@ export function CommandMenu({ ...props }: DialogProps) {
               Logout
             </CommandItem>
           </CommandGroup>
+          <CommandSeparator />
           <CommandGroup heading="Organization">
             <CommandItem
               onSelect={() =>
