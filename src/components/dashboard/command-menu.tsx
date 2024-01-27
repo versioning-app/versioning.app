@@ -39,10 +39,10 @@ export function CommandMenu({ ...props }: DialogProps) {
   } = useClerk();
 
   const [open, setOpen] = React.useState(false);
-  const { setTheme, theme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   const appearance = {
-    baseTheme: theme === 'dark' ? dark : undefined,
+    baseTheme: resolvedTheme === 'dark' ? dark : undefined,
   };
 
   React.useEffect(() => {
