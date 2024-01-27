@@ -11,16 +11,42 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
+import { useClerk } from '@clerk/nextjs';
+import { dark } from '@clerk/themes';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
-import { LaptopIcon, MoonIcon, SunIcon } from '@radix-ui/react-icons';
+import {
+  BackpackIcon,
+  ExitIcon,
+  GearIcon,
+  LaptopIcon,
+  MoonIcon,
+  PersonIcon,
+  SlashIcon,
+  SunIcon,
+} from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
 export function CommandMenu({ ...props }: DialogProps) {
   const router = useRouter();
+  const {
+    signOut,
+    openUserProfile,
+    openCreateOrganization,
+    openOrganizationProfile,
+    mountOrganizationList,
+    organization,
+  } = useClerk();
+
+  const commandRoot = React.useRef<HTMLDivElement>(null);
+
   const [open, setOpen] = React.useState(false);
-  const { setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+
+  const appearance = {
+    baseTheme: resolvedTheme === 'dark' ? dark : undefined,
+  };
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -49,7 +75,7 @@ export function CommandMenu({ ...props }: DialogProps) {
   }, []);
 
   return (
-    <>
+    <div ref={commandRoot}>
       <Button
         variant="outline"
         className={cn(
@@ -61,13 +87,54 @@ export function CommandMenu({ ...props }: DialogProps) {
         <span className="hidden lg:inline-flex">Search...</span>
         <span className="inline-flex lg:hidden">Search...</span>
         <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-          <span className="text-xs">⌘</span>K
+          <SlashIcon />
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Account">
+            <CommandItem
+              onSelect={() => runCommand(() => openUserProfile({ appearance }))}
+            >
+              <PersonIcon className="mr-2 h-4 w-4" />
+              Manage Personal Account
+            </CommandItem>
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => {
+                  signOut(() => router.push('/'));
+                })
+              }
+            >
+              <ExitIcon className="mr-2 h-4 w-4" />
+              Logout
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Organization">
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => openCreateOrganization({ appearance }))
+              }
+            >
+              <BackpackIcon className="mr-2 h-4 w-4" />
+              Create Organization
+            </CommandItem>
+            {organization ? (
+              <CommandItem
+                onSelect={() =>
+                  runCommand(() => {
+                    runCommand(() => openOrganizationProfile({ appearance }));
+                  })
+                }
+              >
+                <GearIcon className="mr-2 h-4 w-4" />
+                Manage Organization
+              </CommandItem>
+            ) : null}
+          </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
@@ -85,6 +152,6 @@ export function CommandMenu({ ...props }: DialogProps) {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
-    </>
+    </div>
   );
 }

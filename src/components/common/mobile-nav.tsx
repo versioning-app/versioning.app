@@ -4,8 +4,8 @@ import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
+import { Logo } from '@/components/common/logo';
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/ui/logo';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { appConfig } from '@/config/app';
 import { cn } from '@/lib/utils';
