@@ -10,7 +10,7 @@ export const SidebarHeader = () => (
   <div className="flex h-[60px] items-center border-b px-6">
     <Link
       className="flex items-center gap-2 font-semibold"
-      href={Navigation.HOME}
+      href={Navigation.DASHBOARD}
     >
       <Logo className="h-12 w-12" />
       <span className="">{appConfig.name}</span>
@@ -20,9 +20,11 @@ export const SidebarHeader = () => (
 
 export const SidebarContent = () => (
   <div className="flex-1 overflow-auto py-2 px-4 font-medium">
-    <header className="h-50"></header>
-    <div className="flex-1">Something</div>
-    <footer className="flex-none">
+    <header className="h-50 flex-none"></header>
+    <div className="grow">
+      <p>test</p>
+    </div>
+    <footer className="h-50 flex-none">
       <Link
         className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
         href="#"
@@ -34,7 +36,9 @@ export const SidebarContent = () => (
   </div>
 );
 
-export function DashboardComponent() {
+export function MainLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
@@ -55,7 +59,9 @@ export function DashboardComponent() {
           <ClerkOrganization />
           <ClerkUser />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6"></main>
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+          {children}
+        </main>
       </div>
     </div>
   );

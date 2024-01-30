@@ -4,5 +4,7 @@ export const appConfig = {
   links: {
     twitter: 'https://twitter.com/versioningapp',
     github: 'https://github.com/versioning-app',
+    email: 'hello@versioning.app',
+    mailto: 'mailto:hello@versioning.app',
   },
 };

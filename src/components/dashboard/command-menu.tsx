@@ -35,7 +35,6 @@ export function CommandMenu({ ...props }: DialogProps) {
     openUserProfile,
     openCreateOrganization,
     openOrganizationProfile,
-    mountOrganizationList,
     organization,
   } = useClerk();
 
