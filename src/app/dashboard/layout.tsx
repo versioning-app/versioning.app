@@ -1,12 +1,21 @@
 import { Logo } from '@/components/common/logo';
 import { MainLayout } from '@/components/dashboard/dashboard';
+import { Sidebar } from '@/components/dashboard/sidebar';
+import { Storage } from '@/config/storage';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
+import { cookies } from 'next/headers';
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const layout = cookies().get(`${Storage.COOKIE_STORAGE_PREFIX}:layout`);
+  const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
+
+  const collapsed = cookies().get(`${Storage.COOKIE_STORAGE_PREFIX}:collapsed`);
+  const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
+
   return (
     <>
       <ClerkLoading>
@@ -22,7 +31,15 @@ export default function DashboardLayout({
         </div>
       </ClerkLoading>
       <ClerkLoaded>
-        <MainLayout>{children}</MainLayout>
+        <MainLayout>
+          <Sidebar
+            defaultLayout={defaultLayout}
+            defaultCollapsed={defaultCollapsed}
+            navCollapsedSize={4}
+          >
+            {children}
+          </Sidebar>
+        </MainLayout>
       </ClerkLoaded>
     </>
   );
