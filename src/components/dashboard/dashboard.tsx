@@ -1,6 +1,7 @@
 import { ClerkOrganization, ClerkUser } from '@/components/common/clerk';
 import { Logo } from '@/components/common/logo';
 import { CommandMenu } from '@/components/dashboard/command-menu';
+import { Separator } from '@/components/ui/separator';
 import { appConfig } from '@/config/app';
 import { Navigation } from '@/config/nav';
 import { GearIcon } from '@radix-ui/react-icons';
@@ -40,18 +41,13 @@ export function MainLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <SidebarHeader />
-          <SidebarContent />
-        </div>
-      </div>
+    <div className="grid min-h-screen w-full">
       <div className="flex flex-col">
-        <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
-          <Link className="lg:hidden" href="#">
-            <Logo className="min-h-12 min-w-12" />
-            <span className="sr-only">Home</span>
+        <header className="flex h-14 lg:h-[60px] items-center gap-4 bg-gray-100/40 px-4 dark:bg-gray-800/40">
+          <Link href={Navigation.DASHBOARD}>
+            <Logo className="w-10 h-10 md:w-12 md:h-12" />
+            <span className="sr-only">Dashboard</span>
+            <span className="hidden md:inline">versioning.app</span>
           </Link>
           <div className="w-full flex-1">
             <CommandMenu />
@@ -59,9 +55,8 @@ export function MainLayout({
           <ClerkOrganization />
           <ClerkUser />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          {children}
-        </main>
+        <Separator />
+        {children}
       </div>
     </div>
   );
