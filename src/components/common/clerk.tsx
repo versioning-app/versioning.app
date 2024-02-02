@@ -1,5 +1,6 @@
 'use client';
 
+import { Navigation } from '@/config/nav';
 import { OrganizationSwitcher, UserButton } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { useTheme } from 'next-themes';
@@ -30,7 +31,11 @@ export const ClerkUser = () => {
 
   return (
     <>
-      <UserButton appearance={appearance} userProfileProps={{ appearance }} />
+      <UserButton
+        appearance={appearance}
+        userProfileProps={{ appearance }}
+        afterSignOutUrl={Navigation.HOME}
+      />
     </>
   );
 };

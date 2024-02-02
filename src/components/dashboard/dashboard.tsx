@@ -1,6 +1,7 @@
 import { ClerkOrganization, ClerkUser } from '@/components/common/clerk';
 import { Logo } from '@/components/common/logo';
 import { CommandMenu } from '@/components/dashboard/command-menu';
+import { MobileSidebar } from '@/components/dashboard/mobile-sidebar';
 import { Separator } from '@/components/ui/separator';
 import { appConfig } from '@/config/app';
 import { Navigation } from '@/config/nav';
@@ -45,7 +46,8 @@ export function MainLayout({
       <div className="flex flex-col">
         <header className="flex h-14 lg:h-[60px] items-center gap-4 bg-gray-100/40 px-4 dark:bg-gray-800/40">
           <Link href={Navigation.DASHBOARD}>
-            <Logo className="w-10 h-10 md:w-12 md:h-12" />
+            <MobileSidebar />
+            <Logo className="hidden md:inline" />
             <span className="sr-only">Dashboard</span>
             <span className="hidden md:inline">versioning.app</span>
           </Link>
