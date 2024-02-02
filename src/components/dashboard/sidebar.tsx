@@ -1,20 +1,13 @@
 'use client';
-import { Nav } from '@/components/dashboard/nav';
+import { DashboardLinks } from '@/components/dashboard/sidebar-links';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { Separator } from '@/components/ui/separator';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Storage } from '@/config/storage';
 import { cn } from '@/lib/utils';
-import {
-  CalendarClock,
-  ComponentIcon,
-  Plug2Icon,
-  Settings,
-} from 'lucide-react';
 import React from 'react';
 
 interface DashboardProps {
@@ -25,7 +18,7 @@ interface DashboardProps {
 }
 
 export function Sidebar({
-  defaultLayout = [265, 440, 655],
+  defaultLayout = [180, 440],
   defaultCollapsed,
   navCollapsedSize,
   children,
@@ -49,7 +42,7 @@ export function Sidebar({
           defaultSize={defaultLayout[0]}
           collapsedSize={navCollapsedSize}
           collapsible={true}
-          minSize={15}
+          minSize={20}
           maxSize={20}
           onCollapse={() => {
             const value = true;
@@ -67,84 +60,14 @@ export function Sidebar({
           }}
           className={cn(
             isCollapsed &&
-              'min-w-[50px] transition-all duration-300 ease-in-out '
+              'min-w-[50px] transition-all duration-300 ease-in-out',
+            'max-w-[180px]',
+            'hidden md:block'
           )}
         >
-          {/* <div
-            className={cn(
-              'flex h-14 lg:h-[60px] items-center justify-center',
-              isCollapsed ? 'h-14 lg:h-[60px]' : 'px-2'
-            )}
-          >
-            <Link href={Navigation.DASHBOARD}>
-              <Logo className="w-10 h-10 md:w-12 md:h-12" />
-              <span className="sr-only">Dashboard</span>
-            </Link>
-          </div>
-          <Separator /> */}
-          <Nav
-            isCollapsed={isCollapsed}
-            links={[
-              {
-                title: 'Components',
-                icon: ComponentIcon,
-                variant: 'ghost',
-              },
-              {
-                title: 'Releases',
-                icon: CalendarClock,
-                variant: 'ghost',
-              },
-              {
-                title: 'Integrations',
-                icon: Plug2Icon,
-                variant: 'ghost',
-              },
-              // {
-              //   title: 'Drafts',
-              //   label: '9',
-              //   icon: File,
-              //   variant: 'ghost',
-              // },
-              // {
-              //   title: 'Sent',
-              //   label: '',
-              //   icon: Send,
-              //   variant: 'ghost',
-              // },
-              // {
-              //   title: 'Junk',
-              //   label: '23',
-              //   icon: ArchiveX,
-              //   variant: 'ghost',
-              // },
-              // {
-              //   title: 'Trash',
-              //   label: '',
-              //   icon: Trash2,
-              //   variant: 'ghost',
-              // },
-              // {
-              //   title: 'Archive',
-              //   label: '',
-              //   icon: Archive,
-              //   variant: 'ghost',
-              // },
-            ]}
-          />
-          <Separator />
-          <Nav
-            isCollapsed={isCollapsed}
-            links={[
-              {
-                title: 'Settings',
-                icon: Settings,
-                variant: 'ghost',
-              },
-            ]}
-          />
+          <DashboardLinks isCollapsed={isCollapsed} />
         </ResizablePanel>
-        <ResizableHandle withHandle />
+        <ResizableHandle withHandle className="hidden md:flex" />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
           <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
         </ResizablePanel>

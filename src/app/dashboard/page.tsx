@@ -1,4 +1,6 @@
+import { Navigation } from '@/config/nav';
 import { auth, clerkClient, currentUser } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
 
 const getOrganization = async (organizationId: string | null | undefined) => {
   if (!organizationId) {
@@ -14,7 +16,7 @@ export default async function Dashboard() {
   const user = await currentUser();
 
   if (!user) {
-    return new Response('Unauthorized', { status: 401 });
+    return redirect(Navigation.HOME);
   }
 
   const { orgId } = auth();

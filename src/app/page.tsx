@@ -1,5 +1,9 @@
-import { HomeComponent } from '@/components/home';
+import { HomeComponent, UnauthenticatedLayout } from '@/components/home';
 
 export default async function Home() {
-  return <HomeComponent />;
+  return (
+    <UnauthenticatedLayout>
+      <HomeComponent />
+    </UnauthenticatedLayout>
+  );
 }
