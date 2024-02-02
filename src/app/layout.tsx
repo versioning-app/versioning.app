@@ -8,6 +8,7 @@ import { Noto_Sans as FontSans } from 'next/font/google';
 
 import { appConfig } from '@/config/app';
 import { ThemeProvider } from '@/providers/theme-provider';
+import Script from 'next/script';
 import '../styles/globals.css';
 
 const fontSans = FontSans({
@@ -30,7 +31,7 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            'min-h-screen bg-background font-sans antialiased',
+            'min-h-screen bg-background font-sans antialiased min-w-[500px]',
             fontSans.variable
           )}
         >
@@ -40,6 +41,7 @@ export default function RootLayout({
             <Analytics />
           </ThemeProvider>
         </body>
+        <Script src="https://js.stripe.com/v3/pricing-table.js" async={true} />
       </html>
     </ClerkProvider>
   );
