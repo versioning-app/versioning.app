@@ -1,8 +1,8 @@
 import { db } from '@/database/db';
 import { Component, NewComponent, components } from '@/database/schema';
 import { BaseService } from '@/services/base.service';
-import { EntityService } from '@/services/entity.service';
 import { ServiceFactory } from '@/services/service-factory';
+import { WorkspaceService } from '@/services/workspace.service';
 import { and, eq } from 'drizzle-orm';
 import 'server-only';
 
@@ -12,12 +12,14 @@ export class ComponentsService extends BaseService {
   }
 
   public async getComponents(): Promise<Component[] | undefined> {
-    const entity = await ServiceFactory.get(EntityService).currentEntity();
+    const workspace = await ServiceFactory.get(
+      WorkspaceService
+    ).currentWorkspace();
 
     const allComponents = await db
       .select()
       .from(components)
-      .where(eq(components.entityId, entity.id));
+      .where(eq(components.workspaceId, workspace.id));
 
     this.logger.debug({ allComponents }, 'Components found');
 
@@ -27,13 +29,15 @@ export class ComponentsService extends BaseService {
   public async getComponentByName(
     name: string
   ): Promise<Component | undefined> {
-    const entity = await ServiceFactory.get(EntityService).currentEntity();
+    const workspace = await ServiceFactory.get(
+      WorkspaceService
+    ).currentWorkspace();
 
     const [component] = await db
       .select()
       .from(components)
       .where(
-        and(eq(components.entityId, entity.id), eq(components.name, name))
+        and(eq(components.workspaceId, workspace.id), eq(components.name, name))
       );
 
     this.logger.debug({ component }, 'Component found');
@@ -45,7 +49,9 @@ export class ComponentsService extends BaseService {
     name,
     description,
   }: Pick<NewComponent, 'name' | 'description'>) {
-    const entity = await ServiceFactory.get(EntityService).currentEntity();
+    const workspace = await ServiceFactory.get(
+      WorkspaceService
+    ).currentWorkspace();
 
     const existing = await this.getComponentByName(name);
 
@@ -59,7 +65,7 @@ export class ComponentsService extends BaseService {
       .values({
         name,
         description,
-        entityId: entity.id,
+        workspaceId: workspace.id,
       })
       .returning();
 

@@ -7,6 +7,7 @@
     "build": "next build",
     "vercel-build": "next build && yarn db:migrate",
     "start": "next start",
+    "start:pretty": "next start | pino-pretty -c -C -t -S -l",
     "lint": "next lint",
     "db:migrate": "tsx src/database/migrate.ts",
     "db:generate": "drizzle-kit generate:pg",
