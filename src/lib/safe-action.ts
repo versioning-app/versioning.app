@@ -1,6 +1,6 @@
 import { getLogger } from '@/lib/logger';
-import { EntityService } from '@/services/entity.service';
 import { ServiceFactory } from '@/services/service-factory';
+import { WorkspaceService } from '@/services/workspace.service';
 import { DEFAULT_SERVER_ERROR, createSafeActionClient } from 'next-safe-action';
 
 export class ActionError extends Error {}
@@ -25,15 +25,17 @@ export const action = createSafeActionClient({
   handleReturnedServerError,
 });
 
-export const entityAction = createSafeActionClient({
+export const workspaceAction = createSafeActionClient({
   middleware: async () => {
-    const entity = await ServiceFactory.get(EntityService).currentEntity();
+    const workspace = await ServiceFactory.get(
+      WorkspaceService
+    ).currentWorkspace();
 
-    if (!entity) {
-      throw new ActionError('No entity found');
+    if (!workspace) {
+      throw new ActionError('No workspace found');
     }
 
-    return entity;
+    return workspace;
   },
   handleServerErrorLog: (e) => {
     getLogger().error(e);

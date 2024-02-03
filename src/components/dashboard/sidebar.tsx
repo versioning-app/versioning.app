@@ -6,7 +6,7 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { Storage } from '@/config/storage';
+import { StorageKeys } from '@/config/storage';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
@@ -33,7 +33,7 @@ export function Sidebar({
         direction="horizontal"
         onLayout={(sizes: number[]) => {
           document.cookie = `${
-            Storage.COOKIE_STORAGE_PREFIX
+            StorageKeys.COOKIE_STORAGE_PREFIX
           }:layout=${JSON.stringify(sizes)}`;
         }}
         className="h-full items-stretch hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40"
@@ -48,14 +48,14 @@ export function Sidebar({
             const value = true;
             setIsCollapsed(value);
             document.cookie = `${
-              Storage.COOKIE_STORAGE_PREFIX
+              StorageKeys.COOKIE_STORAGE_PREFIX
             }:collapsed=${JSON.stringify(value)}`;
           }}
           onExpand={() => {
             const value = false;
             setIsCollapsed(value);
             document.cookie = `${
-              Storage.COOKIE_STORAGE_PREFIX
+              StorageKeys.COOKIE_STORAGE_PREFIX
             }:collapsed=${JSON.stringify(value)}`;
           }}
           className={cn(
