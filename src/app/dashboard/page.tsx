@@ -1,6 +1,6 @@
 import { Navigation } from '@/config/nav';
-import { EntityService } from '@/services/entity.service';
 import { ServiceFactory } from '@/services/service-factory';
+import { WorkspaceService } from '@/services/workspace.service';
 import { auth, clerkClient } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
@@ -21,13 +21,15 @@ export default async function Dashboard() {
     return redirect(Navigation.HOME);
   }
 
-  const entity = await ServiceFactory.get(EntityService).currentEntity();
+  const workspace = await ServiceFactory.get(
+    WorkspaceService
+  ).currentWorkspace();
 
   return (
     <div>
       <p>Welcome to your dashboard</p>
       {/* {organization && <p>You are a member of {organization.name}</p>} */}
-      {entity && <pre>{JSON.stringify(entity, null, 2)}</pre>}
+      {workspace && <pre>{JSON.stringify(workspace, null, 2)}</pre>}
     </div>
   );
 }

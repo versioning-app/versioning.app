@@ -1,5 +1,5 @@
 {
-  "id": "0585ad89-9dd8-4186-bd6b-55c9af0a4ebb",
+  "id": "04f8caca-6e1b-492c-89ee-b17c454941c7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -26,8 +26,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "entity_id": {
-          "name": "entity_id",
+        "workspace_id": {
+          "name": "workspace_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -35,12 +35,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "components_entity_id_entities_id_fk": {
-          "name": "components_entity_id_entities_id_fk",
+        "components_workspace_id_workspaces_id_fk": {
+          "name": "components_workspace_id_workspaces_id_fk",
           "tableFrom": "components",
-          "tableTo": "entities",
+          "tableTo": "workspaces",
           "columnsFrom": [
-            "entity_id"
+            "workspace_id"
           ],
           "columnsTo": [
             "id"
@@ -60,8 +60,8 @@
         }
       }
     },
-    "entities": {
-      "name": "entities",
+    "workspaces": {
+      "name": "workspaces",
       "schema": "",
       "columns": {
         "id": {
@@ -72,7 +72,7 @@
         },
         "type": {
           "name": "type",
-          "type": "entity_type",
+          "type": "workspace_type",
           "primaryKey": false,
           "notNull": false
         },
@@ -93,8 +93,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "entities_id_unique": {
-          "name": "entities_id_unique",
+        "workspaces_id_unique": {
+          "name": "workspaces_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "id"
@@ -104,8 +104,8 @@
     }
   },
   "enums": {
-    "entity_type": {
-      "name": "entity_type",
+    "workspace_type": {
+      "name": "workspace_type",
       "values": {
         "user": "user",
         "organization": "organization"
