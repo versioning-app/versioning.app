@@ -15,7 +15,7 @@ const getOrganization = async (organizationId: string | null | undefined) => {
 };
 
 export default async function Dashboard() {
-  const { userId } = auth();
+  const { userId, sessionClaims } = auth();
 
   if (!userId) {
     return redirect(Navigation.HOME);
@@ -30,6 +30,7 @@ export default async function Dashboard() {
       <p>Welcome to your dashboard</p>
       {/* {organization && <p>You are a member of {organization.name}</p>} */}
       {workspace && <pre>{JSON.stringify(workspace, null, 2)}</pre>}
+      {sessionClaims && <pre>{JSON.stringify(sessionClaims, null, 2)}</pre>}
     </div>
   );
 }
