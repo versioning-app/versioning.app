@@ -1,15 +1,7 @@
-import { getCorrelationId, getLogger } from '@/lib/logger';
+import { LoggerContext, getCorrelationId, getLogger } from '@/lib/logger';
 import { headers } from 'next/headers';
 
-export const serverLogger = () => {
-  let logger = getLogger();
-
-  try {
-    const correlationId = getCorrelationId(headers());
-    logger = logger.child({ correlationId });
-  } catch {
-    logger.warn('Failed to set correlationId in logger context.');
-  }
-
-  return logger;
+export const serverLogger = (context?: LoggerContext) => {
+  const correlationId = getCorrelationId(headers());
+  return getLogger({ ...context, correlationId });
 };
