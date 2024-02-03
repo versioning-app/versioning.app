@@ -12,14 +12,14 @@ export class ComponentsService extends BaseService {
   }
 
   public async getComponents(): Promise<Component[] | undefined> {
-    const workspace = await ServiceFactory.get(
+    const workspaceId = await ServiceFactory.get(
       WorkspaceService
-    ).currentWorkspace();
+    ).currentWorkspaceId();
 
     const allComponents = await db
       .select()
       .from(components)
-      .where(eq(components.workspaceId, workspace.id));
+      .where(eq(components.workspaceId, workspaceId));
 
     this.logger.debug({ allComponents }, 'Components found');
 

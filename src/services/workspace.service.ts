@@ -9,6 +9,10 @@ import { and, eq } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import 'server-only';
 
+type Meta = {
+  workspaceId: number;
+};
+
 export class WorkspaceService extends BaseService {
   public constructor() {
     super();
@@ -16,6 +20,33 @@ export class WorkspaceService extends BaseService {
 
   public get shouldCache(): boolean {
     return process.env.ENABLE_WORKSPACE_CACHE === 'true';
+  }
+
+  public async currentWorkspaceId(): Promise<number> {
+    const { userId, orgId, sessionClaims } = auth();
+
+    this.logger.debug(
+      { userId, orgId, sessionClaims },
+      'Getting current workspace ID'
+    );
+
+    if (!userId) {
+      this.logger.error('No user, cannot get workspace');
+      throw new Error('No user');
+    }
+
+    const workspaceId =
+      (sessionClaims?.org_meta as Meta)?.workspaceId ??
+      (sessionClaims?.user_meta as Meta)?.workspaceId;
+
+    if (!workspaceId) {
+      this.logger.error('No workspace ID found');
+      throw new Error('No workspace ID found');
+    }
+
+    this.logger.debug({ workspaceId }, 'Workspace ID found');
+
+    return workspaceId;
   }
 
   public async currentWorkspace(
@@ -124,7 +155,7 @@ export class WorkspaceService extends BaseService {
         organizationId: orgId,
       });
 
-      if (organization.privateMetadata?.workspaceId === workspaceId) {
+      if (organization.publicMetadata?.workspaceId === workspaceId) {
         this.logger.debug(
           { workspaceId },
           'Workspace already linked to organization'
@@ -135,7 +166,7 @@ export class WorkspaceService extends BaseService {
       this.logger.debug({ workspaceId }, 'Linking workspace to organization');
 
       await clerkClient.organizations.updateOrganization(orgId, {
-        privateMetadata: {
+        publicMetadata: {
           workspaceId,
         },
       });
@@ -146,7 +177,7 @@ export class WorkspaceService extends BaseService {
 
     const user = await clerkClient.users.getUser(userId);
 
-    if (user.privateMetadata?.workspaceId === workspaceId) {
+    if (user.publicMetadata?.workspaceId === workspaceId) {
       this.logger.debug({ workspaceId }, 'Workspace already linked to user');
       return;
     }
@@ -154,7 +185,7 @@ export class WorkspaceService extends BaseService {
     this.logger.debug({ workspaceId }, 'Linking workspace to user');
 
     await clerkClient.users.updateUserMetadata(userId, {
-      privateMetadata: {
+      publicMetadata: {
         workspaceId,
       },
     });
