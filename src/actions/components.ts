@@ -1,4 +1,3 @@
-import { action } from '@/lib/safe-action';
 import { z } from 'zod';
 
 const createComponentSchema = z.object({
@@ -6,7 +5,7 @@ const createComponentSchema = z.object({
   description: z.string().max(255).optional(),
 });
 
-export const createComponentAction = action(
-  createComponentSchema,
-  (input, context) => {}
-);
+// export const createComponentAction = action(
+//   createComponentSchema,
+//   // (input, context) => {}
+// );
