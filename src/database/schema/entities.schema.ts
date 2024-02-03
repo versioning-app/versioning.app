@@ -5,6 +5,9 @@ export const entityType = pgEnum('entity_type', ['user', 'organization']);
 export const entities = pgTable('entities', {
   id: bigserial('id', { mode: 'number' }),
   type: entityType('type'),
-  clerkId: varchar('clerk_id', { length: 255 }),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 255 }),
 });
+
+export type Entity = typeof entities.$inferSelect;
+export type NewEntity = typeof entities.$inferInsert;

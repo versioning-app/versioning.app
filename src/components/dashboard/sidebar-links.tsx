@@ -1,14 +1,27 @@
 'use client';
-import { Nav } from '@/components/dashboard/nav';
+import { Nav, NavLink } from '@/components/dashboard/nav';
 import { Separator } from '@/components/ui/separator';
+import { Navigation } from '@/config/nav';
 import {
   CalendarClock,
   ComponentIcon,
   Plug2Icon,
   Settings,
 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
+  const path = usePathname();
+
+  const getLinkAndVariant = (
+    href: string
+  ): Pick<NavLink, 'variant' | 'href'> => {
+    return {
+      variant: path.startsWith(href) ? 'default' : 'ghost',
+      href,
+    };
+  };
+
   return (
     <>
       <Nav
@@ -17,17 +30,17 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
           {
             title: 'Components',
             icon: ComponentIcon,
-            variant: 'ghost',
+            ...getLinkAndVariant(Navigation.DASHBOARD_COMPONENTS),
           },
           {
             title: 'Releases',
             icon: CalendarClock,
-            variant: 'ghost',
+            ...getLinkAndVariant(Navigation.DASHBOARD_RELEASES),
           },
           {
             title: 'Integrations',
             icon: Plug2Icon,
-            variant: 'ghost',
+            ...getLinkAndVariant(Navigation.DASHBOARD_INTEGRATIONS),
           },
         ]}
       />
@@ -38,7 +51,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
           {
             title: 'Settings',
             icon: Settings,
-            variant: 'ghost',
+            ...getLinkAndVariant(Navigation.DASHBOARD_SETTINGS),
           },
         ]}
       />

@@ -11,14 +11,17 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
+export interface NavLink {
+  title: string;
+  label?: string;
+  icon: LucideIcon;
+  href: string;
+  variant: 'default' | 'ghost';
+}
+
 interface NavProps {
   isCollapsed: boolean;
-  links: {
-    title: string;
-    label?: string;
-    icon: LucideIcon;
-    variant: 'default' | 'ghost';
-  }[];
+  links: NavLink[];
 }
 
 export function Nav({ links, isCollapsed }: NavProps) {
@@ -33,7 +36,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
-                  href="#"
+                  href={link.href}
                   className={cn(
                     buttonVariants({ variant: link.variant, size: 'icon' }),
                     'h-9 w-9',
