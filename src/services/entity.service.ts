@@ -1,6 +1,7 @@
 import { DEFAULT_DB_CACHE_MS } from '@/config/storage';
 import { db } from '@/database/db';
 import { Entity, entities } from '@/database/schema';
+import { redis } from '@/lib/redis';
 import { BaseService } from '@/services/base.service';
 import { auth } from '@clerk/nextjs';
 import { and, eq } from 'drizzle-orm';
@@ -23,20 +24,11 @@ export class EntityService extends BaseService {
     }
 
     const clerkId = orgId || userId;
-    const cached = this.cache.get(clerkId);
+    const cached = await redis.get<Entity>(clerkId);
 
     if (cached) {
-      if (cached.expiry > Date.now()) {
-        const { entity } = cached;
-        this.logger.debug({ clerkId, cached }, 'Found entity in cache');
-        return entity;
-      }
-
-      this.cache.delete(clerkId);
-      this.logger.debug(
-        { clerkId },
-        'Entity cache expired, will fetch from DB'
-      );
+      this.logger.debug({ clerkId, cached }, 'Found entity in cache');
+      return cached;
     }
 
     const existing = await db
@@ -58,10 +50,7 @@ export class EntityService extends BaseService {
         `Found existing entity for ${orgId ? 'organization' : 'user'}, caching`
       );
 
-      this.cache.set(clerkId, {
-        entity: existingEntity,
-        expiry: Date.now() + DEFAULT_DB_CACHE_MS,
-      });
+      await redis.set(clerkId, existingEntity, { px: DEFAULT_DB_CACHE_MS });
       return existingEntity;
     }
 

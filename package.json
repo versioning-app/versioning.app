@@ -33,6 +33,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^2.4.0",
+    "@upstash/redis": "^1.28.3",
     "@vercel/analytics": "^1.1.2",
     "@vercel/speed-insights": "^1.0.7",
     "class-variance-authority": "^0.7.0",
