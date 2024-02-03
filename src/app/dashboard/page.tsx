@@ -1,5 +1,6 @@
-import { getEntity } from '@/actions/entity';
 import { Navigation } from '@/config/nav';
+import { EntityService } from '@/services/entity.service';
+import { ServiceFactory } from '@/services/service-factory';
 import { auth, clerkClient } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
@@ -20,7 +21,7 @@ export default async function Dashboard() {
     return redirect(Navigation.HOME);
   }
 
-  const entity = await getEntity();
+  const entity = await ServiceFactory.get(EntityService).currentEntity();
 
   return (
     <div>

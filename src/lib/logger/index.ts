@@ -2,12 +2,22 @@ import { Storage } from '@/config/storage';
 import pinoLogger, { Logger } from 'pino';
 
 let logger: Logger;
-export const getLogger = () => {
+
+export type LoggerContext = {
+  source?: string;
+  correlationId?: string;
+} & Record<string, unknown>;
+
+export const getLogger = (context?: LoggerContext) => {
   if (!logger) {
     const logLevel = process.env.APP_LOG_LEVEL || 'info';
     logger = pinoLogger({
       level: logLevel,
     });
+  }
+
+  if (context) {
+    logger = logger.child(context);
   }
 
   return logger;
