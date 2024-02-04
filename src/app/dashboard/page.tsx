@@ -1,36 +1,21 @@
-import { Navigation } from '@/config/nav';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { auth, clerkClient } from '@clerk/nextjs';
-import { redirect } from 'next/navigation';
-
-const getOrganization = async (organizationId: string | null | undefined) => {
-  if (!organizationId) {
-    return undefined;
-  }
-
-  return await clerkClient.organizations.getOrganization({
-    organizationId,
-  });
-};
+import { auth } from '@clerk/nextjs';
 
 export default async function Dashboard() {
-  const { userId, sessionClaims } = auth();
+  const { sessionClaims } = auth();
 
-  if (!userId) {
-    return redirect(Navigation.HOME);
-  }
-
-  const workspace = await ServiceFactory.get(
+  const workspaceId = await ServiceFactory.get(
     WorkspaceService
-  ).currentWorkspace();
+  ).currentWorkspaceId();
 
   return (
     <div>
       <p>Welcome to your dashboard</p>
       {/* {organization && <p>You are a member of {organization.name}</p>} */}
-      {workspace && <pre>{JSON.stringify(workspace, null, 2)}</pre>}
       {sessionClaims && <pre>{JSON.stringify(sessionClaims, null, 2)}</pre>}
+      {workspaceId && <p>Your workspace ID is {workspaceId}</p>}
+      {/* {!workspaceId && <UserReload />} */}
     </div>
   );
 }

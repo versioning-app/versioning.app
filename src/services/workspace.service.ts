@@ -9,10 +9,6 @@ import { and, eq } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import 'server-only';
 
-type Meta = {
-  workspaceId: number;
-};
-
 export class WorkspaceService extends BaseService {
   public constructor() {
     super();
@@ -22,8 +18,15 @@ export class WorkspaceService extends BaseService {
     return process.env.ENABLE_WORKSPACE_CACHE === 'true';
   }
 
-  public async currentWorkspaceId(): Promise<number> {
+  public async currentWorkspaceId(): Promise<string> {
     const { userId, orgId, sessionClaims } = auth();
+    return this.getWorkspaceIdFromAuth({ userId, orgId, sessionClaims });
+  }
+
+  public async getWorkspaceIdFromAuth(
+    auth: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>
+  ): Promise<string> {
+    const { userId, orgId, sessionClaims } = auth;
 
     this.logger.debug(
       { userId, orgId, sessionClaims },
@@ -35,18 +38,82 @@ export class WorkspaceService extends BaseService {
       throw new Error('No user');
     }
 
-    const workspaceId =
-      (sessionClaims?.org_meta as Meta)?.workspaceId ??
-      (sessionClaims?.user_meta as Meta)?.workspaceId;
+    // If we have an org ID, we're looking for an organization workspace
+    if (orgId) {
+      let orgMeta = sessionClaims?.org_meta;
 
-    if (!workspaceId) {
-      this.logger.error('No workspace ID found');
+      // This should never happen, but if it does, it's likely the first time an org has been created
+      // If this is true, let's fetch the public metadata via the API instead of using session
+      // Really love the additional network round trip because I cannot force a session refresh
+      if (!orgMeta?.workspaceId) {
+        this.logger.debug('No organization metadata found, fetching from API');
+
+        const { publicMetadata } =
+          await clerkClient.organizations.getOrganization({
+            organizationId: orgId,
+          });
+
+        if (!publicMetadata?.workspaceId) {
+          this.logger.warn(
+            { publicMetadata },
+            'No public metadata found for organization'
+          );
+          throw new Error('No workspace ID found');
+        }
+
+        orgMeta = publicMetadata;
+
+        this.logger.debug({ orgMeta }, 'Organization metadata found from API');
+      }
+
+      const orgWorkspaceId = orgMeta.workspaceId;
+
+      if (!orgWorkspaceId) {
+        throw new Error('No workspace ID found');
+      }
+
+      this.logger.debug(
+        { orgWorkspaceId },
+        'Workspace ID found for organization'
+      );
+      return orgWorkspaceId;
+    }
+
+    let userMeta = sessionClaims?.user_meta;
+
+    this.logger.debug({ userMeta }, 'User metadata found from session');
+
+    // This should never happen, but if it does, it's likely the first time a user is logging in
+    // If this is true, let's fetch the public metadata via the API instead of using session
+    // Really love the additional network round trip because I cannot force a session refresh
+    if (!userMeta?.workspaceId) {
+      this.logger.debug('No user metadata found, fetching from API');
+
+      const { publicMetadata } = await clerkClient.users.getUser(userId);
+
+      if (!publicMetadata?.workspaceId) {
+        this.logger.warn(
+          { publicMetadata },
+          'No public metadata found for user'
+        );
+        throw new Error('No workspace ID found');
+      }
+
+      userMeta = publicMetadata;
+
+      this.logger.debug({ userMeta }, 'User metadata found from API');
+    }
+
+    const userWorkspaceId = userMeta?.workspaceId;
+
+    this.logger.debug({ userWorkspaceId }, 'Workspace ID found for user');
+
+    if (!userWorkspaceId) {
       throw new Error('No workspace ID found');
     }
 
-    this.logger.debug({ workspaceId }, 'Workspace ID found');
-
-    return workspaceId;
+    this.logger.debug({ userWorkspaceId }, 'Workspace ID found for user');
+    return userWorkspaceId;
   }
 
   public async currentWorkspace(
@@ -115,10 +182,10 @@ export class WorkspaceService extends BaseService {
       return existingWorkspace;
     }
 
-    this.logger.debug({ orgId, userId }, 'Workspace does not exist, creating');
+    this.logger.debug({ userId, orgId }, 'Workspace does not exist, creating');
 
-    await this.createWorkspace({ orgId, userId });
-    return this.currentWorkspace();
+    await this.createWorkspace({ userId, orgId });
+    return this.currentWorkspace({ userId, orgId });
   }
 
   public async createWorkspace({
@@ -139,30 +206,59 @@ export class WorkspaceService extends BaseService {
     return newWorkspace;
   }
 
+  public async ensureWorkspace({
+    orgId,
+    userId,
+    sessionClaims,
+  }: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>): Promise<
+    'ready' | 'linked'
+  > {
+    this.logger.debug({ orgId, userId, sessionClaims }, 'Ensuring workspace');
+
+    if (!userId) {
+      this.logger.error('No user, cannot ensure workspace');
+      throw new Error('No user');
+    }
+
+    try {
+      if (await this.getWorkspaceIdFromAuth({ userId, orgId, sessionClaims })) {
+        this.logger.info('Workspace already linked and exists');
+        return 'ready';
+      }
+    } catch (error: unknown) {
+      if ((error as Error)?.message !== 'No workspace ID found') {
+        throw error;
+      }
+
+      this.logger.debug('No workspace found, linking');
+    }
+
+    const workspace = await this.currentWorkspace({
+      userId: userId,
+      orgId: orgId ?? undefined,
+    });
+
+    await this.linkWorkspaceToClerk({
+      workspaceId: workspace.id,
+      userId: userId,
+      orgId: orgId ?? undefined,
+    });
+
+    return 'linked';
+  }
+
   // TODO: Use this method to link stripe customer to clerk
   public async linkWorkspaceToClerk({
     workspaceId,
     userId,
     orgId,
-  }: Pick<AuthObject, 'userId' | 'orgId'> & { workspaceId: number }) {
+  }: Pick<AuthObject, 'userId' | 'orgId'> & { workspaceId: string }) {
     if (!userId) {
       this.logger.warn('No user provided to link workspace');
       return;
     }
 
     if (orgId) {
-      const organization = await clerkClient.organizations.getOrganization({
-        organizationId: orgId,
-      });
-
-      if (organization.publicMetadata?.workspaceId === workspaceId) {
-        this.logger.debug(
-          { workspaceId },
-          'Workspace already linked to organization'
-        );
-        return;
-      }
-
       this.logger.debug({ workspaceId }, 'Linking workspace to organization');
 
       await clerkClient.organizations.updateOrganization(orgId, {
@@ -172,13 +268,6 @@ export class WorkspaceService extends BaseService {
       });
 
       this.logger.info({ workspaceId }, 'Workspace linked to organization');
-      return;
-    }
-
-    const user = await clerkClient.users.getUser(userId);
-
-    if (user.publicMetadata?.workspaceId === workspaceId) {
-      this.logger.debug({ workspaceId }, 'Workspace already linked to user');
       return;
     }
 

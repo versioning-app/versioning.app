@@ -4,7 +4,7 @@ import { DashboardLinks } from '@/components/dashboard/sidebar-links';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { appConfig } from '@/config/app';
-import { Navigation } from '@/config/nav';
+import { Navigation } from '@/config/navigation';
 import Link from 'next/link';
 import React from 'react';
 

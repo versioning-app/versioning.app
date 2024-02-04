@@ -1,6 +1,6 @@
 {
-  "id": "0d9ffd8e-9ae9-4041-af7c-07a4dde67375",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "43bb528d-7c81-42d2-a1e6-88cae121e37d",
+  "prevId": "0d9ffd8e-9ae9-4041-af7c-07a4dde67375",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -12,7 +12,7 @@
           "name": "id",
           "type": "varchar(128)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -68,7 +68,7 @@
           "name": "id",
           "type": "varchar(128)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "type": {
           "name": "type",
