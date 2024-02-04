@@ -10,6 +10,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
+import { Navigation } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { useClerk } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
@@ -24,6 +25,13 @@ import {
   SlashIcon,
   SunIcon,
 } from '@radix-ui/react-icons';
+import {
+  CalendarClock,
+  ComponentIcon,
+  HomeIcon,
+  Plug2Icon,
+  Settings,
+} from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -103,7 +111,7 @@ export function CommandMenu({ ...props }: DialogProps) {
             <CommandItem
               onSelect={() =>
                 runCommand(() => {
-                  signOut(() => router.push('/'));
+                  signOut(() => router.push(Navigation.HOME));
                 })
               }
             >
@@ -135,6 +143,48 @@ export function CommandMenu({ ...props }: DialogProps) {
             ) : null}
           </CommandGroup>
           <CommandSeparator />
+          <CommandGroup heading="Dashboard">
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => router.push(Navigation.DASHBOARD))
+              }
+            >
+              <HomeIcon className="mr-2 h-4 w-4" />
+              Dashboard Home
+            </CommandItem>
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => router.push(Navigation.DASHBOARD_COMPONENTS))
+              }
+            >
+              <ComponentIcon className="mr-2 h-4 w-4" />
+              Components
+            </CommandItem>
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => router.push(Navigation.DASHBOARD_INTEGRATIONS))
+              }
+            >
+              <Plug2Icon className="mr-2 h-4 w-4" />
+              Integrations
+            </CommandItem>
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => router.push(Navigation.DASHBOARD_RELEASES))
+              }
+            >
+              <CalendarClock className="mr-2 h-4 w-4" />
+              Releases
+            </CommandItem>
+            <CommandItem
+              onSelect={() =>
+                runCommand(() => router.push(Navigation.DASHBOARD_SETTINGS))
+              }
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </CommandItem>
+          </CommandGroup>
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
               <SunIcon className="mr-2 h-4 w-4" />
