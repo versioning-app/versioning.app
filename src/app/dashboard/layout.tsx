@@ -5,7 +5,7 @@ import { StorageKeys } from '@/config/storage';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import { cookies } from 'next/headers';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

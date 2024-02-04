@@ -5,8 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1706980713729,
-      "tag": "0000_open_kang",
+      "when": 1707080726611,
+      "tag": "0000_good_living_tribunal",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1707080995174,
+      "tag": "0001_normal_captain_britain",
       "breakpoints": true
     }
   ]

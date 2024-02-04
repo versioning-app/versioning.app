@@ -8,6 +8,7 @@ export default async function Components() {
 
   return (
     <div>
+      <h1>Components</h1>
       <pre>{JSON.stringify(components, null, 2)}</pre>
     </div>
   );

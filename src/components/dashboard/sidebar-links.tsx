@@ -1,10 +1,11 @@
 'use client';
 import { Nav, NavLink } from '@/components/dashboard/nav';
 import { Separator } from '@/components/ui/separator';
-import { Navigation } from '@/config/nav';
+import { Navigation } from '@/config/navigation';
 import {
   CalendarClock,
   ComponentIcon,
+  HomeIcon,
   Plug2Icon,
   Settings,
 } from 'lucide-react';
@@ -14,10 +15,13 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
   const path = usePathname();
 
   const getLinkAndVariant = (
-    href: string
+    href: string,
+    exact = false
   ): Pick<NavLink, 'variant' | 'href'> => {
     return {
-      variant: path.startsWith(href) ? 'default' : 'ghost',
+      variant: (exact ? path === href : path.startsWith(href))
+        ? 'default'
+        : 'ghost',
       href,
     };
   };
@@ -27,6 +31,11 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
       <Nav
         isCollapsed={isCollapsed}
         links={[
+          {
+            title: 'Home',
+            icon: HomeIcon,
+            ...getLinkAndVariant(Navigation.DASHBOARD, true),
+          },
           {
             title: 'Components',
             icon: ComponentIcon,

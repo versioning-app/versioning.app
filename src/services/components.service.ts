@@ -29,15 +29,15 @@ export class ComponentsService extends BaseService {
   public async getComponentByName(
     name: string
   ): Promise<Component | undefined> {
-    const workspace = await ServiceFactory.get(
+    const workspaceId = await ServiceFactory.get(
       WorkspaceService
-    ).currentWorkspace();
+    ).currentWorkspaceId();
 
     const [component] = await db
       .select()
       .from(components)
       .where(
-        and(eq(components.workspaceId, workspace.id), eq(components.name, name))
+        and(eq(components.workspaceId, workspaceId), eq(components.name, name))
       );
 
     this.logger.debug({ component }, 'Component found');
@@ -49,9 +49,9 @@ export class ComponentsService extends BaseService {
     name,
     description,
   }: Pick<NewComponent, 'name' | 'description'>) {
-    const workspace = await ServiceFactory.get(
+    const workspaceId = await ServiceFactory.get(
       WorkspaceService
-    ).currentWorkspace();
+    ).currentWorkspaceId();
 
     const existing = await this.getComponentByName(name);
 
@@ -65,7 +65,7 @@ export class ComponentsService extends BaseService {
       .values({
         name,
         description,
-        workspaceId: workspace.id,
+        workspaceId,
       })
       .returning();
 

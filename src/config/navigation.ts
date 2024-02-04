@@ -1,7 +1,7 @@
 export const Navigation = {
   HOME: '/',
-  DASHBOARD: '/dashboard',
   PRICING: '/pricing',
+  DASHBOARD: '/dashboard',
   DASHBOARD_COMPONENTS: '/dashboard/components',
   DASHBOARD_COMPONENTS_NEW: '/dashboard/components/new',
   DASHBOARD_RELEASES: '/dashboard/releases',
