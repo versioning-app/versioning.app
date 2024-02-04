@@ -1,5 +1,6 @@
 import { Logo } from '@/components/common/logo';
 import { ThemeToggle } from '@/components/common/theme-toggle';
+import { UnderlinedLink } from '@/components/common/underlined-link';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -8,7 +9,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { appConfig } from '@/config/app';
-import { Navigation } from '@/config/nav';
+import { Navigation } from '@/config/navigation';
 import { auth } from '@clerk/nextjs';
 import {
   EnvelopeClosedIcon,
@@ -334,30 +335,21 @@ export function Footer() {
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="flex items-center gap-2">
               <EnvelopeClosedIcon className="h-6 w-6" />
-              <Link
-                className="text-sm text-gray-500 hover:underline underline-offset-4 dark:text-gray-400"
-                href={appConfig.links.email}
-              >
+              <UnderlinedLink href={appConfig.links.mailto}>
                 {appConfig.links.email}
-              </Link>
+              </UnderlinedLink>
             </div>
             <div className="flex items-center gap-2">
               <GitHubLogoIcon className="h-6 w-6" />
-              <Link
-                className="text-sm text-gray-500 hover:underline underline-offset-4 dark:text-gray-400"
-                href={appConfig.links.github}
-              >
+              <UnderlinedLink href={appConfig.links.github}>
                 GitHub
-              </Link>
+              </UnderlinedLink>
             </div>
             <div className="flex items-center gap-2">
               <TwitterLogoIcon className="h-6 w-6" />
-              <Link
-                className="text-sm text-gray-500 hover:underline underline-offset-4 dark:text-gray-400"
-                href={appConfig.links.twitter}
-              >
+              <UnderlinedLink href={appConfig.links.twitter}>
                 Twitter
-              </Link>
+              </UnderlinedLink>
             </div>
           </div>
         </div>

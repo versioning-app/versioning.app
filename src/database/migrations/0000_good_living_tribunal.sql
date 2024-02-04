@@ -5,15 +5,15 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "components" (
-	"id" serial NOT NULL,
+	"id" varchar(128),
 	"name" varchar(42) NOT NULL,
 	"description" varchar(255),
-	"workspace_id" integer,
+	"workspace_id" varchar,
 	CONSTRAINT "components_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "workspaces" (
-	"id" serial NOT NULL,
+	"id" varchar(128),
 	"type" "workspace_type",
 	"clerk_id" varchar(255) NOT NULL,
 	"stripe_customer_id" varchar(255),

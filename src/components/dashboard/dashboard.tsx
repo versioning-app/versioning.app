@@ -4,7 +4,7 @@ import { CommandMenu } from '@/components/dashboard/command-menu';
 import { MobileSidebar } from '@/components/dashboard/mobile-sidebar';
 import { Separator } from '@/components/ui/separator';
 import { appConfig } from '@/config/app';
-import { Navigation } from '@/config/nav';
+import { Navigation } from '@/config/navigation';
 import { GearIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 
