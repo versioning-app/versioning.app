@@ -1,8 +1,11 @@
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { auth } from '@clerk/nextjs';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default async function Dashboard() {
+  noStore();
+
   const { sessionClaims } = auth();
 
   const workspaceId = await ServiceFactory.get(

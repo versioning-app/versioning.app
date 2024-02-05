@@ -8,7 +8,6 @@ import { BaseService } from '@/services/base.service';
 import { auth, clerkClient } from '@clerk/nextjs';
 import { AuthObject, SignedInAuthObject } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
-import { unstable_noStore as noStore } from 'next/cache';
 import 'server-only';
 
 export class WorkspaceService extends BaseService {
@@ -21,7 +20,6 @@ export class WorkspaceService extends BaseService {
   }
 
   public async currentWorkspaceId(): Promise<string> {
-    noStore();
     const { userId, orgId, sessionClaims } = auth();
     return this.getWorkspaceIdFromAuth({ userId, orgId, sessionClaims });
   }
