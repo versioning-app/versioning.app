@@ -13,12 +13,12 @@ export default async function Dashboard({
     ts?: string;
   };
 }) {
-  const { sessionClaims } = auth();
-
   if (searchParams?.revalidate === 'true') {
     revalidatePath(Navigation.DASHBOARD);
     return redirect(Navigation.DASHBOARD);
   }
+
+  const { sessionClaims } = auth();
 
   const workspaceId = await ServiceFactory.get(
     WorkspaceService
