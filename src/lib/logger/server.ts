@@ -1,7 +1,7 @@
-import { LoggerContext, getCorrelationId, getLogger } from '@/lib/logger';
+import { LoggerContext, getLogger, getRequestId } from '@/lib/logger';
 import { headers } from 'next/headers';
 
 export const serverLogger = (context?: LoggerContext) => {
-  const correlationId = getCorrelationId(headers());
-  return getLogger({ ...context, correlationId });
+  const requestId = getRequestId(headers());
+  return getLogger({ ...context, requestId });
 };

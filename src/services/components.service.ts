@@ -1,5 +1,7 @@
 import { db } from '@/database/db';
 import { Component, NewComponent, components } from '@/database/schema';
+import { AppError } from '@/lib/error/app.error';
+import { ErrorCodes } from '@/lib/error/error-codes';
 import { BaseService } from '@/services/base.service';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
@@ -56,8 +58,10 @@ export class ComponentsService extends BaseService {
     const existing = await this.getComponentByName(name);
 
     if (existing) {
-      this.logger.error({ name }, 'Component already exists');
-      throw new Error('Component already exists');
+      throw new AppError(
+        'A component with the same name already exists',
+        ErrorCodes.RESOURCE_ALREADY_EXISTS
+      );
     }
 
     const [newComponent] = await db
@@ -72,5 +76,29 @@ export class ComponentsService extends BaseService {
     this.logger.info({ newComponent }, 'Component created');
 
     return newComponent;
+  }
+
+  public async deleteComponent(componentId: string) {
+    const workspaceId = await ServiceFactory.get(
+      WorkspaceService
+    ).currentWorkspaceId();
+
+    const [deletedComponent] = await db
+      .delete(components)
+      .where(
+        and(
+          eq(components.workspaceId, workspaceId),
+          eq(components.id, componentId)
+        )
+      )
+      .returning();
+
+    if (!deletedComponent) {
+      this.logger.error({ componentId }, 'Component not found');
+
+      throw new AppError('Component not found', ErrorCodes.RESOURCE_NOT_FOUND);
+    }
+
+    this.logger.info({ deletedComponent }, 'Component deleted');
   }
 }

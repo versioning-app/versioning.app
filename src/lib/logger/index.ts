@@ -1,11 +1,12 @@
 import { StorageKeys } from '@/config/storage';
+import { generateRequestId } from '@/lib/utils';
 import pinoLogger, { Logger } from 'pino';
 
 let logger: Logger;
 
 export type LoggerContext = {
   source?: string;
-  correlationId?: string;
+  requestId?: string;
 } & Record<string, unknown>;
 
 export const getLogger = (context?: LoggerContext) => {
@@ -23,12 +24,12 @@ export const getLogger = (context?: LoggerContext) => {
   return logger;
 };
 
-export const getCorrelationId = (headers: Headers) => {
-  let correlationId = headers.get(StorageKeys.CORRELATION_ID_HEADER_KEY);
+export const getRequestId = (headers: Headers) => {
+  let requestId = headers.get(StorageKeys.REQUEST_ID_HEADER_KEY);
 
-  if (!correlationId) {
-    correlationId = crypto.randomUUID();
+  if (!requestId) {
+    requestId = generateRequestId();
   }
 
-  return correlationId;
+  return requestId;
 };

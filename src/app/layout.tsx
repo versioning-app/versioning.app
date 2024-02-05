@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Noto_Sans as FontSans } from 'next/font/google';
 
+import { Toaster } from '@/components/ui/sonner';
 import { appConfig } from '@/config/app';
 import { ThemeProvider } from '@/providers/theme-provider';
 import Script from 'next/script';
@@ -37,6 +38,7 @@ export default function RootLayout({
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+            <Toaster closeButton={true} richColors={true} duration={6000} />
             <SpeedInsights />
             <Analytics />
           </ThemeProvider>

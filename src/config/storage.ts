@@ -1,7 +1,7 @@
 import { appConfig } from '@/config/app';
 export const StorageKeys = {
   COOKIE_STORAGE_PREFIX: 'versioning.app',
-  CORRELATION_ID_HEADER_KEY: 'x-correlation-id',
+  REQUEST_ID_HEADER_KEY: 'x-request-id',
   WORKSPACE_COOKIE_KEY: `${appConfig.name}:workspace`,
 } as const;
 
