@@ -1,3 +1,4 @@
+import { ComponentList } from '@/components/dashboard/component';
 import { ComponentsService } from '@/services/components.service';
 import { ServiceFactory } from '@/services/service-factory';
 
@@ -8,8 +9,11 @@ export default async function Components() {
 
   return (
     <div>
-      <h1>Components</h1>
-      <pre>{JSON.stringify(components, null, 2)}</pre>
+      <div className="flex">
+        <div className="flex-1">
+          <ComponentList components={components} />
+        </div>
+      </div>
     </div>
   );
 }

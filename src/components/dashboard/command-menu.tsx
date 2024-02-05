@@ -30,6 +30,7 @@ import {
   ComponentIcon,
   HomeIcon,
   Plug2Icon,
+  PlusIcon,
   Settings,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -159,6 +160,16 @@ export function CommandMenu({ ...props }: DialogProps) {
             >
               <ComponentIcon className="mr-2 h-4 w-4" />
               Components
+            </CommandItem>
+            <CommandItem
+              onSelect={() =>
+                runCommand(() =>
+                  router.push(Navigation.DASHBOARD_COMPONENTS_NEW)
+                )
+              }
+            >
+              <PlusIcon className="mr-2 h-4 w-4" />
+              New Component
             </CommandItem>
             <CommandItem
               onSelect={() =>
