@@ -1,12 +1,13 @@
-import { DEFAULT_DB_CACHE_MS, StorageKeys } from '@/config/storage';
+import { DEFAULT_DB_CACHE_MS } from '@/config/storage';
 import { db } from '@/database/db';
 import { Workspace, workspaces } from '@/database/schema';
+import { AppError } from '@/lib/error/app.error';
+import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
 import { BaseService } from '@/services/base.service';
 import { auth, clerkClient } from '@clerk/nextjs';
 import { AuthObject, SignedInAuthObject } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
-import { cookies } from 'next/headers';
 import 'server-only';
 
 export class WorkspaceService extends BaseService {
@@ -28,6 +29,11 @@ export class WorkspaceService extends BaseService {
   ): Promise<string> {
     const { userId, orgId, sessionClaims } = auth;
 
+    const workspaceNotFoundError = new AppError(
+      'No workspace ID found',
+      ErrorCodes.WORKSPACE_NOT_FOUND
+    );
+
     this.logger.debug(
       { userId, orgId, sessionClaims },
       'Getting current workspace ID'
@@ -35,18 +41,21 @@ export class WorkspaceService extends BaseService {
 
     if (!userId) {
       this.logger.error('No user, cannot get workspace');
-      throw new Error('No user');
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
     }
 
     // If we have an org ID, we're looking for an organization workspace
     if (orgId) {
-      let orgMeta = sessionClaims?.org_meta;
+      let orgWorkspaceId = sessionClaims?.org_workspaceId;
 
       // This should never happen, but if it does, it's likely the first time an org has been created
       // If this is true, let's fetch the public metadata via the API instead of using session
       // Really love the additional network round trip because I cannot force a session refresh
-      if (!orgMeta?.workspaceId) {
-        this.logger.debug('No organization metadata found, fetching from API');
+      if (!orgWorkspaceId) {
+        ('No organization workspaceId found, fetching public metadata from API');
 
         const { publicMetadata } =
           await clerkClient.organizations.getOrganization({
@@ -56,20 +65,21 @@ export class WorkspaceService extends BaseService {
         if (!publicMetadata?.workspaceId) {
           this.logger.warn(
             { publicMetadata },
-            'No public metadata found for organization'
+            'No workspaceId found in public metadata found for organization'
           );
-          throw new Error('No workspace ID found');
+          throw workspaceNotFoundError;
         }
 
-        orgMeta = publicMetadata;
+        orgWorkspaceId = publicMetadata.workspaceId;
 
-        this.logger.debug({ orgMeta }, 'Organization metadata found from API');
+        this.logger.info(
+          { publicMetadata, orgWorkspaceId },
+          'Organization workspaceId found in public metadata from API'
+        );
       }
 
-      const orgWorkspaceId = orgMeta.workspaceId;
-
       if (!orgWorkspaceId) {
-        throw new Error('No workspace ID found');
+        throw workspaceNotFoundError;
       }
 
       this.logger.debug(
@@ -79,37 +89,38 @@ export class WorkspaceService extends BaseService {
       return orgWorkspaceId;
     }
 
-    let userMeta = sessionClaims?.user_meta;
-
-    this.logger.debug({ userMeta }, 'User metadata found from session');
+    let userWorkspaceId = sessionClaims?.user_workspaceId;
 
     // This should never happen, but if it does, it's likely the first time a user is logging in
     // If this is true, let's fetch the public metadata via the API instead of using session
     // Really love the additional network round trip because I cannot force a session refresh
-    if (!userMeta?.workspaceId) {
-      this.logger.debug('No user metadata found, fetching from API');
+    if (!userWorkspaceId) {
+      this.logger.debug(
+        'No user workspaceId found, fetching public metadata from API'
+      );
 
       const { publicMetadata } = await clerkClient.users.getUser(userId);
 
       if (!publicMetadata?.workspaceId) {
         this.logger.warn(
           { publicMetadata },
-          'No public metadata found for user'
+          'No workspaceId found in public metadata found for user'
         );
-        throw new Error('No workspace ID found');
+        throw workspaceNotFoundError;
       }
 
-      userMeta = publicMetadata;
+      userWorkspaceId = publicMetadata.workspaceId;
 
-      this.logger.debug({ userMeta }, 'User metadata found from API');
+      this.logger.info(
+        { publicMetadata, userWorkspaceId },
+        'User workspaceId found in public metadata from API'
+      );
     }
-
-    const userWorkspaceId = userMeta?.workspaceId;
 
     this.logger.debug({ userWorkspaceId }, 'Workspace ID found for user');
 
     if (!userWorkspaceId) {
-      throw new Error('No workspace ID found');
+      throw workspaceNotFoundError;
     }
 
     this.logger.debug({ userWorkspaceId }, 'Workspace ID found for user');
@@ -123,24 +134,10 @@ export class WorkspaceService extends BaseService {
 
     if (!userId) {
       this.logger.error('No user, cannot get workspace');
-      throw new Error('No user');
-    }
-
-    const workspaceCookie = cookies().get(StorageKeys.WORKSPACE_COOKIE_KEY);
-
-    if (workspaceCookie?.value) {
-      try {
-        this.logger.debug({ workspaceCookie }, 'Found workspace in cookie');
-        const parsed = JSON.parse(workspaceCookie.value);
-        this.logger.debug({ parsed }, 'Parsed workspace from cookie');
-        return parsed;
-      } catch {
-        this.logger.error(
-          { workspaceFromCookie: workspaceCookie },
-          'Failed to parse workspace cookie, removing'
-        );
-        cookies().delete(StorageKeys.WORKSPACE_COOKIE_KEY);
-      }
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
     }
 
     const clerkId = orgId || userId;
@@ -217,7 +214,10 @@ export class WorkspaceService extends BaseService {
 
     if (!userId) {
       this.logger.error('No user, cannot ensure workspace');
-      throw new Error('No user');
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
     }
 
     try {

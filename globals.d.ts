@@ -10,11 +10,7 @@ declare global {
   }
 
   interface CustomJwtSessionClaims {
-    user_meta?: {
-      workspaceId: string;
-    };
-    org_meta?: {
-      workspaceId: string;
-    };
+    org_workspaceId?: string;
+    user_workspaceId: string;
   }
 }

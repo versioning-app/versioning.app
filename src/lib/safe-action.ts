@@ -1,18 +1,26 @@
-import { getLogger } from '@/lib/logger';
+import { AppError } from '@/lib/error/app.error';
+import { ErrorCodes } from '@/lib/error/error-codes';
+import { getLogger, getRequestId } from '@/lib/logger';
+import { serverLogger } from '@/lib/logger/server';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { DEFAULT_SERVER_ERROR, createSafeActionClient } from 'next-safe-action';
-
-export class ActionError extends Error {}
+import { createSafeActionClient } from 'next-safe-action';
+import { headers } from 'next/headers';
 
 const handleReturnedServerError = (e: Error) => {
-  // If the error is an instance of `ActionError`, unmask the message.
-  if (e instanceof ActionError) {
-    return e.message;
+  if (e instanceof AppError) {
+    return JSON.stringify(e.toJSON());
   }
 
   // Otherwise return default error message.
-  return DEFAULT_SERVER_ERROR;
+  return JSON.stringify({
+    message:
+      'Something went wrong executing this operation. Please contact support if the problem persists.',
+    code: ErrorCodes.UNHANDLED_ERROR,
+    context: {
+      requestId: getRequestId(headers()),
+    },
+  });
 };
 
 export const action = createSafeActionClient({
@@ -32,13 +40,16 @@ export const workspaceAction = createSafeActionClient({
     ).currentWorkspace();
 
     if (!workspace) {
-      throw new ActionError('No workspace found');
+      throw new AppError('No workspace found', ErrorCodes.WORKSPACE_NOT_FOUND);
     }
 
-    return workspace;
+    return { workspace };
   },
   handleServerErrorLog: (e) => {
-    getLogger().error(e);
+    const logger = serverLogger({ source: 'workspaceAction' });
+    const { message, ...errorMeta } =
+      e instanceof AppError ? e.toJSON() : { message: e.message };
+    logger.error(errorMeta, message);
   },
   handleReturnedServerError,
 });
