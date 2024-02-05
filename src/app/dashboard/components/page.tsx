@@ -1,11 +1,8 @@
 import { ComponentList } from '@/components/dashboard/component';
 import { ComponentsService } from '@/services/components.service';
 import { ServiceFactory } from '@/services/service-factory';
-import { unstable_noStore as noStore } from 'next/cache';
 
 export default async function Components() {
-  noStore();
-
   const components = await ServiceFactory.get(
     ComponentsService
   ).getComponents();

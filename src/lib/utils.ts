@@ -12,3 +12,7 @@ export function delay(ms: number) {
 export function generateRequestId() {
   return crypto.randomUUID();
 }
+
+export function revalidateUrl(url: string) {
+  return `${url}?revalidate=true&ts=${Date.now()}`;
+}
