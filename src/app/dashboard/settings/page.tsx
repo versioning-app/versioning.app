@@ -1,5 +1,7 @@
 import { ClerkOrganization, ClerkUser } from '@/components/common/clerk';
 
+export const revalidate = 0;
+
 export default async function Settings() {
   return (
     <div>

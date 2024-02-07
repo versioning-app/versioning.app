@@ -1,7 +1,6 @@
 'use client';
 
 import { Navigation } from '@/config/navigation';
-import { revalidateUrl } from '@/lib/utils';
 import { OrganizationSwitcher, UserButton } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { useTheme } from 'next-themes';
@@ -18,10 +17,10 @@ export const ClerkOrganization = () => {
       <OrganizationSwitcher
         appearance={appearance}
         organizationProfileProps={{ appearance }}
-        afterCreateOrganizationUrl={revalidateUrl(Navigation.DASHBOARD)}
+        afterCreateOrganizationUrl={Navigation.DASHBOARD}
         afterLeaveOrganizationUrl={Navigation.HOME}
-        afterSelectOrganizationUrl={revalidateUrl(Navigation.DASHBOARD)}
-        afterSelectPersonalUrl={revalidateUrl(Navigation.DASHBOARD)}
+        afterSelectOrganizationUrl={Navigation.DASHBOARD}
+        afterSelectPersonalUrl={Navigation.DASHBOARD}
       />
     </div>
   );
@@ -41,7 +40,7 @@ export const ClerkUser = () => {
         userProfileProps={{ appearance }}
         afterMultiSessionSingleSignOutUrl={Navigation.HOME}
         afterSignOutUrl={Navigation.HOME}
-        afterSwitchSessionUrl={revalidateUrl(Navigation.DASHBOARD)}
+        afterSwitchSessionUrl={Navigation.DASHBOARD}
       />
     </>
   );
