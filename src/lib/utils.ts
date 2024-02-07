@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { revalidatePath } from 'next/cache';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -13,8 +14,18 @@ export function generateRequestId() {
   return crypto.randomUUID();
 }
 
-export function revalidateUrl(url: string) {
-  return `${url}?revalidate=true&ts=${Date.now()}`;
+export function revalidatePaths(...paths: string[]) {
+  'use server';
+
+  if (paths.length === 0) {
+    return '';
+  }
+
+  for (const path of paths) {
+    revalidatePath(path);
+  }
+
+  return `${paths[0]}?revalidate=true&ts=${Date.now()}`;
 }
 
 export const capitalizeFirstLetter = (str: string) => {

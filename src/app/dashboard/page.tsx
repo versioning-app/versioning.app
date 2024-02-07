@@ -5,6 +5,8 @@ import { auth } from '@clerk/nextjs';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+export const revalidate = 0;
+
 export default async function Dashboard({
   searchParams,
 }: {
