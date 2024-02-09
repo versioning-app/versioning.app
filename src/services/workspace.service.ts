@@ -8,6 +8,7 @@ import { BaseService } from '@/services/base.service';
 import { auth, clerkClient } from '@clerk/nextjs';
 import { AuthObject, SignedInAuthObject } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
+import { unstable_noStore as noStore } from 'next/cache';
 import 'server-only';
 
 export class WorkspaceService extends BaseService {
@@ -21,12 +22,20 @@ export class WorkspaceService extends BaseService {
 
   public async currentWorkspaceId(): Promise<string> {
     const { userId, orgId, sessionClaims } = auth();
-    return this.getWorkspaceIdFromAuth({ userId, orgId, sessionClaims });
+
+    const workspaceId = await this.getWorkspaceIdFromAuth({
+      userId,
+      orgId,
+      sessionClaims,
+    });
+
+    return workspaceId;
   }
 
   public async getWorkspaceIdFromAuth(
     auth: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>
   ): Promise<string> {
+    noStore();
     const { userId, orgId, sessionClaims } = auth;
 
     const workspaceNotFoundError = new AppError(
@@ -207,9 +216,10 @@ export class WorkspaceService extends BaseService {
     orgId,
     userId,
     sessionClaims,
-  }: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>): Promise<
-    'ready' | 'linked'
-  > {
+  }: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>): Promise<{
+    status: 'ready' | 'linked';
+    workspaceId: string;
+  }> {
     this.logger.debug({ orgId, userId, sessionClaims }, 'Ensuring workspace');
 
     if (!userId) {
@@ -221,9 +231,14 @@ export class WorkspaceService extends BaseService {
     }
 
     try {
-      if (await this.getWorkspaceIdFromAuth({ userId, orgId, sessionClaims })) {
+      const workspaceId = await this.getWorkspaceIdFromAuth({
+        userId,
+        orgId,
+        sessionClaims,
+      });
+      if (workspaceId) {
         this.logger.info('Workspace already linked and exists');
-        return 'ready';
+        return { status: 'ready', workspaceId };
       }
     } catch (error: unknown) {
       if ((error as Error)?.message !== 'No workspace ID found') {
@@ -244,7 +259,7 @@ export class WorkspaceService extends BaseService {
       orgId: orgId ?? undefined,
     });
 
-    return 'linked';
+    return { status: 'linked', workspaceId: workspace.id };
   }
 
   // TODO: Use this method to link stripe customer to clerk

@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import { Calendar, CalendarProps } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
@@ -17,8 +17,8 @@ export const DatePicker = forwardRef<
   {
     date?: Date;
     setDate: (date?: Date) => void;
-  }
->(function DatePickerCmp({ date, setDate }, ref) {
+  } & CalendarProps
+>(function DatePickerCmp({ date, setDate, ...calendarProps }, ref) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -35,6 +35,7 @@ export const DatePicker = forwardRef<
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" ref={ref}>
         <Calendar
+          {...calendarProps}
           mode="single"
           selected={date}
           onSelect={setDate}
