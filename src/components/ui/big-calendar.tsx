@@ -1,7 +1,7 @@
 'use client';
+import { CalendarProps } from '@/components/ui/calendar';
 import { DatePicker } from '@/components/ui/date-picker';
 /* This example requires Tailwind CSS v2.0+ */
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import {
   add,
   eachDayOfInterval,
@@ -20,7 +20,11 @@ function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function BigCalendar() {
+export default function BigCalendar({
+  datePickerProps,
+}: {
+  datePickerProps?: CalendarProps;
+}) {
   const today = startOfToday();
   const [currMonth, setCurrMonth] = useState(() => format(today, 'MMM-yyyy'));
   const [selectedDay, setSelectedDay] = useState<Date>();
@@ -72,34 +76,13 @@ export default function BigCalendar() {
       <header className="relative z-20 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-4 lg:flex-none">
         {/* <h1 className="text-lg font-semibold text-muted-foreground"></h1> */}
         <div className="flex items-center">
-          <DatePicker setDate={updateDate} date={selectedDay ?? today} />
-
-          <div className="flex items-center rounded-md shadow-sm md:items-stretch ml-4">
-            <button
-              type="button"
-              className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-card dark:bg-gray-900 py-2 pl-3 pr-4 text-gray-400 hover:text-card-foreground focus:relative md:w-9 md:px-2 md:hover:bg-muted"
-              onClick={getPrevMonth}
-            >
-              <span className="sr-only">Previous month</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="hidden border-t border-b border-gray-300 dark:border-gray-700 bg-card dark:bg-gray-900 px-3.5 text-sm font-medium text-foreground-text hover:bg-muted hover:text-muted-foreground focus:relative md:block"
-              onClick={getToday}
-            >
-              Today
-            </button>
-            <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
-            <button
-              type="button"
-              className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 dark:border-gray-700 bg-card dark:bg-gray-900 py-2 pl-4 pr-3 text-gray-400 hover:text-card-foreground focus:relative md:w-9 md:px-2 md:hover:bg-muted"
-              onClick={getNextMonth}
-            >
-              <span className="sr-only">Next month</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
+          <DatePicker
+            setDate={updateDate}
+            date={selectedDay ?? today}
+            month={parse(currMonth, 'MMM-yyyy', new Date())}
+            onMonthChange={(date) => setCurrMonth(format(date, 'MMM-yyyy'))}
+            {...datePickerProps}
+          />
 
           <div className="hidden md:ml-4 md:flex md:items-center">
             {/* <Menu as="div" className="relative">
@@ -314,7 +297,7 @@ export default function BigCalendar() {
           </Menu> */}
         </div>
       </header>
-      <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+      <div className="shadow ring-1 ring-black dark:ring-gray-700 ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
         <div className="grid grid-cols-7 gap-px border-b border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-center text-xs font-semibold leading-6 text-foreground-text lg:flex-none">
           <div className="bg-card dark:bg-gray-900 py-2">
             M<span className="sr-only sm:not-sr-only">on</span>

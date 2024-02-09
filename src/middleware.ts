@@ -19,11 +19,19 @@ export default authMiddleware({
     // If the user is logged in and trying to access a protected route, allow them to access route
     if (userId && !isPublicRoute) {
       // Only ensure workspace on protected routes
-      await ServiceFactory.get(WorkspaceService).ensureWorkspace({
+      const { workspaceId } = await ServiceFactory.get(
+        WorkspaceService
+      ).ensureWorkspace({
         userId,
         orgId,
         sessionClaims,
       });
+
+      if (
+        req.cookies.get(StorageKeys.WORKSPACE_COOKIE_KEY)?.value !== workspaceId
+      ) {
+        req.cookies.set(StorageKeys.WORKSPACE_COOKIE_KEY, workspaceId);
+      }
 
       return NextResponse.next();
     }
