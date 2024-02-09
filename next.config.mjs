@@ -7,6 +7,9 @@ const nextConfig = {
     // config.experiments.topLevelAwait = true
     return config;
   },
+  experimental: {
+    serverMinification: false,
+  },
 };
 
 export default nextConfig;
