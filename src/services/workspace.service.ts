@@ -23,13 +23,11 @@ export class WorkspaceService extends BaseService {
   public async currentWorkspaceId(): Promise<string> {
     const { userId, orgId, sessionClaims } = auth();
 
-    const workspaceId = await this.getWorkspaceIdFromAuth({
+    return this.getWorkspaceIdFromAuth({
       userId,
       orgId,
       sessionClaims,
     });
-
-    return workspaceId;
   }
 
   public async getWorkspaceIdFromAuth(
