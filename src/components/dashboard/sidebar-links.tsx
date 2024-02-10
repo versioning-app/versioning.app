@@ -5,6 +5,7 @@ import { Navigation } from '@/config/navigation';
 import {
   CalendarClock,
   ComponentIcon,
+  CreditCardIcon,
   HomeIcon,
   Plug2Icon,
   Settings,
@@ -51,6 +52,11 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
             icon: Plug2Icon,
             ...getLinkAndVariant(Navigation.DASHBOARD_INTEGRATIONS),
           },
+          {
+            title: 'Billing',
+            icon: CreditCardIcon,
+            ...getLinkAndVariant(Navigation.DASHBOARD_BILLING),
+          }
         ]}
       />
       <Separator />
