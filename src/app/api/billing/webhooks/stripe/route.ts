@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     const unknownError = new AppError(
       'Unknown error occurred while handling webhook event',
-      ErrorCodes.UNKNOWN_ERROR
+      ErrorCodes.UNHANDLED_ERROR
     );
 
     return unknownError.toResponse();

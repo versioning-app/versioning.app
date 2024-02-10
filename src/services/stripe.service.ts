@@ -35,7 +35,7 @@ export class StripeService extends BaseService {
       if (existingCustomer.deleted) {
         this.logger.warn({ existingCustomer }, 'Customer was deleted');
         throw new AppError(
-          'Customer has been deleted on Stripe',
+          'Customer has been deleted in Stripe, cannot proceed',
           ErrorCodes.STRIPE_CUSTOMER_DELETED
         );
       }
@@ -111,6 +111,106 @@ export class StripeService extends BaseService {
     });
   }
 
+  public async getAllPrices() {
+    try {
+      const prices = await stripe.prices.list({
+        active: true,
+        expand: ['data.product'],
+        limit: 100,
+      });
+
+      return prices?.data;
+    } catch (err) {
+      this.logger.error({ err }, 'Error retrieving products');
+      throw new AppError(
+        'Error retrieving products',
+        ErrorCodes.UNHANDLED_ERROR
+      );
+    }
+  }
+
+  public async getPriceById(priceId: string) {
+    try {
+      return stripe.prices.retrieve(priceId);
+    } catch (err) {
+      this.logger.error({ err }, 'Error retrieving price by ID');
+      throw new AppError('Price not found', ErrorCodes.RESOURCE_NOT_FOUND);
+    }
+  }
+
+  public async createCheckoutSession(
+    price: Stripe.Price,
+    quantity: number = 1,
+    metadata: Record<string, string> = {}
+  ) {
+    if (price.deleted || !price.active) {
+      this.logger.warn({ price }, 'Price is not active');
+      throw new AppError(
+        'Price is not active',
+        ErrorCodes.STRIPE_PRICE_NOT_ACTIVE
+      );
+    }
+
+    const workspaceId = await this.workspaceService.currentWorkspaceId();
+    const customer = await this.createOrRetrieveCustomer();
+
+    if (price.type !== 'recurring') {
+      this.logger.warn({ price }, 'Price type is not recurring');
+      throw new AppError(
+        'Price type not supported',
+        ErrorCodes.STRIPE_PRICE_NOT_SUPPORTED
+      );
+    }
+
+    this.logger.debug(
+      { price, customer, quantity, metadata },
+      'Creating checkout session'
+    );
+
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        customer: customer.id,
+        billing_address_collection: 'required',
+        customer_update: {
+          address: 'auto',
+        },
+        mode: 'subscription',
+        payment_method_types: ['card', 'paypal'],
+        line_items: [
+          {
+            price: price.id,
+            quantity,
+          },
+        ],
+        allow_promotion_codes: true,
+        metadata: {
+          workspaceId,
+          ...metadata,
+        },
+        success_url: `${getURL()}/${Navigation.DASHBOARD_BILLING}?success=true`,
+        cancel_url: `${getURL()}/${Navigation.DASHBOARD_BILLING}?cancel=true`,
+      });
+    } catch (err) {
+      this.logger.error({ err }, 'Error creating checkout session');
+      throw new AppError(
+        'Error creating checkout session',
+        ErrorCodes.UNHANDLED_ERROR
+      );
+    }
+
+    if (!session?.id) {
+      this.logger.error({ session }, 'Error creating checkout session');
+      throw new AppError(
+        'Error creating checkout session',
+        ErrorCodes.STRIPE_CHECKOUT_SESSION_CREATION_FAILURE
+      );
+    }
+
+    this.logger.debug({ session }, 'Checkout session created');
+    return session;
+  }
+
   public async handleWebhookEvent(
     body: string,
     signature: string
@@ -124,7 +224,7 @@ export class StripeService extends BaseService {
 
         throw new AppError(
           'Error processing stripe webhook',
-          ErrorCodes.STRIPE_WEBHOOK_ERROR
+          ErrorCodes.STRIPE_UNHANDLED_WEBHOOK_EVENT
         );
       }
 
@@ -136,7 +236,7 @@ export class StripeService extends BaseService {
 
       throw new AppError(
         'Error processing stripe webhook',
-        ErrorCodes.STRIPE_WEBHOOK_ERROR
+        ErrorCodes.STRIPE_WEBHOOK_FAILURE
       );
     }
 
@@ -190,7 +290,7 @@ export class StripeService extends BaseService {
 
         throw new AppError(
           'Error processing stripe webhook',
-          ErrorCodes.STRIPE_WEBHOOK_ERROR
+          ErrorCodes.STRIPE_WEBHOOK_FAILURE
         );
       }
     } else {
