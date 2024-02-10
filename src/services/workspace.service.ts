@@ -1,3 +1,4 @@
+import { appConfig } from '@/config/app';
 import { DEFAULT_DB_CACHE_MS } from '@/config/storage';
 import { db } from '@/database/db';
 import { Workspace, workspaces } from '@/database/schema';
@@ -28,6 +29,132 @@ export class WorkspaceService extends BaseService {
       orgId,
       sessionClaims,
     });
+  }
+
+  public async getOrganizationCustomerDetails(): Promise<{
+    id: string;
+    type: 'organization';
+    email: string;
+    name: string;
+  }> {
+    const { orgId } = auth();
+
+    if (!orgId) {
+      throw new AppError(
+        'Organization does not exist in session',
+        ErrorCodes.ORGANIZATION_NOT_FOUND
+      );
+    }
+
+    const organization = await clerkClient.organizations.getOrganization({
+      organizationId: orgId,
+    });
+
+    if (!organization) {
+      throw new AppError(
+        'Organization not found',
+        ErrorCodes.RESOURCE_NOT_FOUND
+      );
+    }
+
+    const creators =
+      (await clerkClient.organizations.getOrganizationMembershipList({
+        organizationId: orgId,
+        limit: 10,
+      })) ?? [];
+
+    const { publicUserData } = creators
+      ?.filter((creator) => creator.role === appConfig.organization.creatorRole)
+      ?.sort((a, b) => a.createdAt - b.createdAt)?.[0];
+
+    if (!publicUserData?.userId) {
+      throw new AppError(
+        'No creator found for organization',
+        ErrorCodes.RESOURCE_NOT_FOUND
+      );
+    }
+
+    const creator = await clerkClient.users.getUser(publicUserData.userId);
+
+    const primaryEmail = creator?.emailAddresses?.find(
+      (email) => email.id === creator.primaryEmailAddressId
+    );
+
+    if (!primaryEmail?.emailAddress) {
+      throw new AppError(
+        'No primary email found for organization creator',
+        ErrorCodes.RESOURCE_NOT_FOUND
+      );
+    }
+
+    return {
+      id: orgId,
+      type: 'organization',
+      email: primaryEmail.emailAddress,
+      name: organization.name,
+    };
+  }
+
+  public async getUserCustomerDetails(): Promise<{
+    id: string;
+    type: 'user';
+    email: string;
+    name: string;
+  }> {
+    const { userId } = auth();
+
+    if (!userId) {
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+
+    if (!user) {
+      throw new AppError('User not found', ErrorCodes.RESOURCE_NOT_FOUND);
+    }
+
+    const primaryEmail = user?.emailAddresses?.find(
+      (email) => email.id === user.primaryEmailAddressId
+    );
+
+    if (!primaryEmail?.emailAddress) {
+      throw new AppError(
+        'No primary email found for user',
+        ErrorCodes.RESOURCE_NOT_FOUND
+      );
+    }
+
+    return {
+      id: userId,
+      type: 'user',
+      email: primaryEmail.emailAddress,
+      name: `${user.firstName} ${user.lastName}`,
+    };
+  }
+
+  public async getCustomerDetails(): Promise<{
+    id: string;
+    type: 'user' | 'organization';
+    email: string;
+    name: string;
+  }> {
+    const { userId, orgId, organization } = auth();
+
+    if (!userId) {
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
+    }
+
+    if (orgId) {
+      return this.getOrganizationCustomerDetails();
+    }
+
+    return this.getUserCustomerDetails();
   }
 
   public async getWorkspaceIdFromAuth(
@@ -260,7 +387,6 @@ export class WorkspaceService extends BaseService {
     return { status: 'linked', workspaceId: workspace.id };
   }
 
-  // TODO: Use this method to link stripe customer to clerk
   public async linkWorkspaceToClerk({
     workspaceId,
     userId,
@@ -293,5 +419,24 @@ export class WorkspaceService extends BaseService {
     });
 
     this.logger.info({ workspaceId }, 'Workspace linked to user');
+  }
+
+  public async linkStripeCustomer(stripeCustomerId: string) {
+    const workspace = await this.currentWorkspace();
+
+    this.logger.debug(
+      { stripeCustomerId, workspace },
+      'Linking stripe customer to workspace'
+    );
+
+    await db
+      .update(workspaces)
+      .set({ stripeCustomerId })
+      .where(eq(workspaces.id, workspace.id));
+
+    this.logger.info(
+      { stripeCustomerId, workspace },
+      'Stripe customer linked to workspace'
+    );
   }
 }

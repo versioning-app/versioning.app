@@ -7,4 +7,9 @@ export const appConfig = {
     email: 'hello@versioning.app',
     mailto: 'mailto:hello@versioning.app',
   },
+  organization: {
+    creatorRole: String(
+      process.env.NEXT_PUBLIC_CLERK_CREATOR_ROLE ?? 'org:admin'
+    ),
+  },
 };
