@@ -8,7 +8,7 @@ export function formatAmountForDisplay(
     currencyDisplay: 'symbol',
   });
 
-  return numberFormat.format(amount);
+  return numberFormat.format(amount / 100);
 }
 
 export function formatAmountForStripe(
