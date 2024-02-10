@@ -12,7 +12,8 @@
     "db:migrate": "tsx src/database/migrate.ts",
     "db:generate": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
-    "db:drop": "drizzle-kit drop"
+    "db:drop": "drizzle-kit drop",
+    "stripe:listen": "stripe listen --forward-to=https://localhost:3000/api/billing/webhooks/stripe"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.5",
@@ -52,6 +53,7 @@
     "cmdk": "^0.2.0",
     "date-fns": "^3.3.1",
     "drizzle-orm": "^0.29.3",
+    "http-status-codes": "^2.3.0",
     "lucide-react": "^0.314.0",
     "next": "14.1.0",
     "next-safe-action": "^6.0.2",

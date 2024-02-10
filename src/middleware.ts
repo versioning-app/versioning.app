@@ -31,7 +31,7 @@ export default authMiddleware({
     // Allow users visiting public routes to access them
     return NextResponse.next();
   },
-  publicRoutes: ['/', '/pricing', '/about'],
+  publicRoutes: ['/', '/pricing', '/about', '/api/billing/webhooks/stripe'],
 });
 
 export const config = {
