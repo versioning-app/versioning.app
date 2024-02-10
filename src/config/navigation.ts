@@ -7,4 +7,5 @@ export const Navigation = {
   DASHBOARD_RELEASES: '/dashboard/releases',
   DASHBOARD_INTEGRATIONS: '/dashboard/integrations',
   DASHBOARD_SETTINGS: '/dashboard/settings',
+  DASHBOARD_BILLING: '/dashboard/billing',
 } as const;
