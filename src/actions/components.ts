@@ -10,11 +10,6 @@ import {
 } from '@/validation/component';
 import { revalidatePath } from 'next/cache';
 
-// export const createComponentAction = action(
-//   createComponentSchema,
-//   // (input, context) => {}
-// );
-
 export const createComponentAction = workspaceAction(
   createComponentSchema,
   async (input) => {
