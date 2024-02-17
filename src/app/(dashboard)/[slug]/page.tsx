@@ -1,12 +1,8 @@
-import { Navigation } from '@/config/navigation';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { auth } from '@clerk/nextjs';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export const revalidate = 0;
-export const dynamic = 'force-dynamic';
 
 export default async function Dashboard({
   searchParams,
@@ -16,16 +12,10 @@ export default async function Dashboard({
     ts?: string;
   };
 }) {
-  if (searchParams?.revalidate === 'true') {
-    revalidatePath(Navigation.DASHBOARD);
-    return redirect(Navigation.DASHBOARD);
-  }
-
   const { sessionClaims } = auth();
 
-  const workspaceId = await ServiceFactory.get(
-    WorkspaceService
-  ).currentWorkspaceId();
+  const workspaceId =
+    await ServiceFactory.get(WorkspaceService).currentWorkspaceId();
 
   return (
     <div>

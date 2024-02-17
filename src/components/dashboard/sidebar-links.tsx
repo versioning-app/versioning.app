@@ -1,7 +1,11 @@
 'use client';
 import { Nav, NavLink } from '@/components/dashboard/nav';
 import { Separator } from '@/components/ui/separator';
-import { Navigation } from '@/config/navigation';
+import {
+  Navigation,
+  NavigationItem,
+  dashboardRoute,
+} from '@/config/navigation';
 import {
   CalendarClock,
   ComponentIcon,
@@ -10,20 +14,21 @@ import {
   Plug2Icon,
   Settings,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
+  const { slug } = useParams();
   const path = usePathname();
 
   const getLinkAndVariant = (
-    href: string,
+    href: NavigationItem,
     exact = false
   ): Pick<NavLink, 'variant' | 'href'> => {
     return {
       variant: (exact ? path === href : path.startsWith(href))
         ? 'default'
         : 'ghost',
-      href,
+      href: dashboardRoute(slug, href),
     };
   };
 
@@ -35,7 +40,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
           {
             title: 'Home',
             icon: HomeIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD, true),
+            ...getLinkAndVariant(Navigation.DASHBOARD_ROOT, true),
           },
           {
             title: 'Components',
@@ -56,7 +61,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
             title: 'Billing',
             icon: CreditCardIcon,
             ...getLinkAndVariant(Navigation.DASHBOARD_BILLING),
-          }
+          },
         ]}
       />
       <Separator />

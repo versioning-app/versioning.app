@@ -17,10 +17,10 @@ export const ClerkOrganization = () => {
       <OrganizationSwitcher
         appearance={appearance}
         organizationProfileProps={{ appearance }}
-        afterCreateOrganizationUrl={Navigation.DASHBOARD}
+        afterCreateOrganizationUrl={Navigation.DASHBOARD_ROOT}
         afterLeaveOrganizationUrl={Navigation.HOME}
-        afterSelectOrganizationUrl={Navigation.DASHBOARD}
-        afterSelectPersonalUrl={Navigation.DASHBOARD}
+        afterSelectOrganizationUrl={Navigation.DASHBOARD_ROOT}
+        afterSelectPersonalUrl={Navigation.DASHBOARD_ROOT}
       />
     </div>
   );
@@ -40,7 +40,7 @@ export const ClerkUser = () => {
         userProfileProps={{ appearance }}
         afterMultiSessionSingleSignOutUrl={Navigation.HOME}
         afterSignOutUrl={Navigation.HOME}
-        afterSwitchSessionUrl={Navigation.DASHBOARD}
+        afterSwitchSessionUrl={Navigation.DASHBOARD_ROOT}
       />
     </>
   );

@@ -6,14 +6,14 @@ import {
 } from '@/actions/components';
 import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
 import { Button } from '@/components/ui/button';
-import { Navigation } from '@/config/navigation';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { Component } from '@/database/schema';
 import { parseServerError } from '@/lib/actions/parse-server-error';
 import { AppErrorJson } from '@/lib/error/app.error';
 import { cn } from '@/lib/utils';
 import { createComponentSchema } from '@/validation/component';
 import { Loader2, TrashIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -88,6 +88,7 @@ export const ComponentList = ({ components }: { components?: Component[] }) => {
 
 export function CreateComponentForm() {
   const router = useRouter();
+  const { slug } = useParams();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<AppErrorJson>();
   const [values, setValues] = useState<
@@ -101,9 +102,8 @@ export function CreateComponentForm() {
       closeButton: false,
     });
 
-    const { data: component, serverError } = await createComponentAction(
-      values
-    );
+    const { data: component, serverError } =
+      await createComponentAction(values);
 
     toast.dismiss(loadingToast);
     setSubmitting(false);
@@ -121,7 +121,7 @@ export function CreateComponentForm() {
       toast.success(`Component "${component.name}" created`);
       setError(undefined);
       setValues({});
-      router.push(Navigation.DASHBOARD_COMPONENTS);
+      router.push(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
     }
   };
 
