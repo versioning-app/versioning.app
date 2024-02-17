@@ -32,6 +32,18 @@ export function AutoFormSubmit({
   );
 }
 
+export interface IAutoFormProps<SchemaType extends ZodObjectOrWrapped> {
+  formSchema: SchemaType;
+  values?: Partial<z.infer<SchemaType>>;
+  onValuesChange?: (values: Partial<z.infer<SchemaType>>) => void;
+  onParsedValuesChange?: (values: Partial<z.infer<SchemaType>>) => void;
+  onSubmit?: (values: z.infer<SchemaType>) => void;
+  fieldConfig?: FieldConfig<z.infer<SchemaType>>;
+  children?: React.ReactNode;
+  className?: string;
+  dependencies?: Dependency<z.infer<SchemaType>>[];
+}
+
 function AutoForm<SchemaType extends ZodObjectOrWrapped>({
   formSchema,
   values: valuesProp,
@@ -42,17 +54,7 @@ function AutoForm<SchemaType extends ZodObjectOrWrapped>({
   children,
   className,
   dependencies,
-}: {
-  formSchema: SchemaType;
-  values?: Partial<z.infer<SchemaType>>;
-  onValuesChange?: (values: Partial<z.infer<SchemaType>>) => void;
-  onParsedValuesChange?: (values: Partial<z.infer<SchemaType>>) => void;
-  onSubmit?: (values: z.infer<SchemaType>) => void;
-  fieldConfig?: FieldConfig<z.infer<SchemaType>>;
-  children?: React.ReactNode;
-  className?: string;
-  dependencies?: Dependency<z.infer<SchemaType>>[];
-}) {
+}: IAutoFormProps<SchemaType>) {
   const objectFormSchema = getObjectFormSchema(formSchema);
   const defaultValues: DefaultValues<z.infer<typeof objectFormSchema>> | null =
     getDefaultValues(objectFormSchema);
