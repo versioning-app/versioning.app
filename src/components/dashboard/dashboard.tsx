@@ -1,22 +1,19 @@
 import { ClerkOrganization, ClerkUser } from '@/components/common/clerk';
 import { Logo } from '@/components/common/logo';
 import { CommandMenu } from '@/components/dashboard/command-menu';
+import { DashboardLink } from '@/components/dashboard/dashboard-link';
 import { MobileSidebar } from '@/components/dashboard/mobile-sidebar';
 import { Separator } from '@/components/ui/separator';
 import { appConfig } from '@/config/app';
-import { Navigation } from '@/config/navigation';
 import { GearIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 
 export const SidebarHeader = () => (
   <div className="flex h-[60px] items-center border-b px-6">
-    <Link
-      className="flex items-center gap-2 font-semibold"
-      href={Navigation.DASHBOARD}
-    >
+    <DashboardLink className="flex items-center gap-2 font-semibold">
       <Logo className="h-12 w-12" />
       <span className="">{appConfig.name}</span>
-    </Link>
+    </DashboardLink>
   </div>
 );
 
@@ -45,12 +42,12 @@ export function MainLayout({
     <div className="grid min-h-screen w-full">
       <div className="flex flex-col">
         <header className="flex h-14 lg:h-[60px] items-center gap-4 bg-gray-100/40 px-4 dark:bg-gray-800/40">
-          <Link href={Navigation.DASHBOARD}>
+          <DashboardLink>
             <MobileSidebar />
             <Logo className="hidden md:inline" />
             <span className="sr-only">Dashboard</span>
-            <span className="hidden md:inline">versioning.app</span>
-          </Link>
+            <span className="hidden md:inline">{appConfig.name}</span>
+          </DashboardLink>
           <div className="w-full flex-1">
             <CommandMenu />
           </div>

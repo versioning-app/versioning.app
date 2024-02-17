@@ -1,4 +1,5 @@
 import { appConfig } from '@/config/app';
+import { DisallowedSlugs } from '@/config/navigation';
 import { DEFAULT_DB_CACHE_MS } from '@/config/storage';
 import { db } from '@/database/db';
 import { Workspace, workspaces } from '@/database/schema';
@@ -8,9 +9,11 @@ import { redis } from '@/lib/redis';
 import { BaseService } from '@/services/base.service';
 import { auth, clerkClient } from '@clerk/nextjs';
 import { AuthObject, SignedInAuthObject } from '@clerk/nextjs/server';
+import cryptoRandomString from 'crypto-random-string';
 import { and, eq } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
 import 'server-only';
+import slugify from 'slugify';
 
 export class WorkspaceService extends BaseService {
   public constructor() {
@@ -319,21 +322,203 @@ export class WorkspaceService extends BaseService {
     return this.currentWorkspace({ userId, orgId });
   }
 
+  public async getWorkspaceFromSlug(
+    slug: string
+  ): Promise<Workspace | undefined> {
+    try {
+      const workspaceBySlug = await db
+        .select()
+        .from(workspaces)
+        .where(eq(workspaces.slug, slug));
+
+      return workspaceBySlug?.[0];
+    } catch (error: unknown) {
+      this.logger.error({ slug, error }, 'Error fetching workspace from slug');
+      return undefined;
+    }
+  }
+
+  public async generateSlugForWorkspace({
+    userId,
+    orgId,
+  }: Pick<SignedInAuthObject, 'userId' | 'orgId'>): Promise<string> {
+    if (!userId) {
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
+    }
+
+    if (orgId) {
+      const organization = await clerkClient.organizations.getOrganization({
+        organizationId: orgId,
+      });
+
+      if (!organization) {
+        throw new AppError(
+          'Organization not found',
+          ErrorCodes.ORGANIZATION_NOT_FOUND
+        );
+      }
+
+      return slugify(
+        organization.slug ?? organization.name ?? orgId
+      ).toLowerCase();
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+
+    if (!user) {
+      throw new AppError('User not found', ErrorCodes.USER_NOT_FOUND);
+    }
+
+    const name = `${user.firstName} ${user.lastName}`;
+    const username = user.username ?? user.emailAddresses?.[0]?.emailAddress;
+
+    return slugify(name.length >= 6 ? name : username || userId).toLowerCase();
+  }
+
+  public async getWorkspaceById(workspaceId: string): Promise<Workspace> {
+    const workspace = await db
+      .select()
+      .from(workspaces)
+      .where(eq(workspaces.id, workspaceId));
+
+    if (!workspace) {
+      throw new AppError('Workspace not found', ErrorCodes.RESOURCE_NOT_FOUND);
+    }
+
+    return workspace[0];
+  }
+
+  public async isValidSlug(slug: string) {
+    return (
+      !DisallowedSlugs.includes(slug) &&
+      (await this.getWorkspaceFromSlug(slug)) === undefined
+    );
+  }
+
+  public async changeSlug(updateData: { slug: string }) {
+    const slug = updateData.slug.toLowerCase();
+
+    const workspace = await this.currentWorkspace();
+
+    if (workspace.slug === slug) {
+      throw new AppError(
+        'Slug is the same as current slug',
+        ErrorCodes.WORKSPACE_SLUG_UNAVAILABLE
+      );
+    }
+
+    if (!(await this.isValidSlug(slug))) {
+      throw new AppError(
+        'Slug is not available',
+        ErrorCodes.WORKSPACE_SLUG_UNAVAILABLE
+      );
+    }
+
+    this.logger.debug({ slug }, 'Changing workspace slug');
+
+    const updatedWorkspaces = await db
+      .update(workspaces)
+      .set({ slug })
+      .where(
+        and(
+          eq(workspaces.id, workspace.id),
+          eq(workspaces.clerkId, this.currentClerkId)
+        )
+      )
+      .returning();
+
+    if (updatedWorkspaces?.[0]?.slug !== slug) {
+      throw new AppError(
+        'Error updating workspace slug',
+        ErrorCodes.RESOURCE_NOT_FOUND
+      );
+    }
+
+    const { orgId, userId } = auth();
+
+    await this.linkWorkspaceToClerk({
+      workspaceId: workspace.id,
+      slug,
+      userId,
+      orgId,
+    });
+
+    this.logger.info({ slug }, 'Workspace slug changed');
+    return updatedWorkspaces[0];
+  }
+
+  public async generateUniqueSlug({
+    generatedSlug,
+  }: {
+    generatedSlug: string;
+  }): Promise<string> {
+    let slug: string | undefined;
+    do {
+      if (!slug) {
+        slug = generatedSlug;
+        this.logger.debug({ slug }, 'Attempting to use generated slug');
+        continue;
+      }
+
+      this.logger.debug(
+        { slug, generatedSlug },
+        'Slug exists, appending random string'
+      );
+
+      slug = `${generatedSlug}-${cryptoRandomString({ length: 8 })}`;
+    } while (!(await this.isValidSlug(slug)));
+
+    this.logger.info({ slug }, 'Generated unique slug');
+    return slug;
+  }
+
+  public get currentClerkId(): string {
+    const { orgId, userId } = auth();
+
+    if (!userId) {
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND
+      );
+    }
+
+    return orgId || userId;
+  }
+
   public async createWorkspace({
     orgId,
     userId,
   }: Pick<SignedInAuthObject, 'userId' | 'orgId'>): Promise<Workspace> {
     this.logger.debug({ orgId, userId }, 'Creating workspace');
 
+    const generatedSlug = await this.generateSlugForWorkspace({
+      userId,
+      orgId,
+    });
+
+    const slug = await this.generateUniqueSlug({ generatedSlug });
+
     const [newWorkspace] = await db
       .insert(workspaces)
       .values({
+        slug,
         type: orgId ? 'organization' : 'user',
         clerkId: orgId || userId,
       })
       .returning();
 
+    if (!newWorkspace) {
+      throw new AppError(
+        'Error creating workspace',
+        ErrorCodes.RESOURCE_NOT_FOUND
+      );
+    }
+
     this.logger.info({ newWorkspace }, 'Workspace created');
+
     return newWorkspace;
   }
 
@@ -361,7 +546,39 @@ export class WorkspaceService extends BaseService {
         orgId,
         sessionClaims,
       });
+
       if (workspaceId) {
+        const workspace = await this.getWorkspaceById(workspaceId);
+
+        if (workspace?.clerkId !== (orgId || userId)) {
+          this.logger.warn(
+            { workspaceId, orgId, userId, workspace },
+            'Workspace ID does not match user or organization'
+          );
+
+          throw new AppError(
+            'Workspace does not exist',
+            ErrorCodes.WORKSPACE_NOT_FOUND
+          );
+        }
+
+        if (
+          (orgId && workspace.slug !== sessionClaims?.org_slug) ||
+          (!orgId && workspace.slug !== sessionClaims?.user_slug)
+        ) {
+          this.logger.debug(
+            { orgId, userId, workspace, sessionClaims },
+            'Workspace slug does not match, updating'
+          );
+
+          await this.linkWorkspaceToClerk({
+            workspaceId,
+            slug: workspace.slug,
+            userId,
+            orgId,
+          });
+        }
+
         this.logger.info('Workspace already linked and exists');
         return { status: 'ready', workspaceId };
       }
@@ -380,6 +597,7 @@ export class WorkspaceService extends BaseService {
 
     await this.linkWorkspaceToClerk({
       workspaceId: workspace.id,
+      slug: workspace.slug,
       userId: userId,
       orgId: orgId ?? undefined,
     });
@@ -389,9 +607,13 @@ export class WorkspaceService extends BaseService {
 
   public async linkWorkspaceToClerk({
     workspaceId,
+    slug,
     userId,
     orgId,
-  }: Pick<AuthObject, 'userId' | 'orgId'> & { workspaceId: string }) {
+  }: Pick<AuthObject, 'userId' | 'orgId'> & {
+    workspaceId: string;
+    slug: string;
+  }) {
     if (!userId) {
       this.logger.warn('No user provided to link workspace');
       return;
@@ -403,7 +625,9 @@ export class WorkspaceService extends BaseService {
       await clerkClient.organizations.updateOrganization(orgId, {
         publicMetadata: {
           workspaceId,
+          slug,
         },
+        slug,
       });
 
       this.logger.info({ workspaceId }, 'Workspace linked to organization');
@@ -415,6 +639,7 @@ export class WorkspaceService extends BaseService {
     await clerkClient.users.updateUserMetadata(userId, {
       publicMetadata: {
         workspaceId,
+        slug,
       },
     });
 

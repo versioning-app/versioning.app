@@ -8,7 +8,7 @@ import { Noto_Sans as FontSans } from 'next/font/google';
 
 import { Toaster } from '@/components/ui/sonner';
 import { appConfig } from '@/config/app';
-import { ThemeProvider } from '@/providers/theme-provider';
+import { AppProviders } from '@/providers/providers';
 import Script from 'next/script';
 import '../styles/globals.css';
 
@@ -36,12 +36,12 @@ export default function RootLayout({
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AppProviders attribute="class" defaultTheme="system" enableSystem>
             {children}
             <Toaster closeButton={true} richColors={true} duration={6000} />
             <SpeedInsights />
             <Analytics />
-          </ThemeProvider>
+          </AppProviders>
         </body>
         <Script src="https://js.stripe.com/v3/pricing-table.js" async={true} />
       </html>

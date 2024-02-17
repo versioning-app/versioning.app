@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
-import { Navigation } from '@/config/navigation';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { useClerk } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
@@ -34,11 +34,13 @@ import {
   Settings,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import * as React from 'react';
 
 export function CommandMenu({ ...props }: DialogProps) {
   const router = useRouter();
+  const { slug } = useParams();
+
   const {
     signOut,
     openUserProfile,
@@ -147,7 +149,9 @@ export function CommandMenu({ ...props }: DialogProps) {
           <CommandGroup heading="Dashboard">
             <CommandItem
               onSelect={() =>
-                runCommand(() => router.push(Navigation.DASHBOARD))
+                runCommand(() =>
+                  router.push(dashboardRoute(slug, Navigation.DASHBOARD_ROOT))
+                )
               }
             >
               <HomeIcon className="mr-2 h-4 w-4" />
@@ -155,7 +159,11 @@ export function CommandMenu({ ...props }: DialogProps) {
             </CommandItem>
             <CommandItem
               onSelect={() =>
-                runCommand(() => router.push(Navigation.DASHBOARD_COMPONENTS))
+                runCommand(() =>
+                  router.push(
+                    dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS)
+                  )
+                )
               }
             >
               <ComponentIcon className="mr-2 h-4 w-4" />
@@ -164,7 +172,9 @@ export function CommandMenu({ ...props }: DialogProps) {
             <CommandItem
               onSelect={() =>
                 runCommand(() =>
-                  router.push(Navigation.DASHBOARD_COMPONENTS_NEW)
+                  router.push(
+                    dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS_NEW)
+                  )
                 )
               }
             >
@@ -173,7 +183,11 @@ export function CommandMenu({ ...props }: DialogProps) {
             </CommandItem>
             <CommandItem
               onSelect={() =>
-                runCommand(() => router.push(Navigation.DASHBOARD_INTEGRATIONS))
+                runCommand(() =>
+                  router.push(
+                    dashboardRoute(slug, Navigation.DASHBOARD_INTEGRATIONS)
+                  )
+                )
               }
             >
               <Plug2Icon className="mr-2 h-4 w-4" />
@@ -181,7 +195,11 @@ export function CommandMenu({ ...props }: DialogProps) {
             </CommandItem>
             <CommandItem
               onSelect={() =>
-                runCommand(() => router.push(Navigation.DASHBOARD_RELEASES))
+                runCommand(() =>
+                  router.push(
+                    dashboardRoute(slug, Navigation.DASHBOARD_RELEASES)
+                  )
+                )
               }
             >
               <CalendarClock className="mr-2 h-4 w-4" />
@@ -189,7 +207,11 @@ export function CommandMenu({ ...props }: DialogProps) {
             </CommandItem>
             <CommandItem
               onSelect={() =>
-                runCommand(() => router.push(Navigation.DASHBOARD_SETTINGS))
+                runCommand(() =>
+                  router.push(
+                    dashboardRoute(slug, Navigation.DASHBOARD_SETTINGS)
+                  )
+                )
               }
             >
               <Settings className="mr-2 h-4 w-4" />

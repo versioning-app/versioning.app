@@ -2,13 +2,9 @@ import { ComponentList } from '@/components/dashboard/component';
 import { ComponentsService } from '@/services/components.service';
 import { ServiceFactory } from '@/services/service-factory';
 
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
-
 export default async function Components() {
-  const components = await ServiceFactory.get(
-    ComponentsService
-  ).getComponents();
+  const components =
+    await ServiceFactory.get(ComponentsService).getComponents();
 
   return (
     <div>

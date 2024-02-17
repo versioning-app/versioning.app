@@ -12,6 +12,7 @@ export const workspaceType = pgEnum('workspace_type', ['user', 'organization']);
 export const workspaces = pgTable('workspaces', {
   id: identifierColumn(),
   type: workspaceType('type'),
+  slug: varchar('slug', { length: 42 }).notNull().unique(),
   clerkId: varchar('clerk_id', { length: 255 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 255 }),
 });
