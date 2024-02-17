@@ -4,11 +4,13 @@ import { DashboardLinks } from '@/components/dashboard/sidebar-links';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { appConfig } from '@/config/app';
-import { Navigation } from '@/config/navigation';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import React from 'react';
 
 export function MobileSidebar() {
+  const { slug } = useParams();
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -27,7 +29,10 @@ export function MobileSidebar() {
         side="left"
         className="px-0 bg-gray-100/90 py-4 dark:bg-gray-800/90"
       >
-        <Link href={Navigation.DASHBOARD} className="pl-4 flex items-center">
+        <Link
+          href={dashboardRoute(slug, Navigation.DASHBOARD_ROOT)}
+          className="pl-4 flex items-center"
+        >
           <Logo className="min-h-5 min-w-5" />
           <span className="font-bold">{appConfig.name}</span>
         </Link>

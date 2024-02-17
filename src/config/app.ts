@@ -1,5 +1,7 @@
 export const appConfig = {
   name: 'versioning.app',
+  // creator: 'Callum Morris',
+  creator: 'versioning.app',
   url: 'https://versioning.app',
   links: {
     twitter: 'https://twitter.com/versioningapp',

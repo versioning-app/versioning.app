@@ -1,6 +1,7 @@
 import { Logo } from '@/components/common/logo';
 import { ThemeToggle } from '@/components/common/theme-toggle';
 import { UnderlinedLink } from '@/components/common/underlined-link';
+import { DashboardButton } from '@/components/dashboard/dashboard-link';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -19,8 +20,9 @@ import {
 import { MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 
-export function Header() {
+export async function Header() {
   const { userId } = auth();
+
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 border-b sticky top-0 shadow-md bg-background max-w-screen">
       <Link className="mr-6 hidden lg:flex" href={Navigation.HOME}>
@@ -311,9 +313,9 @@ export function Header() {
       </Sheet>
       <div className="ml-auto flex gap-2">
         <ThemeToggle />
-        <Link href={Navigation.DASHBOARD}>
-          <Button variant="default">{userId ? 'Dashboard' : 'Sign in'}</Button>
-        </Link>
+        <DashboardButton url={userId ? Navigation.DASHBOARD_ROOT : undefined}>
+          {userId ? 'Dashboard' : 'Sign in'}
+        </DashboardButton>
       </div>
     </header>
   );

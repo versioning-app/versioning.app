@@ -1,15 +1,27 @@
 import { Logo } from '@/components/common/logo';
 import { MainLayout } from '@/components/dashboard/dashboard';
 import { Sidebar } from '@/components/dashboard/sidebar';
+import { dashboardRoute } from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
+import { ServiceFactory } from '@/services/service-factory';
+import { WorkspaceService } from '@/services/workspace.service';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardLayout({
   children,
+  params: { slug },
 }: Readonly<{
   children: React.ReactNode;
+  params: { slug: string };
 }>) {
+  if (!slug) {
+    const workspaceService = ServiceFactory.get(WorkspaceService);
+    const workspace = await workspaceService.currentWorkspace();
+    return redirect(dashboardRoute(workspace.slug));
+  }
+
   const layout = cookies().get(`${StorageKeys.COOKIE_STORAGE_PREFIX}:layout`);
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 

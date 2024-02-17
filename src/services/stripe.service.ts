@@ -1,4 +1,4 @@
-import { Navigation } from '@/config/navigation';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { stripe } from '@/lib/stripe/stripe';
@@ -107,7 +107,7 @@ export class StripeService extends BaseService {
 
     return stripe.billingPortal.sessions.create({
       customer: workspace.stripeCustomerId,
-      return_url: `${getURL()}/${Navigation.DASHBOARD_BILLING}`,
+      return_url: `${getURL()}/${dashboardRoute(workspace.slug, Navigation.DASHBOARD_BILLING)}`,
     });
   }
 
@@ -151,7 +151,8 @@ export class StripeService extends BaseService {
       );
     }
 
-    const workspaceId = await this.workspaceService.currentWorkspaceId();
+    const workspace = await this.workspaceService.currentWorkspace();
+    const { id: workspaceId, slug } = workspace;
     const customer = await this.createOrRetrieveCustomer();
 
     if (price.type !== 'recurring') {
@@ -188,8 +189,8 @@ export class StripeService extends BaseService {
           workspaceId,
           ...metadata,
         },
-        success_url: `${getURL()}/${Navigation.DASHBOARD_BILLING}?success=true`,
-        cancel_url: `${getURL()}/${Navigation.DASHBOARD_BILLING}?cancel=true`,
+        success_url: `${getURL()}/${dashboardRoute(slug, Navigation.DASHBOARD_BILLING)}?success=true`,
+        cancel_url: `${getURL()}/${dashboardRoute(slug, Navigation.DASHBOARD_BILLING)}?cancel=true`,
       });
     } catch (err) {
       this.logger.error({ err }, 'Error creating checkout session');
