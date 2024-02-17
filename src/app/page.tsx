@@ -31,7 +31,7 @@ export default async function RootPage() {
     } catch (error) {
       logger.debug(
         { error },
-        'Error getting current workspace, user is likely not logged in'
+        'Error getting current workspace, user is likely not logged in',
       );
     }
   }
