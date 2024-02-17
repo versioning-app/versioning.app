@@ -1,8 +1,8 @@
 import { StorageKeys } from '@/config/storage';
 import { generateRequestId } from '@/lib/utils';
-import pinoLogger, { Logger } from 'pino';
+import pinoLogger from 'pino';
 
-let logger: Logger;
+// let logger: Logger;
 
 export type LoggerContext = {
   source?: string;
@@ -10,12 +10,10 @@ export type LoggerContext = {
 } & Record<string, unknown>;
 
 export const getLogger = (context?: LoggerContext) => {
-  if (!logger) {
-    const logLevel = process.env.APP_LOG_LEVEL || 'info';
-    logger = pinoLogger({
-      level: logLevel,
-    });
-  }
+  const logLevel = process.env.APP_LOG_LEVEL || 'info';
+  let logger = pinoLogger({
+    level: logLevel,
+  });
 
   if (context) {
     logger = logger.child(context);
