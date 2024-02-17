@@ -18,5 +18,5 @@ export const changeSlugAction = workspaceAction(
     logger.debug({ updated }, 'Slug changed successfully');
 
     return updated;
-  }
+  },
 );
