@@ -9,6 +9,7 @@ const nextConfig = {
   },
   experimental: {
     serverMinification: false,
+    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
   },
 };
 

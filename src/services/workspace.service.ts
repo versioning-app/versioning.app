@@ -144,7 +144,7 @@ export class WorkspaceService extends BaseService {
     email: string;
     name: string;
   }> {
-    const { userId, orgId, organization } = auth();
+    const { userId, orgId } = auth();
 
     if (!userId) {
       throw new AppError(
