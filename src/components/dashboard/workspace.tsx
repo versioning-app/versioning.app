@@ -34,7 +34,7 @@ export function ChangeSlugForm() {
       `Changing workspace slug to "${values.slug}"`,
       {
         closeButton: false,
-      }
+      },
     );
 
     const { data: updatedWorkspace, serverError } =
@@ -57,7 +57,7 @@ export function ChangeSlugForm() {
       setError(undefined);
       setValues({});
       router.push(
-        dashboardRoute(updatedWorkspace.slug, Navigation.DASHBOARD_SETTINGS)
+        dashboardRoute(updatedWorkspace.slug, Navigation.DASHBOARD_SETTINGS),
       );
     }
   };
