@@ -2,20 +2,20 @@ import { Navigation } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { getAuth } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
+export const revalidate = 0;
 
-export async function GET(request: NextRequest) {
-  const origin = request.nextUrl.origin;
+export default async function RootPage() {
   const logger = serverLogger({ source: 'index' });
-
-  let path: string = Navigation.HOME;
 
   const workspaceService = ServiceFactory.get(WorkspaceService);
 
-  const { userId, orgId, sessionClaims } = getAuth(request);
+  const { userId, orgId, sessionClaims } = auth();
+
+  let path: string = Navigation.HOME;
 
   if (userId || orgId) {
     try {
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       });
 
       if (workspace) {
-        path = `${Navigation.DASHBOARD_ROOT}/${workspace.slug}`;
+        path = `${Navigation.DASHBOARD_ROOT}${workspace.slug}`;
       }
     } catch (error) {
       logger.debug(
@@ -36,5 +36,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}${path}`);
+  return redirect(path);
 }

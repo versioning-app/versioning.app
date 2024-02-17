@@ -1,13 +1,16 @@
 import { Logo } from '@/components/common/logo';
 import { MainLayout } from '@/components/dashboard/dashboard';
 import { Sidebar } from '@/components/dashboard/sidebar';
-import { dashboardRoute } from '@/config/navigation';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
+import { ClerkLoaded, ClerkLoading, auth } from '@clerk/nextjs';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+
+export const dynamic = 'force-dynamic'; // defaults to auto
+export const revalidate = 0;
 
 export default async function DashboardLayout({
   children,
@@ -16,9 +19,20 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { slug: string };
 }>) {
+  const { userId, orgId } = auth();
+
+  if (!userId) {
+    return redirect(Navigation.HOME);
+  }
+
   if (!slug) {
     const workspaceService = ServiceFactory.get(WorkspaceService);
-    const workspace = await workspaceService.currentWorkspace();
+
+    const workspace = await workspaceService.currentWorkspace({
+      userId,
+      orgId,
+    });
+
     return redirect(dashboardRoute(workspace.slug));
   }
 
