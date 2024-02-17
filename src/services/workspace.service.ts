@@ -528,7 +528,7 @@ export class WorkspaceService extends BaseService {
     sessionClaims,
   }: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>): Promise<{
     status: 'ready' | 'linked';
-    workspaceId: string;
+    workspace: Workspace;
   }> {
     this.logger.debug({ orgId, userId, sessionClaims }, 'Ensuring workspace');
 
@@ -580,7 +580,7 @@ export class WorkspaceService extends BaseService {
         }
 
         this.logger.info('Workspace already linked and exists');
-        return { status: 'ready', workspaceId };
+        return { status: 'ready', workspace };
       }
     } catch (error: unknown) {
       if ((error as Error)?.message !== 'No workspace ID found') {
@@ -602,7 +602,7 @@ export class WorkspaceService extends BaseService {
       orgId: orgId ?? undefined,
     });
 
-    return { status: 'linked', workspaceId: workspace.id };
+    return { status: 'linked', workspace };
   }
 
   public async linkWorkspaceToClerk({
