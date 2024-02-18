@@ -8,6 +8,69 @@
       "when": 1708162483549,
       "tag": "0000_smart_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708267221697,
+      "tag": "0001_sleepy_nighthawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708267608196,
+      "tag": "0002_curved_trish_tilby",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1708267737715,
+      "tag": "0003_hesitant_talisman",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1708269284221,
+      "tag": "0004_loving_blur",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1708269473059,
+      "tag": "0005_fuzzy_maddog",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1708271335678,
+      "tag": "0006_adorable_surge",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1708272454577,
+      "tag": "0007_jittery_slyde",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1708292165987,
+      "tag": "0008_pretty_silvermane",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1708293211672,
+      "tag": "0009_flowery_red_skull",
+      "breakpoints": true
     }
   ]
 }
