@@ -1,0 +1,1 @@
+ALTER TABLE "release_strategy_steps" ALTER COLUMN "environment_id" DROP NOT NULL;
