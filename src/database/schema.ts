@@ -34,7 +34,11 @@ export const releaseStepStatus = pgEnum('release_step_status', [
   'archived',
 ]);
 
-export const gateTypes = pgEnum('gate_types', ['approval', 'manual']);
+export const approvalTypes = pgEnum('gate_types', [
+  'preparation',
+  'post_deployment',
+  'approval_gate',
+]);
 
 export const releaseStatus = pgEnum('release_status', [
   'planning',
@@ -245,7 +249,7 @@ export const releases = pgTable('releases', {
   id: identifierColumn(),
   date: timestamp('date'),
   status: releaseStatus('status'),
-  version: varchar('version', { length: 42 }).notNull(),
+  version: varchar('version', { length: 42 }),
   description: text('description'),
   strategyId: varchar('release_strategy_id')
     .references(() => releaseStrategies.id, { onDelete: 'cascade' })
@@ -266,6 +270,8 @@ export const releaseComponentVersions = pgTable('release_components', {
   componentVersionId: varchar('component_version_id')
     .references(() => componentVersions.id, { onDelete: 'cascade' })
     .notNull(),
+  active: boolean('active').notNull().default(false),
+  ...TIME_COLUMNS,
 });
 
 export type ReleaseComponentVersion =
@@ -278,7 +284,7 @@ export const releaseSteps = pgTable('release_steps', {
   releaseId: varchar('release_id')
     .references(() => releases.id, { onDelete: 'cascade' })
     .notNull(),
-  strategyStepId: varchar('strategy_step_id')
+  releaseStrategyStepId: varchar('release_strategy_step_id')
     .references(() => releaseStrategySteps.id, { onDelete: 'cascade' })
     .notNull(),
   status: releaseStepStatus('status').notNull(),
@@ -304,12 +310,20 @@ export const deployments = pgTable('deployments', {
 export type Deployment = typeof deployments.$inferSelect;
 export type NewDeployment = typeof deployments.$inferInsert;
 
-export const releaseStepGates = pgTable('release_step_gates', {
+export const approvals = pgTable('approvals', {
   id: identifierColumn(),
   releaseStepId: varchar('release_step_id')
     .references(() => releaseSteps.id, { onDelete: 'cascade' })
     .notNull(),
-  type: gateTypes('type').notNull(),
+  type: approvalTypes('type').notNull(),
+  // False if the approval was rejected
+  approved: boolean('approved').notNull().default(false),
+  comments: text('comments'),
+  member_id: varchar('member_id')
+    .references(() => members.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
   ...TIME_COLUMNS,
 });
 

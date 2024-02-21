@@ -12,7 +12,7 @@ async function runMigrate() {
   if (!databaseUrl) {
     throw new AppError(
       'DATABASE_URL is not defined',
-      ErrorCodes.INTERNAL_MISCONFIGURATION
+      ErrorCodes.INTERNAL_MISCONFIGURATION,
     );
   }
 
