@@ -1,19 +1,18 @@
+version: '3'
+
 services:
   postgres:
-    image: "postgres:16-alpine"
-    environment:
-      POSTGRES_USER: versioning-app
-      POSTGRES_PASSWORD: versioning-app
-      POSTGRES_DB: versioning-app
+    image: postgres:16
+    command: '-d 1' # set debug-level
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
-  pg_proxy:
-    image: ghcr.io/neondatabase/wsproxy:latest
+      - '5432:5432'
     environment:
-      APPEND_PORT: "postgres:5432"
-      ALLOW_ADDR_REGEX: ".*"
-      LOG_TRAFFIC: "true"
-    ports:
-      - "5433:80"
-    depends_on:
-      - postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: main
+      
+volumes:
+  db_data:
