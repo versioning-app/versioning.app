@@ -1,10 +1,17 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
 
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import 'dotenv/config';
+
+if (process.env.USE_OFFLINE_DATABASE) {
+  // https://github.com/neondatabase/serverless/issues/33
+  // https://github.com/TimoWilhelm/local-neon-http-proxy
+  neonConfig.fetchEndpoint = (host) =>
+    `https://${host}:${host === 'db.localtest.me' ? 4444 : 443}/sql`;
+}
 
 const databaseUrl = process.env.DATABASE_URL;
 
