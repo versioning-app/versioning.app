@@ -1,4 +1,4 @@
-import { CreateComponentForm } from '@/components/dashboard/forms/create-component-form';
+import { CreateComponentForm } from '@/components/dashboard/forms/create-component';
 import { PageDialog } from '@/components/dashboard/page-dialog';
 import { DialogContent } from '@/components/ui/dialog';
 

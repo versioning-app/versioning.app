@@ -1,6 +1,6 @@
 'use client';
 import { createComponentAction } from '@/actions/components';
-import { InputForm } from '@/components/dashboard/forms/input-form';
+import { InputForm } from '@/components/dashboard/forms/generic';
 import { Navigation } from '@/config/navigation';
 import { createComponentSchema } from '@/validation/component';
 

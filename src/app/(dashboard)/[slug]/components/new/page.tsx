@@ -1,4 +1,4 @@
-import { CreateComponentForm } from '@/components/dashboard/forms/create-component-form';
+import { CreateComponentForm } from '@/components/dashboard/forms/create-component';
 
 export default function NewComponentPage() {
   return (
