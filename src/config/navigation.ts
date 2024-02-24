@@ -9,13 +9,15 @@ export const Navigation = {
   DASHBOARD_INTEGRATIONS: '/integrations',
   DASHBOARD_SETTINGS: '/settings',
   DASHBOARD_BILLING: '/billing',
+  DASHBOARD_ENVIRONMENTS: '/environments',
+  DASHBOARD_ENVIRONMENTS_NEW: '/environments/new',
 } as const;
 
 export type NavigationItem = (typeof Navigation)[keyof typeof Navigation];
 
 export const dashboardRoute = (
   slug: string | string[],
-  path?: NavigationItem
+  path?: NavigationItem,
 ) =>
   `${Navigation.DASHBOARD_ROOT}${typeof slug === 'string' ? slug : slug[0]}${path ? path : ''}`;
 

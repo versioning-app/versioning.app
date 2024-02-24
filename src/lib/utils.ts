@@ -13,19 +13,13 @@ export function generateRequestId() {
   return crypto.randomUUID();
 }
 
-// export function revalidatePaths(...paths: string[]) {
-//   'use server';
+export const prettyPrint = (obj: any) => {
+  if (!obj) {
+    return '';
+  }
 
-//   if (paths.length === 0) {
-//     return '';
-//   }
-
-//   for (const path of paths) {
-//     revalidatePath(path);
-//   }
-
-//   return `${paths[0]}?revalidate=true&ts=${Date.now()}`;
-// }
+  return JSON.stringify(obj, null, 2);
+};
 
 export const capitalizeFirstLetter = (str: string) => {
   if (typeof str !== 'string' || str.length === 0) {

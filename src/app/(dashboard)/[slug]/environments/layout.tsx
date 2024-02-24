@@ -3,7 +3,7 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ComponentsLayout({
+export default function EnvironmentsLayout({
   children,
   modal,
   params: { slug },
@@ -17,18 +17,20 @@ export default function ComponentsLayout({
       <div>
         <div className="flex">
           <div className="flex-1">
-            <Link href={dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS)}>
-              <h1 className="text-2xl">Components</h1>
+            <Link
+              href={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS)}
+            >
+              <h1 className="text-2xl">Environments</h1>
             </Link>
           </div>
           <div className="mb-4">
             <Link
-              href={dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS_NEW)}
+              href={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS_NEW)}
               className="flex items-center"
             >
               <Button className="mr-2">
                 <Plus className="w-4 h-4 mr-2" />
-                New component
+                New environment
               </Button>
             </Link>
           </div>
