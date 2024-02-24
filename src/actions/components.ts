@@ -23,8 +23,8 @@ export const createComponentAction = workspaceAction(
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
 
-    return component;
-  }
+    return { component, success: true };
+  },
 );
 
 export const deleteComponentAction = workspaceAction(
@@ -39,5 +39,5 @@ export const deleteComponentAction = workspaceAction(
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
-  }
+  },
 );

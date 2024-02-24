@@ -2,21 +2,17 @@ import { db } from '@/database/db';
 import { Component, NewComponent, components } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
-import { BaseService } from '@/services/base.service';
-import { ServiceFactory } from '@/services/service-factory';
-import { WorkspaceService } from '@/services/workspace.service';
+import { WorkspaceScopedService } from '@/services/workspace-scoped-service';
 import { and, eq } from 'drizzle-orm';
 import 'server-only';
 
-export class ComponentsService extends BaseService {
+export class ComponentsService extends WorkspaceScopedService {
   public constructor() {
     super();
   }
 
   public async getComponents(): Promise<Component[] | undefined> {
-    const workspaceId = await ServiceFactory.get(
-      WorkspaceService
-    ).currentWorkspaceId();
+    const workspaceId = await this.currentWorkspaceId;
 
     const allComponents = await db
       .select()
@@ -29,17 +25,15 @@ export class ComponentsService extends BaseService {
   }
 
   public async getComponentByName(
-    name: string
+    name: string,
   ): Promise<Component | undefined> {
-    const workspaceId = await ServiceFactory.get(
-      WorkspaceService
-    ).currentWorkspaceId();
+    const workspaceId = await this.currentWorkspaceId;
 
     const [component] = await db
       .select()
       .from(components)
       .where(
-        and(eq(components.workspaceId, workspaceId), eq(components.name, name))
+        and(eq(components.workspaceId, workspaceId), eq(components.name, name)),
       );
 
     this.logger.debug({ component }, 'Component found');
@@ -51,16 +45,13 @@ export class ComponentsService extends BaseService {
     name,
     description,
   }: Pick<NewComponent, 'name' | 'description'>) {
-    const workspaceId = await ServiceFactory.get(
-      WorkspaceService
-    ).currentWorkspaceId();
-
+    const workspaceId = await this.currentWorkspaceId;
     const existing = await this.getComponentByName(name);
 
     if (existing) {
       throw new AppError(
         'A component with the same name already exists',
-        ErrorCodes.RESOURCE_ALREADY_EXISTS
+        ErrorCodes.RESOURCE_ALREADY_EXISTS,
       );
     }
 
@@ -79,17 +70,15 @@ export class ComponentsService extends BaseService {
   }
 
   public async deleteComponent(componentId: string) {
-    const workspaceId = await ServiceFactory.get(
-      WorkspaceService
-    ).currentWorkspaceId();
+    const workspaceId = await this.currentWorkspaceId;
 
     const [deletedComponent] = await db
       .delete(components)
       .where(
         and(
           eq(components.workspaceId, workspaceId),
-          eq(components.id, componentId)
-        )
+          eq(components.id, componentId),
+        ),
       )
       .returning();
 
