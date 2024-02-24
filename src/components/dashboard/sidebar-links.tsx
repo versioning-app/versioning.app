@@ -9,6 +9,7 @@ import {
 import {
   CalendarClock,
   ComponentIcon,
+  ContainerIcon,
   CreditCardIcon,
   HomeIcon,
   Plug2Icon,
@@ -22,7 +23,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
 
   const getLinkAndVariant = (
     href: NavigationItem,
-    exact = false
+    exact = false,
   ): Pick<NavLink, 'variant' | 'href'> => {
     return {
       variant: (exact ? path === href : path.startsWith(href))
@@ -41,6 +42,11 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
             title: 'Home',
             icon: HomeIcon,
             ...getLinkAndVariant(Navigation.DASHBOARD_ROOT, true),
+          },
+          {
+            title: 'Environments',
+            icon: ContainerIcon,
+            ...getLinkAndVariant(Navigation.DASHBOARD_ENVIRONMENTS),
           },
           {
             title: 'Components',
