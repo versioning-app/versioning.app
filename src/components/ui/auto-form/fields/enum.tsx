@@ -12,6 +12,9 @@ import AutoFormTooltip from '../common/tooltip';
 import { AutoFormInputComponentProps } from '../types';
 import { getBaseSchema } from '../utils';
 
+const isLabelValue = (value: any): value is { label: string; value: string } =>
+  typeof value === 'object' && 'label' in value && 'value' in value;
+
 export default function AutoFormEnum({
   label,
   isRequired,
@@ -20,8 +23,9 @@ export default function AutoFormEnum({
   zodItem,
   fieldProps,
 }: AutoFormInputComponentProps) {
-  const baseValues = (getBaseSchema(zodItem) as unknown as z.ZodEnum<any>)._def
-    .values;
+  const baseValues =
+    fieldConfigItem?.inputProps?.values ??
+    (getBaseSchema(zodItem) as unknown as z.ZodEnum<any>)._def.values;
 
   let values: [string, string][] = [];
   if (!Array.isArray(baseValues)) {
@@ -50,8 +54,11 @@ export default function AutoFormEnum({
           </SelectTrigger>
           <SelectContent>
             {values.map(([value, label]) => (
-              <SelectItem value={label} key={value}>
-                {label}
+              <SelectItem
+                value={isLabelValue(label) ? label.value : label}
+                key={value}
+              >
+                {isLabelValue(label) ? label.label : label}
               </SelectItem>
             ))}
           </SelectContent>
