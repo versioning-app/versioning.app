@@ -35,7 +35,7 @@ export const deleteComponentAction = workspaceAction(
     logger.debug({ input }, 'Deleting component');
 
     const componentsService = ServiceFactory.get(ComponentsService);
-    await componentsService.deleteComponent(input.componentId);
+    await componentsService.deleteComponent(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));

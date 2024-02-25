@@ -11,6 +11,8 @@ export const Navigation = {
   DASHBOARD_BILLING: '/billing',
   DASHBOARD_ENVIRONMENTS: '/environments',
   DASHBOARD_ENVIRONMENTS_NEW: '/environments/new',
+  DASHBOARD_ENVIRONMENT_TYPES: '/environment-types',
+  DASHBOARD_ENVIRONMENT_TYPES_NEW: '/environment-types/new',
 } as const;
 
 export type NavigationItem = (typeof Navigation)[keyof typeof Navigation];

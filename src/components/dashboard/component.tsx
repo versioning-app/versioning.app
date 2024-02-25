@@ -1,22 +1,13 @@
 'use client';
 
-import {
-  createComponentAction,
-  deleteComponentAction,
-} from '@/actions/components';
-import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
+import { deleteComponentAction } from '@/actions/components';
 import { Button } from '@/components/ui/button';
-import { Navigation, dashboardRoute } from '@/config/navigation';
 import { Component } from '@/database/schema';
 import { parseServerError } from '@/lib/actions/parse-server-error';
-import { AppErrorJson } from '@/lib/error/app.error';
 import { cn } from '@/lib/utils';
-import { createComponentSchema } from '@/validation/component';
 import { Loader2, TrashIcon } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 export const ComponentListItem = ({ component }: { component: Component }) => {
   const [isDeleting, setDeleting] = useState(false);
@@ -30,7 +21,7 @@ export const ComponentListItem = ({ component }: { component: Component }) => {
       closeButton: false,
     });
 
-    const { serverError } = await deleteComponentAction({ componentId: id });
+    const { serverError } = await deleteComponentAction({ id });
     toast.dismiss(loadingToast);
 
     if (serverError) {

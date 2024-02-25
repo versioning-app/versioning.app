@@ -2,7 +2,7 @@ import { prettyPrint } from '@/lib/utils';
 import { EnvironmentsService } from '@/services/environments.service';
 import { ServiceFactory } from '@/services/service-factory';
 
-export default async function Environments() {
+export default async function EnvironmentsPage() {
   const environments =
     await ServiceFactory.get(EnvironmentsService).getEnvironments();
 

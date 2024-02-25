@@ -6,5 +6,5 @@ export const createComponentSchema = z.object({
 });
 
 export const deleteComponentSchema = z.object({
-  componentId: z.string(),
+  id: z.string(),
 });
