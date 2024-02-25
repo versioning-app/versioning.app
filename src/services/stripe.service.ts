@@ -20,7 +20,7 @@ export class StripeService extends BaseService {
   ]);
 
   public constructor(
-    private readonly workspaceService: WorkspaceService = new WorkspaceService()
+    private readonly workspaceService: WorkspaceService = new WorkspaceService(),
   ) {
     super();
   }
@@ -36,7 +36,7 @@ export class StripeService extends BaseService {
         this.logger.warn({ existingCustomer }, 'Customer was deleted');
         throw new AppError(
           'Customer has been deleted in Stripe, cannot proceed',
-          ErrorCodes.STRIPE_CUSTOMER_DELETED
+          ErrorCodes.STRIPE_CUSTOMER_DELETED,
         );
       }
 
@@ -59,7 +59,7 @@ export class StripeService extends BaseService {
     this.logger.debug({ workspace }, 'Retrieving customer for workspace');
 
     const customer = await stripe.customers.retrieve(
-      workspace.stripeCustomerId
+      workspace.stripeCustomerId,
     );
 
     return customer;
@@ -71,7 +71,7 @@ export class StripeService extends BaseService {
 
     this.logger.debug(
       { workspace, customerDetails },
-      'Creating customer for workspace'
+      'Creating customer for workspace',
     );
 
     const { name, email } = customerDetails;
@@ -86,7 +86,7 @@ export class StripeService extends BaseService {
 
     this.logger.info(
       { customer },
-      'Stripe Customer created, linking to workspace'
+      'Stripe Customer created, linking to workspace',
     );
 
     await this.workspaceService.linkStripeCustomer(customer.id);
@@ -101,7 +101,7 @@ export class StripeService extends BaseService {
       this.logger.warn({ workspace }, 'No stripe customer ID found');
       throw new AppError(
         'No stripe customer ID found',
-        ErrorCodes.STRIPE_CUSTOMER_NOT_LINKED
+        ErrorCodes.STRIPE_CUSTOMER_NOT_LINKED,
       );
     }
 
@@ -124,7 +124,7 @@ export class StripeService extends BaseService {
       this.logger.error({ err }, 'Error retrieving products');
       throw new AppError(
         'Error retrieving products',
-        ErrorCodes.UNHANDLED_ERROR
+        ErrorCodes.UNHANDLED_ERROR,
       );
     }
   }
@@ -141,13 +141,13 @@ export class StripeService extends BaseService {
   public async createCheckoutSession(
     price: Stripe.Price,
     quantity: number = 1,
-    metadata: Record<string, string> = {}
+    metadata: Record<string, string> = {},
   ) {
     if (price.deleted || !price.active) {
       this.logger.warn({ price }, 'Price is not active');
       throw new AppError(
         'Price is not active',
-        ErrorCodes.STRIPE_PRICE_NOT_ACTIVE
+        ErrorCodes.STRIPE_PRICE_NOT_ACTIVE,
       );
     }
 
@@ -159,13 +159,13 @@ export class StripeService extends BaseService {
       this.logger.warn({ price }, 'Price type is not recurring');
       throw new AppError(
         'Price type not supported',
-        ErrorCodes.STRIPE_PRICE_NOT_SUPPORTED
+        ErrorCodes.STRIPE_PRICE_NOT_SUPPORTED,
       );
     }
 
     this.logger.debug(
       { price, customer, quantity, metadata },
-      'Creating checkout session'
+      'Creating checkout session',
     );
 
     let session;
@@ -196,7 +196,7 @@ export class StripeService extends BaseService {
       this.logger.error({ err }, 'Error creating checkout session');
       throw new AppError(
         'Error creating checkout session',
-        ErrorCodes.UNHANDLED_ERROR
+        ErrorCodes.UNHANDLED_ERROR,
       );
     }
 
@@ -204,7 +204,7 @@ export class StripeService extends BaseService {
       this.logger.error({ session }, 'Error creating checkout session');
       throw new AppError(
         'Error creating checkout session',
-        ErrorCodes.STRIPE_CHECKOUT_SESSION_CREATION_FAILURE
+        ErrorCodes.STRIPE_CHECKOUT_SESSION_CREATION_FAILURE,
       );
     }
 
@@ -214,7 +214,7 @@ export class StripeService extends BaseService {
 
   public async handleWebhookEvent(
     body: string,
-    signature: string
+    signature: string,
   ): Promise<boolean> {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     let event: Stripe.Event;
@@ -225,7 +225,7 @@ export class StripeService extends BaseService {
 
         throw new AppError(
           'Error processing stripe webhook',
-          ErrorCodes.STRIPE_UNHANDLED_WEBHOOK_EVENT
+          ErrorCodes.STRIPE_UNHANDLED_WEBHOOK_EVENT,
         );
       }
 
@@ -237,7 +237,7 @@ export class StripeService extends BaseService {
 
       throw new AppError(
         'Error processing stripe webhook',
-        ErrorCodes.STRIPE_WEBHOOK_FAILURE
+        ErrorCodes.STRIPE_WEBHOOK_FAILURE,
       );
     }
 
@@ -278,7 +278,7 @@ export class StripeService extends BaseService {
           default:
             throw new AppError(
               'No webhook handler defined for stripe event',
-              ErrorCodes.STRIPE_UNHANDLED_WEBHOOK_EVENT
+              ErrorCodes.STRIPE_UNHANDLED_WEBHOOK_EVENT,
             );
         }
       } catch (error) {
@@ -291,13 +291,13 @@ export class StripeService extends BaseService {
 
         throw new AppError(
           'Error processing stripe webhook',
-          ErrorCodes.STRIPE_WEBHOOK_FAILURE
+          ErrorCodes.STRIPE_WEBHOOK_FAILURE,
         );
       }
     } else {
       this.logger.warn(
         { event },
-        'Received Stripe Webhook event type that is not defined in our recognized event list'
+        'Received Stripe Webhook event type that is not defined in our recognized event list',
       );
     }
 

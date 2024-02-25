@@ -17,30 +17,44 @@ const identifierColumn = () =>
     .$defaultFn(() => createId());
 
 // -- Enums
-export const workspaceType = pgEnum('workspace_type', ['user', 'organization']);
+export const WorkspaceType = ['user', 'organization'] as const;
 
-export const releaseStepActions = pgEnum('release_step_actions', [
+export const workspace_type = pgEnum('workspace_type', WorkspaceType);
+
+export const ReleaseStepActions = [
   'prepare',
   'deployment',
   'approval_gate',
-]);
+] as const;
 
-export const releaseStepStatus = pgEnum('release_step_status', [
+export const release_step_actions = pgEnum(
+  'release_step_actions',
+  ReleaseStepActions,
+);
+
+export const ReleaseStepStatus = [
   'pending',
   'in_progress',
   'complete',
   'failed',
   'cancelled',
   'archived',
-]);
+] as const;
 
-export const approvalTypes = pgEnum('gate_types', [
+export const release_step_status = pgEnum(
+  'release_step_status',
+  ReleaseStepStatus,
+);
+
+export const ApprovalTypes = [
   'preparation',
   'post_deployment',
   'approval_gate',
-]);
+] as const;
 
-export const releaseStatus = pgEnum('release_status', [
+export const approval_types = pgEnum('gate_types', ApprovalTypes);
+
+export const ReleaseStatus = [
   'planning',
   'blocked',
   'scheduled',
@@ -48,17 +62,21 @@ export const releaseStatus = pgEnum('release_status', [
   'complete',
   'cancelled',
   'archived',
-]);
+] as const;
 
-export const deploymentStatus = pgEnum('deployment_status', [
+export const release_status = pgEnum('release_status', ReleaseStatus);
+
+export const DeploymentStatus = [
   'queued',
   'cancelled',
   'in_progress',
   'complete',
   'failed',
-]);
+] as const;
 
-export const environment_type_styles = pgEnum('environment_type_styles', [
+export const deployment_status = pgEnum('deployment_status', DeploymentStatus);
+
+export const EnvironmentTypeStyles = [
   'slate',
   'gray',
   'zinc',
@@ -81,7 +99,12 @@ export const environment_type_styles = pgEnum('environment_type_styles', [
   'fuchsia',
   'pink',
   'rose',
-]);
+] as const;
+
+export const environment_type_styles = pgEnum(
+  'environment_type_styles',
+  EnvironmentTypeStyles,
+);
 
 // -- Shared common columns
 const TIME_COLUMNS = {
@@ -92,7 +115,7 @@ const TIME_COLUMNS = {
 // -- Tables
 export const workspaces = pgTable('workspaces', {
   id: identifierColumn(),
-  type: workspaceType('type'),
+  type: workspace_type('type'),
   slug: varchar('slug', { length: 42 }).notNull().unique(),
   clerkId: varchar('clerk_id', { length: 255 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 255 }),
@@ -188,6 +211,9 @@ export const environmentTypes = pgTable('environment_types', {
   ...TIME_COLUMNS,
 });
 
+export type EnvironmentType = typeof environmentTypes.$inferSelect;
+export type NewEnvironmentType = typeof environmentTypes.$inferInsert;
+
 export const environments = pgTable('environments', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
@@ -225,7 +251,7 @@ export const releaseStrategySteps = pgTable('release_strategy_steps', {
   ),
   name: varchar('name', { length: 42 }).notNull(),
   description: text('description'),
-  action: releaseStepActions('action').notNull(),
+  action: release_step_actions('action').notNull(),
   // Used for deployments to indicate the environment to deploy to
   environmentId: varchar('environment_id').references(() => environments.id, {
     onDelete: 'cascade',
@@ -248,7 +274,7 @@ export type NewReleaseStrategyStep = typeof releaseStrategySteps.$inferInsert;
 export const releases = pgTable('releases', {
   id: identifierColumn(),
   date: timestamp('date'),
-  status: releaseStatus('status'),
+  status: release_status('status'),
   version: varchar('version', { length: 42 }),
   description: text('description'),
   strategyId: varchar('release_strategy_id')
@@ -287,7 +313,7 @@ export const releaseSteps = pgTable('release_steps', {
   releaseStrategyStepId: varchar('release_strategy_step_id')
     .references(() => releaseStrategySteps.id, { onDelete: 'cascade' })
     .notNull(),
-  status: releaseStepStatus('status').notNull(),
+  status: release_step_status('status').notNull(),
   finalizedAt: timestamp('finalized_at'),
   ...TIME_COLUMNS,
 });
@@ -303,7 +329,7 @@ export const deployments = pgTable('deployments', {
   environmentId: varchar('environment_id')
     .references(() => environments.id, { onDelete: 'cascade' })
     .notNull(),
-  status: deploymentStatus('status'),
+  status: deployment_status('status'),
   ...TIME_COLUMNS,
 });
 
@@ -315,7 +341,7 @@ export const approvals = pgTable('approvals', {
   releaseStepId: varchar('release_step_id')
     .references(() => releaseSteps.id, { onDelete: 'cascade' })
     .notNull(),
-  type: approvalTypes('type').notNull(),
+  type: approval_types('type').notNull(),
   // False if the approval was rejected
   approved: boolean('approved').notNull().default(false),
   comments: text('comments'),

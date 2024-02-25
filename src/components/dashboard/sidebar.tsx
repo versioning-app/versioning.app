@@ -24,7 +24,7 @@ export function Sidebar({
   children,
 }: DashboardProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(
-    defaultCollapsed ?? false
+    defaultCollapsed ?? false,
   );
 
   return (
@@ -62,14 +62,16 @@ export function Sidebar({
             isCollapsed &&
               'min-w-[50px] transition-all duration-300 ease-in-out',
             'max-w-[180px]',
-            'hidden md:block'
+            'hidden md:block',
           )}
         >
           <DashboardLinks isCollapsed={isCollapsed} />
         </ResizablePanel>
         <ResizableHandle withHandle className="hidden md:flex" />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
+          <main className="flex flex-1 flex-col gap-4 p-4 h-full">
+            {children}
+          </main>
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>
