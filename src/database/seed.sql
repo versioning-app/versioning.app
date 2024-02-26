@@ -2,7 +2,7 @@
 TRUNCATE workspaces CASCADE;
 
 INSERT INTO workspaces (id, type, slug, clerk_id) 
-VALUES ('workspace_1', 'organization', 'testing_workspace', 'org_2bVbNW03wQLl3yjNIOZgV1JIovU');
+VALUES ('workspace_1', 'organization', 'testing-workspace', 'org_2bVbNW03wQLl3yjNIOZgV1JIovU');
 
 INSERT INTO members (id, clerk_id, workspace_id)
 VALUES 

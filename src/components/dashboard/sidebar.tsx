@@ -61,7 +61,7 @@ export function Sidebar({
           className={cn(
             isCollapsed &&
               'min-w-[50px] transition-all duration-300 ease-in-out',
-            'max-w-[180px]',
+            'max-w-[200px]',
             'hidden md:block',
           )}
         >
