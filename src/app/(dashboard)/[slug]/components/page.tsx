@@ -1,18 +1,14 @@
-import { ComponentList } from '@/components/dashboard/component';
+import { ComponentList } from '@/components/dashboard/lists/components';
 import { ComponentsService } from '@/services/components.service';
 import { ServiceFactory } from '@/services/service-factory';
 
-export default async function Components() {
+export default async function Components({
+  params: { slug },
+}: {
+  params: { slug: string };
+}) {
   const components =
     await ServiceFactory.get(ComponentsService).getComponents();
 
-  return (
-    <div>
-      <div className="flex">
-        <div className="flex-1">
-          <ComponentList components={components} />
-        </div>
-      </div>
-    </div>
-  );
+  return <ComponentList slug={slug} components={components} />;
 }
