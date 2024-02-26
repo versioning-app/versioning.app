@@ -7,19 +7,22 @@ import {
   dashboardRoute,
 } from '@/config/navigation';
 import {
+  CableIcon,
   CalendarClock,
+  CloudIcon,
   ComponentIcon,
   ContainerIcon,
   CreditCardIcon,
   HomeIcon,
-  Plug2Icon,
   Settings,
 } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 
 export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
   const { slug } = useParams();
-  const path = usePathname();
+  const rawPath = usePathname();
+
+  const path = `/${rawPath.split('/').slice(2).join('/')}`;
 
   const getLinkAndVariant = (
     href: NavigationItem,
@@ -43,11 +46,29 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
             icon: HomeIcon,
             ...getLinkAndVariant(Navigation.DASHBOARD_ROOT, true),
           },
+        ]}
+      />
+      <Separator />
+      <Nav
+        title="Environments"
+        isCollapsed={isCollapsed}
+        links={[
+          {
+            title: 'Environment Types',
+            icon: CloudIcon,
+            ...getLinkAndVariant(Navigation.DASHBOARD_ENVIRONMENT_TYPES),
+          },
           {
             title: 'Environments',
             icon: ContainerIcon,
             ...getLinkAndVariant(Navigation.DASHBOARD_ENVIRONMENTS),
           },
+        ]}
+      />
+      <Separator />
+      <Nav
+        isCollapsed={isCollapsed}
+        links={[
           {
             title: 'Components',
             icon: ComponentIcon,
@@ -60,7 +81,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
           },
           {
             title: 'Integrations',
-            icon: Plug2Icon,
+            icon: CableIcon,
             ...getLinkAndVariant(Navigation.DASHBOARD_INTEGRATIONS),
           },
           {
