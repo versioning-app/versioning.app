@@ -12,6 +12,10 @@ declare global {
   }
 
   interface CustomJwtSessionClaims {
+    firstName?: string;
+    lastName?: string;
+    fullName?: string;
+    orgName?: string;
     org_slug?: string;
     user_slug: string;
     org_workspaceId?: string;
