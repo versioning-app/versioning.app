@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-type Listable = { id: string };
+type Listable = { id: string; name?: string; label?: string };
 
 export function ListItem<T extends Listable>({
   resourceName,
@@ -25,6 +25,8 @@ export function ListItem<T extends Listable>({
 }) {
   const itemContents = Object.entries(resource);
 
+  const name = resource.name ?? resource.label;
+
   const [isDeleting, setDeleting] = useState(false);
 
   const onDelete = async ({ id }: Listable) => {
@@ -34,9 +36,12 @@ export function ListItem<T extends Listable>({
 
     setDeleting(true);
 
-    const loadingToast = toast.loading(`Deleting ${resourceName}`, {
-      closeButton: false,
-    });
+    const loadingToast = toast.loading(
+      `Deleting ${resourceName} ${name ? `"${name}"` : ''}`,
+      {
+        closeButton: false,
+      },
+    );
 
     const { serverError } = await actions.delete({ id });
     toast.dismiss(loadingToast);
@@ -47,7 +52,7 @@ export function ListItem<T extends Listable>({
       return;
     }
 
-    toast.success(`${resourceName} deleted`);
+    toast.success(`${resourceName}${name ? ` "${name}"` : ''} deleted`);
   };
 
   return (
