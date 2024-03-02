@@ -4,13 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { parseServerError } from '@/lib/actions/parse-server-error';
-import { capitalizeFirstLetter, prettyPrint } from '@/lib/utils';
+import { capitalizeFirstLetter, cn, prettyPrint } from '@/lib/utils';
 import { TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-type Listable = { id: string; name?: string; label?: string };
+type Listable = {
+  id: string;
+  name?: string;
+  label?: string;
+  style?: string;
+  hidden?: boolean;
+};
 
 export function ListItem<T extends Listable>({
   resourceName,
@@ -58,7 +64,11 @@ export function ListItem<T extends Listable>({
   return (
     <li>
       <Card>
-        <CardHeader className="flex justify-between items-center pt-3 pb-5 px-0">
+        <CardHeader
+          className={cn('flex justify-between items-center pt-3 pb-5 px-0', {
+            hidden: resource.hidden === true,
+          })}
+        >
           <div className="flex items-center min-h-10">
             <p className="text-xs font-bold w-full px-4">{resourceName}</p>
             {actions?.delete && (
