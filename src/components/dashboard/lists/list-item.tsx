@@ -54,7 +54,8 @@ export function ListItem<T extends Listable>({
 
     if (serverError) {
       const error = parseServerError(serverError);
-      toast.error(error.message);
+      toast.error(`${error.message} (Request Id: ${error.context?.requestId})`);
+      setDeleting(false);
       return;
     }
 
