@@ -18,90 +18,108 @@ import {
 } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 
+type BasicNavLink = Pick<NavLink, 'icon' | 'title' | 'href'>;
+
+const HomeNavLinks: BasicNavLink[] = [
+  {
+    icon: HomeIcon,
+    title: 'Home',
+    href: Navigation.DASHBOARD_ROOT,
+  },
+] as const;
+
+export const EnvironmentNavLinks: BasicNavLink[] = [
+  {
+    icon: CloudIcon,
+    title: 'Environment Types',
+    href: Navigation.DASHBOARD_ENVIRONMENT_TYPES,
+  },
+  {
+    icon: ContainerIcon,
+    title: 'Environments',
+    href: Navigation.DASHBOARD_ENVIRONMENTS,
+  },
+] as const;
+
+export const GeneralNavLinks: BasicNavLink[] = [
+  {
+    icon: ComponentIcon,
+    title: 'Components',
+    href: Navigation.DASHBOARD_COMPONENTS,
+  },
+  {
+    icon: CalendarClock,
+    title: 'Releases',
+    href: Navigation.DASHBOARD_RELEASES,
+  },
+  {
+    icon: CableIcon,
+    title: 'Integrations',
+    href: Navigation.DASHBOARD_INTEGRATIONS,
+  },
+  {
+    icon: CreditCardIcon,
+    title: 'Billing',
+    href: Navigation.DASHBOARD_BILLING,
+  },
+] as const;
+
+export const SettingsNavLinks: BasicNavLink[] = [
+  {
+    icon: Settings,
+    title: 'Settings',
+    href: Navigation.DASHBOARD_SETTINGS,
+  },
+] as const;
+
+export const NavigationItemMappings: Record<
+  'home' | 'environment' | 'general' | 'settings',
+  { links: BasicNavLink[]; titles?: { sidebar?: string; commandMenu?: string } }
+> = {
+  home: { links: HomeNavLinks, titles: { commandMenu: 'Home' } },
+  environment: {
+    links: EnvironmentNavLinks,
+    titles: { sidebar: 'Environments', commandMenu: 'Environments' },
+  },
+  general: { links: GeneralNavLinks, titles: { commandMenu: 'Dashboard' } },
+  settings: { links: SettingsNavLinks, titles: { commandMenu: 'Settings' } },
+} as const;
+
 export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
   const { slug } = useParams();
   const rawPath = usePathname();
 
   const path = `/${rawPath.split('/').slice(2).join('/')}`;
 
-  const getLinkAndVariant = (
-    href: NavigationItem,
-    exact = false,
-  ): Pick<NavLink, 'variant' | 'href'> => {
+  const getLinkAndVariant = (link: BasicNavLink, exact: boolean): NavLink => {
+    const { href } = link;
     return {
+      ...link,
       variant: (exact ? path === href : path.startsWith(href))
         ? 'default'
         : 'ghost',
-      href: dashboardRoute(slug, href),
+      // TODO: Remove as usage?
+      href: dashboardRoute(slug, href as NavigationItem),
     };
   };
 
   return (
     <>
-      <Nav
-        isCollapsed={isCollapsed}
-        links={[
-          {
-            title: 'Home',
-            icon: HomeIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD_ROOT, true),
-          },
-        ]}
-      />
-      <Separator />
-      <Nav
-        title="Environments"
-        isCollapsed={isCollapsed}
-        links={[
-          {
-            title: 'Environment Types',
-            icon: CloudIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD_ENVIRONMENT_TYPES),
-          },
-          {
-            title: 'Environments',
-            icon: ContainerIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD_ENVIRONMENTS),
-          },
-        ]}
-      />
-      <Separator />
-      <Nav
-        isCollapsed={isCollapsed}
-        links={[
-          {
-            title: 'Components',
-            icon: ComponentIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD_COMPONENTS),
-          },
-          {
-            title: 'Releases',
-            icon: CalendarClock,
-            ...getLinkAndVariant(Navigation.DASHBOARD_RELEASES),
-          },
-          {
-            title: 'Integrations',
-            icon: CableIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD_INTEGRATIONS),
-          },
-          {
-            title: 'Billing',
-            icon: CreditCardIcon,
-            ...getLinkAndVariant(Navigation.DASHBOARD_BILLING),
-          },
-        ]}
-      />
-      <Separator />
-      <Nav
-        isCollapsed={isCollapsed}
-        links={[
-          {
-            title: 'Settings',
-            icon: Settings,
-            ...getLinkAndVariant(Navigation.DASHBOARD_SETTINGS),
-          },
-        ]}
-      />
+      {Object.entries(NavigationItemMappings).map(
+        ([key, { links, titles }], index) => (
+          <>
+            <Nav
+              key={key}
+              title={titles?.sidebar}
+              isCollapsed={isCollapsed}
+              links={links.map((link) => getLinkAndVariant(link, false))}
+            />
+            {index < Object.entries(NavigationItemMappings).length - 1 && (
+              <Separator />
+            )}
+          </>
+        ),
+      )}
     </>
   );
 }
