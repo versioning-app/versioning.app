@@ -21,7 +21,7 @@ export const dashboardRoute = (
   slug: string | string[],
   path?: NavigationItem,
 ) =>
-  `${Navigation.DASHBOARD_ROOT}${encodeURIComponent(typeof slug === 'string' ? slug : slug[0])}${path ? path : ''}`;
+  `${Navigation.DASHBOARD_ROOT}${typeof slug === 'string' ? slug : slug[0]}${path ? path : ''}`;
 
 export const RootLevelPathRegex = /^[^/]*\/[^/]*$/;
 
