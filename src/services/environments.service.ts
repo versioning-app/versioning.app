@@ -77,8 +77,42 @@ export class EnvironmentsService extends WorkspaceScopedService {
     }
   }
 
+  public async checkEnvironmentTypeDependents(
+    environmentTypeId: string,
+  ): Promise<boolean> {
+    const workspaceId = await this.currentWorkspaceId;
+
+    const results = await db.query.environmentTypes.findFirst({
+      where: (types, { eq }) =>
+        and(
+          eq(types.id, environmentTypeId),
+          eq(types.workspaceId, workspaceId),
+        ),
+      columns: {
+        id: true,
+      },
+      with: {
+        environments: {
+          columns: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    return !!results?.environments?.length;
+  }
+
   public async deleteEnvironmentType(environmentTypeId: string) {
     const workspaceId = await this.currentWorkspaceId;
+
+    // First check to see if anything depends
+    if (await this.checkEnvironmentTypeDependents(environmentTypeId)) {
+      throw new AppError(
+        'Environment type has dependents',
+        ErrorCodes.RESOURCE_HAS_DEPENDENTS,
+      );
+    }
 
     const result = await db
       .delete(environmentTypes)
