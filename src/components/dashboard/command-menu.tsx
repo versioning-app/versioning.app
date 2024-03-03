@@ -1,5 +1,6 @@
 'use client';
 
+import { NavigationItemMappings } from '@/components/dashboard/sidebar-links';
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
@@ -10,7 +11,11 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
-import { Navigation, dashboardRoute } from '@/config/navigation';
+import {
+  Navigation,
+  NavigationItem,
+  dashboardRoute,
+} from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { useClerk } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
@@ -29,6 +34,7 @@ import {
   CalendarClock,
   ComponentIcon,
   HomeIcon,
+  LucideIcon,
   Plug2Icon,
   PlusIcon,
   Settings,
@@ -84,12 +90,33 @@ export function CommandMenu({ ...props }: DialogProps) {
     command();
   }, []);
 
+  function RouterCommandItem({
+    href,
+    label,
+    ...props
+  }: {
+    href: NavigationItem;
+    icon: LucideIcon;
+    label: string;
+  }) {
+    return (
+      <CommandItem
+        onSelect={() =>
+          runCommand(() => router.push(dashboardRoute(slug, href)))
+        }
+      >
+        <props.icon className="mr-2 h-4 w-4" />
+        {label}
+      </CommandItem>
+    );
+  }
+
   return (
     <div ref={commandRoot}>
       <Button
         variant="outline"
         className={cn(
-          'relative h-8 w-full justify-start rounded-[0.5rem] bg-background text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64'
+          'relative h-8 w-full justify-start rounded-[0.5rem] bg-background text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64',
         )}
         onClick={() => setOpen(true)}
         {...props}
@@ -146,78 +173,24 @@ export function CommandMenu({ ...props }: DialogProps) {
             ) : null}
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Dashboard">
-            <CommandItem
-              onSelect={() =>
-                runCommand(() =>
-                  router.push(dashboardRoute(slug, Navigation.DASHBOARD_ROOT))
-                )
-              }
-            >
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Dashboard Home
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() =>
-                  router.push(
-                    dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS)
-                  )
-                )
-              }
-            >
-              <ComponentIcon className="mr-2 h-4 w-4" />
-              Components
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() =>
-                  router.push(
-                    dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS_NEW)
-                  )
-                )
-              }
-            >
-              <PlusIcon className="mr-2 h-4 w-4" />
-              New Component
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() =>
-                  router.push(
-                    dashboardRoute(slug, Navigation.DASHBOARD_INTEGRATIONS)
-                  )
-                )
-              }
-            >
-              <Plug2Icon className="mr-2 h-4 w-4" />
-              Integrations
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() =>
-                  router.push(
-                    dashboardRoute(slug, Navigation.DASHBOARD_RELEASES)
-                  )
-                )
-              }
-            >
-              <CalendarClock className="mr-2 h-4 w-4" />
-              Releases
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() =>
-                  router.push(
-                    dashboardRoute(slug, Navigation.DASHBOARD_SETTINGS)
-                  )
-                )
-              }
-            >
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </CommandItem>
-          </CommandGroup>
+          {Object.entries(NavigationItemMappings).map(
+            ([key, { links, titles }]) => (
+              <>
+                <CommandGroup key={key} heading={titles?.commandMenu}>
+                  {links.map((link, index) => (
+                    <RouterCommandItem
+                      key={index}
+                      href={link.href as NavigationItem}
+                      icon={link.icon}
+                      label={link.title}
+                    />
+                  ))}
+                </CommandGroup>
+                <CommandSeparator />
+              </>
+            ),
+          )}
+
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
               <SunIcon className="mr-2 h-4 w-4" />
