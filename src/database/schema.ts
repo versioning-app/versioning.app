@@ -1,4 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
+import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
@@ -229,6 +230,20 @@ export const environments = pgTable('environments', {
 
 export type Environment = typeof environments.$inferSelect;
 export type NewEnvironment = typeof environments.$inferInsert;
+
+export const environmentTypeRelations = relations(
+  environmentTypes,
+  ({ many }) => ({
+    environments: many(environments),
+  }),
+);
+
+export const environmentRelations = relations(environments, ({ one }) => ({
+  type: one(environmentTypes, {
+    fields: [environments.typeId],
+    references: [environmentTypes.id],
+  }),
+}));
 
 export const releaseStrategies = pgTable('release_strategies', {
   id: identifierColumn(),
