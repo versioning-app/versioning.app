@@ -76,13 +76,22 @@ export const NavigationItemMappings: Record<
   'home' | 'environment' | 'general' | 'settings',
   { links: BasicNavLink[]; titles?: { sidebar?: string; commandMenu?: string } }
 > = {
-  home: { links: HomeNavLinks, titles: { commandMenu: 'Home' } },
+  home: {
+    links: HomeNavLinks,
+    titles: { sidebar: 'Home', commandMenu: 'Home' },
+  },
   environment: {
     links: EnvironmentNavLinks,
     titles: { sidebar: 'Environments', commandMenu: 'Environments' },
   },
-  general: { links: GeneralNavLinks, titles: { commandMenu: 'Dashboard' } },
-  settings: { links: SettingsNavLinks, titles: { commandMenu: 'Settings' } },
+  general: {
+    links: GeneralNavLinks,
+    titles: { sidebar: 'Management', commandMenu: 'Management' },
+  },
+  settings: {
+    links: SettingsNavLinks,
+    titles: { sidebar: 'Settings', commandMenu: 'Settings' },
+  },
 } as const;
 
 export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
@@ -93,13 +102,16 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
 
   const getLinkAndVariant = (link: BasicNavLink, exact: boolean): NavLink => {
     const { href } = link;
+
+    // TODO: Remove as usage?
+    const route = dashboardRoute(slug, href as NavigationItem);
+
     return {
       ...link,
       variant: (exact ? path === href : path.startsWith(href))
         ? 'default'
         : 'ghost',
-      // TODO: Remove as usage?
-      href: dashboardRoute(slug, href as NavigationItem),
+      href: route,
     };
   };
 
@@ -112,7 +124,12 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
               key={key}
               title={titles?.sidebar}
               isCollapsed={isCollapsed}
-              links={links.map((link) => getLinkAndVariant(link, false))}
+              links={links.map((link) =>
+                getLinkAndVariant(
+                  link,
+                  link.href === Navigation.DASHBOARD_ROOT,
+                ),
+              )}
             />
             {index < Object.entries(NavigationItemMappings).length - 1 && (
               <Separator />
