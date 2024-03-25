@@ -13,6 +13,8 @@ export const Navigation = {
   DASHBOARD_ENVIRONMENTS_NEW: '/environments/new',
   DASHBOARD_ENVIRONMENT_TYPES: '/environment-types',
   DASHBOARD_ENVIRONMENT_TYPES_NEW: '/environment-types/new',
+  DASHBOARD_RELEASE_STRATEGIES: '/release-strategies',
+  DASHBOARD_RELEASE_STRATEGIES_NEW: '/release-strategies/new',
 } as const;
 
 export type NavigationItem = (typeof Navigation)[keyof typeof Navigation];

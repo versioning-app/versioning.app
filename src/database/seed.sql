@@ -4,6 +4,8 @@ TRUNCATE workspaces CASCADE;
 INSERT INTO workspaces (id, type, slug, clerk_id) 
 VALUES ('workspace_1', 'organization', 'testing-workspace', 'org_2bVbNW03wQLl3yjNIOZgV1JIovU');
 
+-- sync from clerk, when there is a new member for a workspace we should add them here - remove when needed aswell?
+
 INSERT INTO members (id, clerk_id, workspace_id)
 VALUES 
 ('developer_1', 'user_dev', 'workspace_1'),
@@ -28,6 +30,7 @@ VALUES
 ('staging_approval_group_1', 'staging_1'),
 ('production_approval_group_1', 'production_1');
 
+-- Implemented - need to allow color select better
 INSERT INTO environment_types (id, workspace_id, name, description, style)
 VALUES
 ('dev_env_type', 'workspace_1', 'Development', 'Development environments', 'indigo'),
@@ -36,6 +39,7 @@ VALUES
 ('staging_env_type', 'workspace_1', 'Staging', 'Pre production environment', 'emerald'),
 ('production_env_type', 'workspace_1', 'Production', 'Production environment', 'green');
 
+-- done?
 INSERT INTO environments (id, workspace_id, type_id, name, description)
 VALUES
 ('dev_1_env', 'workspace_1', 'dev_env_type', 'DEV1', 'Main development environment'),
