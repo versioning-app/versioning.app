@@ -255,6 +255,17 @@ export const releaseStrategies = pgTable('release_strategies', {
   ...TIME_COLUMNS,
 });
 
+export const releaseStrategyRelations = relations(
+  releaseStrategies,
+  ({ one, many }) => ({
+    workspace: one(workspaces, {
+      fields: [releaseStrategies.workspaceId],
+      references: [workspaces.id],
+    }),
+    steps: many(releaseStrategySteps),
+  }),
+);
+
 export type ReleaseStrategy = typeof releaseStrategies.$inferSelect;
 export type NewReleaseStrategy = typeof releaseStrategies.$inferInsert;
 
@@ -285,6 +296,28 @@ export const releaseStrategySteps = pgTable('release_strategy_steps', {
 
 export type ReleaseStrategyStep = typeof releaseStrategySteps.$inferSelect;
 export type NewReleaseStrategyStep = typeof releaseStrategySteps.$inferInsert;
+
+export const releaseStrategyStepRelations = relations(
+  releaseStrategySteps,
+  ({ one }) => ({
+    parent: one(releaseStrategySteps, {
+      fields: [releaseStrategySteps.parentId],
+      references: [releaseStrategySteps.id],
+    }),
+    strategy: one(releaseStrategies, {
+      fields: [releaseStrategySteps.strategyId],
+      references: [releaseStrategies.id],
+    }),
+    environment: one(environments, {
+      fields: [releaseStrategySteps.environmentId],
+      references: [environments.id],
+    }),
+    approvalGroup: one(approval_groups, {
+      fields: [releaseStrategySteps.approvalGroupId],
+      references: [approval_groups.id],
+    }),
+  }),
+);
 
 export const releases = pgTable('releases', {
   id: identifierColumn(),
