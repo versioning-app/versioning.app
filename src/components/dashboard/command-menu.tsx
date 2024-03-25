@@ -30,15 +30,7 @@ import {
   SlashIcon,
   SunIcon,
 } from '@radix-ui/react-icons';
-import {
-  CalendarClock,
-  ComponentIcon,
-  HomeIcon,
-  LucideIcon,
-  Plug2Icon,
-  PlusIcon,
-  Settings,
-} from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useParams, useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -129,7 +121,7 @@ export function CommandMenu({ ...props }: DialogProps) {
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
+        <CommandList className="text-foreground">
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Account">
             <CommandItem
