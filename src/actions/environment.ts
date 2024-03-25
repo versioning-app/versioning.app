@@ -23,7 +23,9 @@ export const createEnvironmentTypeAction = workspaceAction(
       await environmentsService.createEnvironmentType(input);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENT_TYPES),
+    );
 
     return { environmentType, success: true };
   },
@@ -41,7 +43,9 @@ export const deleteEnvironmentTypeAction = workspaceAction(
     await environmentsService.deleteEnvironmentType(input.id);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENT_TYPES),
+    );
   },
 );
 
@@ -56,7 +60,7 @@ export const createEnvironmentAction = workspaceAction(
     const environment = await environmentsService.createEnvironment(input);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
 
     return { environment, success: true };
   },
@@ -74,6 +78,6 @@ export const deleteEnvironmentAction = workspaceAction(
     await environmentsService.deleteEnvironment(input.id);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
   },
 );

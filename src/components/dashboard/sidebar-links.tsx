@@ -41,16 +41,24 @@ export const EnvironmentNavLinks: BasicNavLink[] = [
   },
 ] as const;
 
+export const ReleaseNavLinks: BasicNavLink[] = [
+  {
+    icon: CalendarClock,
+    title: 'Releases',
+    href: Navigation.DASHBOARD_RELEASES,
+  },
+  {
+    icon: CableIcon,
+    title: 'Release Strategies',
+    href: Navigation.DASHBOARD_RELEASE_STRATEGIES,
+  },
+] as const;
+
 export const GeneralNavLinks: BasicNavLink[] = [
   {
     icon: ComponentIcon,
     title: 'Components',
     href: Navigation.DASHBOARD_COMPONENTS,
-  },
-  {
-    icon: CalendarClock,
-    title: 'Releases',
-    href: Navigation.DASHBOARD_RELEASES,
   },
   {
     icon: CableIcon,
@@ -73,7 +81,7 @@ export const SettingsNavLinks: BasicNavLink[] = [
 ] as const;
 
 export const NavigationItemMappings: Record<
-  'home' | 'environment' | 'general' | 'settings',
+  'home' | 'environment' | 'release' | 'general' | 'settings',
   { links: BasicNavLink[]; titles?: { sidebar?: string; commandMenu?: string } }
 > = {
   home: {
@@ -83,6 +91,10 @@ export const NavigationItemMappings: Record<
   environment: {
     links: EnvironmentNavLinks,
     titles: { sidebar: 'Environments', commandMenu: 'Environments' },
+  },
+  release: {
+    links: ReleaseNavLinks,
+    titles: { sidebar: 'Releases', commandMenu: 'Releases' },
   },
   general: {
     links: GeneralNavLinks,
