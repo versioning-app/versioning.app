@@ -7,8 +7,8 @@ import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
 import { BaseService } from '@/services/base.service';
-import { auth, clerkClient } from '@clerk/nextjs';
-import { AuthObject, SignedInAuthObject } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
+import { AuthObject, SignedInAuthObject } from '@clerk/backend/internal';
 import cryptoRandomString from 'crypto-random-string';
 import { and, eq } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -45,7 +45,7 @@ export class WorkspaceService extends BaseService {
     if (!orgId) {
       throw new AppError(
         'Organization does not exist in session',
-        ErrorCodes.ORGANIZATION_NOT_FOUND
+        ErrorCodes.ORGANIZATION_NOT_FOUND,
       );
     }
 
@@ -56,37 +56,41 @@ export class WorkspaceService extends BaseService {
     if (!organization) {
       throw new AppError(
         'Organization not found',
-        ErrorCodes.RESOURCE_NOT_FOUND
+        ErrorCodes.RESOURCE_NOT_FOUND,
       );
     }
 
     const creators =
-      (await clerkClient.organizations.getOrganizationMembershipList({
-        organizationId: orgId,
-        limit: 10,
-      })) ?? [];
+      (
+        await clerkClient.organizations.getOrganizationMembershipList({
+          organizationId: orgId,
+          limit: 10,
+        })
+      ).data ?? [];
 
     const { publicUserData } = creators
-      ?.filter((creator) => creator.role === appConfig.organization.creatorRole)
+      ?.filter(
+        (creator: any) => creator.role === appConfig.organization.creatorRole,
+      )
       ?.sort((a, b) => a.createdAt - b.createdAt)?.[0];
 
     if (!publicUserData?.userId) {
       throw new AppError(
         'No creator found for organization',
-        ErrorCodes.RESOURCE_NOT_FOUND
+        ErrorCodes.RESOURCE_NOT_FOUND,
       );
     }
 
     const creator = await clerkClient.users.getUser(publicUserData.userId);
 
     const primaryEmail = creator?.emailAddresses?.find(
-      (email) => email.id === creator.primaryEmailAddressId
+      (email) => email.id === creator.primaryEmailAddressId,
     );
 
     if (!primaryEmail?.emailAddress) {
       throw new AppError(
         'No primary email found for organization creator',
-        ErrorCodes.RESOURCE_NOT_FOUND
+        ErrorCodes.RESOURCE_NOT_FOUND,
       );
     }
 
@@ -109,7 +113,7 @@ export class WorkspaceService extends BaseService {
     if (!userId) {
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -120,13 +124,13 @@ export class WorkspaceService extends BaseService {
     }
 
     const primaryEmail = user?.emailAddresses?.find(
-      (email) => email.id === user.primaryEmailAddressId
+      (email) => email.id === user.primaryEmailAddressId,
     );
 
     if (!primaryEmail?.emailAddress) {
       throw new AppError(
         'No primary email found for user',
-        ErrorCodes.RESOURCE_NOT_FOUND
+        ErrorCodes.RESOURCE_NOT_FOUND,
       );
     }
 
@@ -149,7 +153,7 @@ export class WorkspaceService extends BaseService {
     if (!userId) {
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -161,26 +165,26 @@ export class WorkspaceService extends BaseService {
   }
 
   public async getWorkspaceIdFromAuth(
-    auth: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>
+    auth: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>,
   ): Promise<string> {
     noStore();
     const { userId, orgId, sessionClaims } = auth;
 
     const workspaceNotFoundError = new AppError(
       'No workspace ID found',
-      ErrorCodes.WORKSPACE_NOT_FOUND
+      ErrorCodes.WORKSPACE_NOT_FOUND,
     );
 
     this.logger.debug(
       { userId, orgId, sessionClaims },
-      'Getting current workspace ID'
+      'Getting current workspace ID',
     );
 
     if (!userId) {
       this.logger.error('No user, cannot get workspace');
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -202,7 +206,7 @@ export class WorkspaceService extends BaseService {
         if (!publicMetadata?.workspaceId) {
           this.logger.warn(
             { publicMetadata },
-            'No workspaceId found in public metadata found for organization'
+            'No workspaceId found in public metadata found for organization',
           );
           throw workspaceNotFoundError;
         }
@@ -211,7 +215,7 @@ export class WorkspaceService extends BaseService {
 
         this.logger.info(
           { publicMetadata, orgWorkspaceId },
-          'Organization workspaceId found in public metadata from API'
+          'Organization workspaceId found in public metadata from API',
         );
       }
 
@@ -221,7 +225,7 @@ export class WorkspaceService extends BaseService {
 
       this.logger.debug(
         { orgWorkspaceId },
-        'Workspace ID found for organization'
+        'Workspace ID found for organization',
       );
       return orgWorkspaceId;
     }
@@ -233,7 +237,7 @@ export class WorkspaceService extends BaseService {
     // Really love the additional network round trip because I cannot force a session refresh
     if (!userWorkspaceId) {
       this.logger.debug(
-        'No user workspaceId found, fetching public metadata from API'
+        'No user workspaceId found, fetching public metadata from API',
       );
 
       const { publicMetadata } = await clerkClient.users.getUser(userId);
@@ -241,7 +245,7 @@ export class WorkspaceService extends BaseService {
       if (!publicMetadata?.workspaceId) {
         this.logger.warn(
           { publicMetadata },
-          'No workspaceId found in public metadata found for user'
+          'No workspaceId found in public metadata found for user',
         );
         throw workspaceNotFoundError;
       }
@@ -250,7 +254,7 @@ export class WorkspaceService extends BaseService {
 
       this.logger.info(
         { publicMetadata, userWorkspaceId },
-        'User workspaceId found in public metadata from API'
+        'User workspaceId found in public metadata from API',
       );
     }
 
@@ -265,7 +269,7 @@ export class WorkspaceService extends BaseService {
   }
 
   public async currentWorkspace(
-    authObject?: Pick<SignedInAuthObject, 'userId' | 'orgId'>
+    authObject?: Pick<SignedInAuthObject, 'userId' | 'orgId'>,
   ): Promise<Workspace> {
     const { userId, orgId } = authObject ?? auth();
 
@@ -273,7 +277,7 @@ export class WorkspaceService extends BaseService {
       this.logger.error('No user, cannot get workspace');
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -294,8 +298,8 @@ export class WorkspaceService extends BaseService {
       .where(
         and(
           eq(workspaces.type, orgId ? 'organization' : 'user'),
-          eq(workspaces.clerkId, clerkId)
-        )
+          eq(workspaces.clerkId, clerkId),
+        ),
       );
 
     const existingWorkspace = existing?.[0];
@@ -304,7 +308,7 @@ export class WorkspaceService extends BaseService {
     if (existingWorkspace) {
       this.logger.debug(
         { existingWorkspace },
-        `Found existing workspace for ${orgId ? 'organization' : 'user'}`
+        `Found existing workspace for ${orgId ? 'organization' : 'user'}`,
       );
 
       if (this.shouldCache) {
@@ -323,7 +327,7 @@ export class WorkspaceService extends BaseService {
   }
 
   public async getWorkspaceFromSlug(
-    slug: string
+    slug: string,
   ): Promise<Workspace | undefined> {
     try {
       const workspaceBySlug = await db
@@ -345,7 +349,7 @@ export class WorkspaceService extends BaseService {
     if (!userId) {
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -357,12 +361,12 @@ export class WorkspaceService extends BaseService {
       if (!organization) {
         throw new AppError(
           'Organization not found',
-          ErrorCodes.ORGANIZATION_NOT_FOUND
+          ErrorCodes.ORGANIZATION_NOT_FOUND,
         );
       }
 
       return slugify(
-        organization.slug ?? organization.name ?? orgId
+        organization.slug ?? organization.name ?? orgId,
       ).toLowerCase();
     }
 
@@ -406,14 +410,14 @@ export class WorkspaceService extends BaseService {
     if (workspace.slug === slug) {
       throw new AppError(
         'Slug is the same as current slug',
-        ErrorCodes.WORKSPACE_SLUG_UNAVAILABLE
+        ErrorCodes.WORKSPACE_SLUG_UNAVAILABLE,
       );
     }
 
     if (!(await this.isValidSlug(slug))) {
       throw new AppError(
         'Slug is not available',
-        ErrorCodes.WORKSPACE_SLUG_UNAVAILABLE
+        ErrorCodes.WORKSPACE_SLUG_UNAVAILABLE,
       );
     }
 
@@ -425,15 +429,15 @@ export class WorkspaceService extends BaseService {
       .where(
         and(
           eq(workspaces.id, workspace.id),
-          eq(workspaces.clerkId, this.currentClerkId)
-        )
+          eq(workspaces.clerkId, this.currentClerkId),
+        ),
       )
       .returning();
 
     if (updatedWorkspaces?.[0]?.slug !== slug) {
       throw new AppError(
         'Error updating workspace slug',
-        ErrorCodes.RESOURCE_NOT_FOUND
+        ErrorCodes.RESOURCE_NOT_FOUND,
       );
     }
 
@@ -465,7 +469,7 @@ export class WorkspaceService extends BaseService {
 
       this.logger.debug(
         { slug, generatedSlug },
-        'Slug exists, appending random string'
+        'Slug exists, appending random string',
       );
 
       slug = `${generatedSlug}-${cryptoRandomString({ length: 8 })}`;
@@ -481,7 +485,7 @@ export class WorkspaceService extends BaseService {
     if (!userId) {
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -513,7 +517,7 @@ export class WorkspaceService extends BaseService {
     if (!newWorkspace) {
       throw new AppError(
         'Error creating workspace',
-        ErrorCodes.RESOURCE_NOT_FOUND
+        ErrorCodes.RESOURCE_NOT_FOUND,
       );
     }
 
@@ -536,7 +540,7 @@ export class WorkspaceService extends BaseService {
       this.logger.error('No user, cannot ensure workspace');
       throw new AppError(
         'User does not exist in session',
-        ErrorCodes.USER_NOT_FOUND
+        ErrorCodes.USER_NOT_FOUND,
       );
     }
 
@@ -553,12 +557,12 @@ export class WorkspaceService extends BaseService {
         if (workspace?.clerkId !== (orgId || userId)) {
           this.logger.warn(
             { workspaceId, orgId, userId, workspace },
-            'Workspace ID does not match user or organization'
+            'Workspace ID does not match user or organization',
           );
 
           throw new AppError(
             'Workspace does not exist',
-            ErrorCodes.WORKSPACE_NOT_FOUND
+            ErrorCodes.WORKSPACE_NOT_FOUND,
           );
         }
 
@@ -568,7 +572,7 @@ export class WorkspaceService extends BaseService {
         ) {
           this.logger.debug(
             { orgId, userId, workspace, sessionClaims },
-            'Workspace slug does not match, updating'
+            'Workspace slug does not match, updating',
           );
 
           await this.linkWorkspaceToClerk({
@@ -651,7 +655,7 @@ export class WorkspaceService extends BaseService {
 
     this.logger.debug(
       { stripeCustomerId, workspace },
-      'Linking stripe customer to workspace'
+      'Linking stripe customer to workspace',
     );
 
     await db
@@ -661,7 +665,7 @@ export class WorkspaceService extends BaseService {
 
     this.logger.info(
       { stripeCustomerId, workspace },
-      'Stripe customer linked to workspace'
+      'Stripe customer linked to workspace',
     );
   }
 }

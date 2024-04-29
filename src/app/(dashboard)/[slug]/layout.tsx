@@ -5,7 +5,8 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { ClerkLoaded, ClerkLoading, auth } from '@clerk/nextjs';
+import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -40,7 +41,7 @@ export default async function DashboardLayout({
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   const collapsed = cookies().get(
-    `${StorageKeys.COOKIE_STORAGE_PREFIX}:collapsed`
+    `${StorageKeys.COOKIE_STORAGE_PREFIX}:collapsed`,
   );
   const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
 

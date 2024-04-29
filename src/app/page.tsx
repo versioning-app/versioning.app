@@ -2,7 +2,7 @@ import { Navigation } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { auth } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
