@@ -63,7 +63,7 @@
     "next-safe-action": "^6.2.0",
     "next-themes": "^0.3.0",
     "nodemailer": "^6.9.13",
-    "pino": "^8.21.0",
+    "pino": "^9.0.0",
     "pino-pretty": "^11.0.0",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
@@ -75,11 +75,11 @@
     "server-only": "^0.0.1",
     "slugify": "^1.6.6",
     "sonner": "^1.4.41",
-    "stripe": "^14.25.0",
+    "stripe": "^15.4.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",
-    "zod": "^3.23.5"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",
@@ -90,7 +90,7 @@
     "autoprefixer": "^10.4.19",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.20.17",
-    "eslint": "^9.1.1",
+    "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
