@@ -13,6 +13,18 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: main
-      
+  neon-proxy:
+    image: local-neon-http-proxy:latest
+    build:
+      context: docker
+      dockerfile: Dockerfile
+    environment:
+      - PG_CONNECTION_STRING=postgres://postgres:postgres@postgres:5432/main
+      - ENABLE_TELEMETRY=false
+    ports:
+      - '4444:4444'
+    depends_on:
+      - postgres
+    
 volumes:
   db_data:
