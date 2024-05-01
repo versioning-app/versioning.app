@@ -11,7 +11,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { appConfig } from '@/config/app';
 import { Navigation } from '@/config/navigation';
-import { auth } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import {
   EnvelopeClosedIcon,
   GitHubLogoIcon,
