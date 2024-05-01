@@ -1,19 +1,20 @@
-import { neon, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
 
+import { buildNeonClient } from '@/database/client';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
+import { neonConfig } from '@neondatabase/serverless';
 import 'dotenv/config';
 
-if (process.env.USE_OFFLINE_DATABASE) {
-  // https://github.com/neondatabase/serverless/issues/33
-  // https://github.com/TimoWilhelm/local-neon-http-proxy
-  neonConfig.fetchEndpoint = (host) =>
-    `https://${host}:${host === 'db.localtest.me' ? 4444 : 443}/sql`;
-}
+const databaseUrl = process.env.DATABASE_URL!;
 
-const databaseUrl = process.env.DATABASE_URL;
+neonConfig.fetchEndpoint = (host) => {
+  const protocol = host === 'db.localtest.me' ? 'http' : 'https';
+  const port = host === 'db.localtest.me' ? 4444 : 443;
+  console.log(`Using ${protocol}://${host}:${port}/sql`);
+  return `${protocol}://${host}:${port}/sql`;
+};
 
 async function runMigrate() {
   if (!databaseUrl) {
@@ -23,8 +24,7 @@ async function runMigrate() {
     );
   }
 
-  const sql = neon(databaseUrl);
-
+  const sql = buildNeonClient(databaseUrl);
   const db = drizzle(sql);
 
   console.log('Running migrations...');
