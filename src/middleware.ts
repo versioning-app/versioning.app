@@ -2,36 +2,40 @@ import { StorageKeys } from '@/config/storage';
 import { generateRequestId } from '@/lib/utils';
 import { ServiceFactory } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
-import { authMiddleware, redirectToSignIn } from '@clerk/nextjs';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-export default authMiddleware({
-  beforeAuth: (req) => {
-    req.headers.set(StorageKeys.REQUEST_ID_HEADER_KEY, generateRequestId());
-  },
-  afterAuth: async (auth, req) => {
-    const { userId, orgId, sessionClaims, isPublicRoute } = auth;
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/home',
+  '/pricing',
+  '/about',
+  '/api/billing/webhooks/stripe',
+]);
 
-    if (!userId && !isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
-    }
+export default clerkMiddleware(async (auth, req, event) => {
+  // Generate request ID for each request
+  req.headers.set(StorageKeys.REQUEST_ID_HEADER_KEY, generateRequestId());
 
-    // If the user is logged in and trying to access a protected route, allow them to access route
-    if (userId && !isPublicRoute) {
-      // Only ensure workspace on protected routes
-      await ServiceFactory.get(WorkspaceService).ensureWorkspace({
-        userId,
-        orgId,
-        sessionClaims,
-      });
-
-      return NextResponse.next();
-    }
-
-    // Allow users visiting public routes to access them
+  if (isPublicRoute(req)) {
     return NextResponse.next();
-  },
-  publicRoutes: ['/', '/pricing', '/about', '/api/billing/webhooks/stripe'],
+  }
+
+  auth().protect();
+
+  const { userId, orgId, sessionClaims } = auth();
+
+  if (!userId) {
+    return auth().redirectToSignIn({ returnBackUrl: req.url });
+  }
+
+  await ServiceFactory.get(WorkspaceService).ensureWorkspace({
+    userId,
+    orgId,
+    sessionClaims,
+  });
+
+  return NextResponse.next();
 });
 
 export const config = {

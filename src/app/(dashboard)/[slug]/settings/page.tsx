@@ -1,9 +1,5 @@
-import { ClerkOrganization, ClerkUser } from '@/components/common/clerk';
 import { ChangeSlugForm } from '@/components/dashboard/workspace';
-import { ServiceFactory } from '@/services/service-factory';
-import { WorkspaceService } from '@/services/workspace.service';
-import { auth } from '@clerk/nextjs';
-import { Divider } from '@nextui-org/react';
+import { auth } from '@clerk/nextjs/server';
 
 export default async function Settings({
   params: { slug },
