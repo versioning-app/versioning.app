@@ -1,10 +1,8 @@
 {
-  "id": "a3aed373-e2aa-4e57-9ee2-0fa1939721ef",
-  "prevId": "d68043a9-1373-48c3-9855-913998ed52f5",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "approval_group_members": {
+    "public.approval_group_members": {
       "name": "approval_group_members",
       "schema": "",
       "columns": {
@@ -40,34 +38,34 @@
         "approval_group_members_approval_group_id_approval_groups_id_fk": {
           "name": "approval_group_members_approval_group_id_approval_groups_id_fk",
           "tableFrom": "approval_group_members",
-          "tableTo": "approval_groups",
           "columnsFrom": [
             "approval_group_id"
           ],
+          "tableTo": "approval_groups",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "approval_group_members_member_id_members_id_fk": {
           "name": "approval_group_members_member_id_members_id_fk",
           "tableFrom": "approval_group_members",
-          "tableTo": "members",
           "columnsFrom": [
             "member_id"
           ],
+          "tableTo": "members",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "approval_groups": {
+    "public.approval_groups": {
       "name": "approval_groups",
       "schema": "",
       "columns": {
@@ -115,29 +113,29 @@
         "approval_groups_workspace_id_workspaces_id_fk": {
           "name": "approval_groups_workspace_id_workspaces_id_fk",
           "tableFrom": "approval_groups",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "approval_groups_id_unique": {
           "name": "approval_groups_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "component_versions": {
+    "public.component_versions": {
       "name": "component_versions",
       "schema": "",
       "columns": {
@@ -186,29 +184,29 @@
         "component_versions_component_id_components_id_fk": {
           "name": "component_versions_component_id_components_id_fk",
           "tableFrom": "component_versions",
-          "tableTo": "components",
           "columnsFrom": [
             "component_id"
           ],
+          "tableTo": "components",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "component_versions_id_unique": {
           "name": "component_versions_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "components": {
+    "public.components": {
       "name": "components",
       "schema": "",
       "columns": {
@@ -256,29 +254,29 @@
         "components_workspace_id_workspaces_id_fk": {
           "name": "components_workspace_id_workspaces_id_fk",
           "tableFrom": "components",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "components_id_unique": {
           "name": "components_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "deployments": {
+    "public.deployments": {
       "name": "deployments",
       "schema": "",
       "columns": {
@@ -326,42 +324,42 @@
         "deployments_release_step_id_release_steps_id_fk": {
           "name": "deployments_release_step_id_release_steps_id_fk",
           "tableFrom": "deployments",
-          "tableTo": "release_steps",
           "columnsFrom": [
             "release_step_id"
           ],
+          "tableTo": "release_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "deployments_environment_id_environments_id_fk": {
           "name": "deployments_environment_id_environments_id_fk",
           "tableFrom": "deployments",
-          "tableTo": "environments",
           "columnsFrom": [
             "environment_id"
           ],
+          "tableTo": "environments",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "deployments_id_unique": {
           "name": "deployments_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "environment_types": {
+    "public.environment_types": {
       "name": "environment_types",
       "schema": "",
       "columns": {
@@ -415,29 +413,29 @@
         "environment_types_workspace_id_workspaces_id_fk": {
           "name": "environment_types_workspace_id_workspaces_id_fk",
           "tableFrom": "environment_types",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "environment_types_id_unique": {
           "name": "environment_types_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "environments": {
+    "public.environments": {
       "name": "environments",
       "schema": "",
       "columns": {
@@ -491,42 +489,42 @@
         "environments_type_environment_types_id_fk": {
           "name": "environments_type_environment_types_id_fk",
           "tableFrom": "environments",
-          "tableTo": "environment_types",
           "columnsFrom": [
             "type"
           ],
+          "tableTo": "environment_types",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "environments_workspace_id_workspaces_id_fk": {
           "name": "environments_workspace_id_workspaces_id_fk",
           "tableFrom": "environments",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "environments_id_unique": {
           "name": "environments_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "members": {
+    "public.members": {
       "name": "members",
       "schema": "",
       "columns": {
@@ -568,29 +566,29 @@
         "members_workspace_id_workspaces_id_fk": {
           "name": "members_workspace_id_workspaces_id_fk",
           "tableFrom": "members",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "members_id_unique": {
           "name": "members_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "notifications": {
+    "public.notifications": {
       "name": "notifications",
       "schema": "",
       "columns": {
@@ -632,29 +630,29 @@
         "notifications_release_step_id_release_steps_id_fk": {
           "name": "notifications_release_step_id_release_steps_id_fk",
           "tableFrom": "notifications",
-          "tableTo": "release_steps",
           "columnsFrom": [
             "release_step_id"
           ],
+          "tableTo": "release_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "notifications_id_unique": {
           "name": "notifications_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "release_components": {
+    "public.release_components": {
       "name": "release_components",
       "schema": "",
       "columns": {
@@ -676,34 +674,34 @@
         "release_components_release_id_releases_id_fk": {
           "name": "release_components_release_id_releases_id_fk",
           "tableFrom": "release_components",
-          "tableTo": "releases",
           "columnsFrom": [
             "release_id"
           ],
+          "tableTo": "releases",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_components_component_version_id_component_versions_id_fk": {
           "name": "release_components_component_version_id_component_versions_id_fk",
           "tableFrom": "release_components",
-          "tableTo": "component_versions",
           "columnsFrom": [
             "component_version_id"
           ],
+          "tableTo": "component_versions",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "release_step_gates": {
+    "public.release_step_gates": {
       "name": "release_step_gates",
       "schema": "",
       "columns": {
@@ -745,29 +743,29 @@
         "release_step_gates_release_step_id_release_steps_id_fk": {
           "name": "release_step_gates_release_step_id_release_steps_id_fk",
           "tableFrom": "release_step_gates",
-          "tableTo": "release_steps",
           "columnsFrom": [
             "release_step_id"
           ],
+          "tableTo": "release_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_step_gates_id_unique": {
           "name": "release_step_gates_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "release_steps": {
+    "public.release_steps": {
       "name": "release_steps",
       "schema": "",
       "columns": {
@@ -821,42 +819,42 @@
         "release_steps_release_id_releases_id_fk": {
           "name": "release_steps_release_id_releases_id_fk",
           "tableFrom": "release_steps",
-          "tableTo": "releases",
           "columnsFrom": [
             "release_id"
           ],
+          "tableTo": "releases",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_steps_strategy_step_id_release_strategy_steps_id_fk": {
           "name": "release_steps_strategy_step_id_release_strategy_steps_id_fk",
           "tableFrom": "release_steps",
-          "tableTo": "release_strategy_steps",
           "columnsFrom": [
             "strategy_step_id"
           ],
+          "tableTo": "release_strategy_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_steps_id_unique": {
           "name": "release_steps_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "release_strategies": {
+    "public.release_strategies": {
       "name": "release_strategies",
       "schema": "",
       "columns": {
@@ -904,29 +902,29 @@
         "release_strategies_workspace_id_workspaces_id_fk": {
           "name": "release_strategies_workspace_id_workspaces_id_fk",
           "tableFrom": "release_strategies",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_strategies_id_unique": {
           "name": "release_strategies_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "release_strategy_steps": {
+    "public.release_strategy_steps": {
       "name": "release_strategy_steps",
       "schema": "",
       "columns": {
@@ -986,42 +984,42 @@
         "release_strategy_steps_release_strategy_id_release_strategies_id_fk": {
           "name": "release_strategy_steps_release_strategy_id_release_strategies_id_fk",
           "tableFrom": "release_strategy_steps",
-          "tableTo": "release_strategies",
           "columnsFrom": [
             "release_strategy_id"
           ],
+          "tableTo": "release_strategies",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_strategy_steps_parent_id_release_strategy_steps_id_fk": {
           "name": "release_strategy_steps_parent_id_release_strategy_steps_id_fk",
           "tableFrom": "release_strategy_steps",
-          "tableTo": "release_strategy_steps",
           "columnsFrom": [
             "parent_id"
           ],
+          "tableTo": "release_strategy_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_strategy_steps_id_unique": {
           "name": "release_strategy_steps_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "releases": {
+    "public.releases": {
       "name": "releases",
       "schema": "",
       "columns": {
@@ -1087,42 +1085,42 @@
         "releases_release_strategy_id_release_strategies_id_fk": {
           "name": "releases_release_strategy_id_release_strategies_id_fk",
           "tableFrom": "releases",
-          "tableTo": "release_strategies",
           "columnsFrom": [
             "release_strategy_id"
           ],
+          "tableTo": "release_strategies",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "releases_workspace_id_workspaces_id_fk": {
           "name": "releases_workspace_id_workspaces_id_fk",
           "tableFrom": "releases",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "releases_id_unique": {
           "name": "releases_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "workspaces": {
+    "public.workspaces": {
       "name": "workspaces",
       "schema": "",
       "columns": {
@@ -1177,111 +1175,120 @@
       "uniqueConstraints": {
         "workspaces_id_unique": {
           "name": "workspaces_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "workspaces_slug_unique": {
           "name": "workspaces_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     }
   },
   "enums": {
-    "deployment_status": {
+    "public.deployment_status": {
       "name": "deployment_status",
-      "values": {
-        "queued": "queued",
-        "cancelled": "cancelled",
-        "in_progress": "in_progress",
-        "complete": "complete",
-        "failed": "failed"
-      }
+      "schema": "public",
+      "values": [
+        "queued",
+        "cancelled",
+        "in_progress",
+        "complete",
+        "failed"
+      ]
     },
-    "environment_type_styles": {
+    "public.environment_type_styles": {
       "name": "environment_type_styles",
-      "values": {
-        "slate": "slate",
-        "gray": "gray",
-        "zinc": "zinc",
-        "neutral": "neutral",
-        "stone": "stone",
-        "red": "red",
-        "orange": "orange",
-        "amber": "amber",
-        "yellow": "yellow",
-        "lime": "lime",
-        "green": "green",
-        "emerald": "emerald",
-        "teal": "teal",
-        "cyan": "cyan",
-        "sky": "sky",
-        "blue": "blue",
-        "indigo": "indigo",
-        "violet": "violet",
-        "purple": "purple",
-        "fuchsia": "fuchsia",
-        "pink": "pink",
-        "rose": "rose"
-      }
+      "schema": "public",
+      "values": [
+        "slate",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "rose"
+      ]
     },
-    "gate_types": {
+    "public.gate_types": {
       "name": "gate_types",
-      "values": {
-        "approval": "approval",
-        "manual": "manual"
-      }
+      "schema": "public",
+      "values": [
+        "approval",
+        "manual"
+      ]
     },
-    "release_status": {
+    "public.release_status": {
       "name": "release_status",
-      "values": {
-        "planning": "planning",
-        "blocked": "blocked",
-        "scheduled": "scheduled",
-        "testing": "testing",
-        "complete": "complete",
-        "cancelled": "cancelled",
-        "archived": "archived"
-      }
+      "schema": "public",
+      "values": [
+        "planning",
+        "blocked",
+        "scheduled",
+        "testing",
+        "complete",
+        "cancelled",
+        "archived"
+      ]
     },
-    "release_step_actions": {
+    "public.release_step_actions": {
       "name": "release_step_actions",
-      "values": {
-        "prepare": "prepare",
-        "deployment": "deployment",
-        "approval_gate": "approval_gate",
-        "manual_gate": "manual_gate",
-        "notification": "notification"
-      }
+      "schema": "public",
+      "values": [
+        "prepare",
+        "deployment",
+        "approval_gate",
+        "manual_gate",
+        "notification"
+      ]
     },
-    "release_step_status": {
+    "public.release_step_status": {
       "name": "release_step_status",
-      "values": {
-        "pending": "pending",
-        "in_progress": "in_progress",
-        "complete": "complete",
-        "failed": "failed",
-        "cancelled": "cancelled",
-        "archived": "archived"
-      }
+      "schema": "public",
+      "values": [
+        "pending",
+        "in_progress",
+        "complete",
+        "failed",
+        "cancelled",
+        "archived"
+      ]
     },
-    "workspace_type": {
+    "public.workspace_type": {
       "name": "workspace_type",
-      "values": {
-        "user": "user",
-        "organization": "organization"
-      }
+      "schema": "public",
+      "values": [
+        "user",
+        "organization"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "a3aed373-e2aa-4e57-9ee2-0fa1939721ef",
+  "prevId": "d68043a9-1373-48c3-9855-913998ed52f5"
 }
