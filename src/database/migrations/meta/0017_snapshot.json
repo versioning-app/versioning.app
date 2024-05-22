@@ -1,6 +1,4 @@
 {
-  "id": "941f2512-88f6-440d-bf56-eede6d06618e",
-  "prevId": "c7adeee5-d1e7-4f25-92ee-93c7fec29f6f",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -40,28 +38,28 @@
         "approval_group_members_approval_group_id_approval_groups_id_fk": {
           "name": "approval_group_members_approval_group_id_approval_groups_id_fk",
           "tableFrom": "approval_group_members",
-          "tableTo": "approval_groups",
           "columnsFrom": [
             "approval_group_id"
           ],
+          "tableTo": "approval_groups",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "approval_group_members_member_id_members_id_fk": {
           "name": "approval_group_members_member_id_members_id_fk",
           "tableFrom": "approval_group_members",
-          "tableTo": "members",
           "columnsFrom": [
             "member_id"
           ],
+          "tableTo": "members",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -115,25 +113,25 @@
         "approval_groups_workspace_id_workspaces_id_fk": {
           "name": "approval_groups_workspace_id_workspaces_id_fk",
           "tableFrom": "approval_groups",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "approval_groups_id_unique": {
           "name": "approval_groups_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -156,7 +154,6 @@
         "type": {
           "name": "type",
           "type": "gate_types",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -199,38 +196,38 @@
         "approvals_release_step_id_release_steps_id_fk": {
           "name": "approvals_release_step_id_release_steps_id_fk",
           "tableFrom": "approvals",
-          "tableTo": "release_steps",
           "columnsFrom": [
             "release_step_id"
           ],
+          "tableTo": "release_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "approvals_member_id_members_id_fk": {
           "name": "approvals_member_id_members_id_fk",
           "tableFrom": "approvals",
-          "tableTo": "members",
           "columnsFrom": [
             "member_id"
           ],
+          "tableTo": "members",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "approvals_id_unique": {
           "name": "approvals_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -283,25 +280,25 @@
         "component_versions_component_id_components_id_fk": {
           "name": "component_versions_component_id_components_id_fk",
           "tableFrom": "component_versions",
-          "tableTo": "components",
           "columnsFrom": [
             "component_id"
           ],
+          "tableTo": "components",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "component_versions_id_unique": {
           "name": "component_versions_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -353,25 +350,25 @@
         "components_workspace_id_workspaces_id_fk": {
           "name": "components_workspace_id_workspaces_id_fk",
           "tableFrom": "components",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "components_id_unique": {
           "name": "components_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -400,7 +397,6 @@
         "status": {
           "name": "status",
           "type": "deployment_status",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -424,38 +420,38 @@
         "deployments_release_step_id_release_steps_id_fk": {
           "name": "deployments_release_step_id_release_steps_id_fk",
           "tableFrom": "deployments",
-          "tableTo": "release_steps",
           "columnsFrom": [
             "release_step_id"
           ],
+          "tableTo": "release_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "deployments_environment_id_environments_id_fk": {
           "name": "deployments_environment_id_environments_id_fk",
           "tableFrom": "deployments",
-          "tableTo": "environments",
           "columnsFrom": [
             "environment_id"
           ],
+          "tableTo": "environments",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "deployments_id_unique": {
           "name": "deployments_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -484,7 +480,6 @@
         "style": {
           "name": "style",
           "type": "environment_type_styles",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -514,25 +509,25 @@
         "environment_types_workspace_id_workspaces_id_fk": {
           "name": "environment_types_workspace_id_workspaces_id_fk",
           "tableFrom": "environment_types",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "environment_types_id_unique": {
           "name": "environment_types_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -590,38 +585,38 @@
         "environments_type_id_environment_types_id_fk": {
           "name": "environments_type_id_environment_types_id_fk",
           "tableFrom": "environments",
-          "tableTo": "environment_types",
           "columnsFrom": [
             "type_id"
           ],
+          "tableTo": "environment_types",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "environments_workspace_id_workspaces_id_fk": {
           "name": "environments_workspace_id_workspaces_id_fk",
           "tableFrom": "environments",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "environments_id_unique": {
           "name": "environments_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -667,25 +662,25 @@
         "members_workspace_id_workspaces_id_fk": {
           "name": "members_workspace_id_workspaces_id_fk",
           "tableFrom": "members",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "members_id_unique": {
           "name": "members_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -731,25 +726,25 @@
         "notifications_release_step_id_release_steps_id_fk": {
           "name": "notifications_release_step_id_release_steps_id_fk",
           "tableFrom": "notifications",
-          "tableTo": "release_steps",
           "columnsFrom": [
             "release_step_id"
           ],
+          "tableTo": "release_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "notifications_id_unique": {
           "name": "notifications_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -796,28 +791,28 @@
         "release_components_release_id_releases_id_fk": {
           "name": "release_components_release_id_releases_id_fk",
           "tableFrom": "release_components",
-          "tableTo": "releases",
           "columnsFrom": [
             "release_id"
           ],
+          "tableTo": "releases",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_components_component_version_id_component_versions_id_fk": {
           "name": "release_components_component_version_id_component_versions_id_fk",
           "tableFrom": "release_components",
-          "tableTo": "component_versions",
           "columnsFrom": [
             "component_version_id"
           ],
+          "tableTo": "component_versions",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -848,7 +843,6 @@
         "status": {
           "name": "status",
           "type": "release_step_status",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -878,38 +872,38 @@
         "release_steps_release_id_releases_id_fk": {
           "name": "release_steps_release_id_releases_id_fk",
           "tableFrom": "release_steps",
-          "tableTo": "releases",
           "columnsFrom": [
             "release_id"
           ],
+          "tableTo": "releases",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_steps_release_strategy_step_id_release_strategy_steps_id_fk": {
           "name": "release_steps_release_strategy_step_id_release_strategy_steps_id_fk",
           "tableFrom": "release_steps",
-          "tableTo": "release_strategy_steps",
           "columnsFrom": [
             "release_strategy_step_id"
           ],
+          "tableTo": "release_strategy_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_steps_id_unique": {
           "name": "release_steps_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -961,25 +955,25 @@
         "release_strategies_workspace_id_workspaces_id_fk": {
           "name": "release_strategies_workspace_id_workspaces_id_fk",
           "tableFrom": "release_strategies",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_strategies_id_unique": {
           "name": "release_strategies_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -1014,7 +1008,6 @@
         "action": {
           "name": "action",
           "type": "release_step_actions",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1056,64 +1049,64 @@
         "release_strategy_steps_release_strategy_id_release_strategies_id_fk": {
           "name": "release_strategy_steps_release_strategy_id_release_strategies_id_fk",
           "tableFrom": "release_strategy_steps",
-          "tableTo": "release_strategies",
           "columnsFrom": [
             "release_strategy_id"
           ],
+          "tableTo": "release_strategies",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_strategy_steps_environment_id_environments_id_fk": {
           "name": "release_strategy_steps_environment_id_environments_id_fk",
           "tableFrom": "release_strategy_steps",
-          "tableTo": "environments",
           "columnsFrom": [
             "environment_id"
           ],
+          "tableTo": "environments",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_strategy_steps_approval_group_id_approval_groups_id_fk": {
           "name": "release_strategy_steps_approval_group_id_approval_groups_id_fk",
           "tableFrom": "release_strategy_steps",
-          "tableTo": "approval_groups",
           "columnsFrom": [
             "approval_group_id"
           ],
+          "tableTo": "approval_groups",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "release_strategy_steps_parent_id_release_strategy_steps_id_fk": {
           "name": "release_strategy_steps_parent_id_release_strategy_steps_id_fk",
           "tableFrom": "release_strategy_steps",
-          "tableTo": "release_strategy_steps",
           "columnsFrom": [
             "parent_id"
           ],
+          "tableTo": "release_strategy_steps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "release_strategy_steps_id_unique": {
           "name": "release_strategy_steps_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -1136,7 +1129,6 @@
         "status": {
           "name": "status",
           "type": "release_status",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1184,38 +1176,38 @@
         "releases_release_strategy_id_release_strategies_id_fk": {
           "name": "releases_release_strategy_id_release_strategies_id_fk",
           "tableFrom": "releases",
-          "tableTo": "release_strategies",
           "columnsFrom": [
             "release_strategy_id"
           ],
+          "tableTo": "release_strategies",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "releases_workspace_id_workspaces_id_fk": {
           "name": "releases_workspace_id_workspaces_id_fk",
           "tableFrom": "releases",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "releases_id_unique": {
           "name": "releases_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
@@ -1232,7 +1224,6 @@
         "type": {
           "name": "type",
           "type": "workspace_type",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1275,17 +1266,17 @@
       "uniqueConstraints": {
         "workspaces_id_unique": {
           "name": "workspaces_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "workspaces_slug_unique": {
           "name": "workspaces_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     }
@@ -1384,8 +1375,10 @@
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "acbd28fa-b3d3-4603-aa58-bfbcd0560969",
+  "prevId": "c7adeee5-d1e7-4f25-92ee-93c7fec29f6f"
 }
