@@ -1,10 +1,8 @@
 {
-  "id": "6a7d344f-b4cc-4ca2-8439-1d7d7ede71bd",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "components": {
+    "public.components": {
       "name": "components",
       "schema": "",
       "columns": {
@@ -38,29 +36,29 @@
         "components_workspace_id_workspaces_id_fk": {
           "name": "components_workspace_id_workspaces_id_fk",
           "tableFrom": "components",
-          "tableTo": "workspaces",
           "columnsFrom": [
             "workspace_id"
           ],
+          "tableTo": "workspaces",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "components_id_unique": {
           "name": "components_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "workspaces": {
+    "public.workspaces": {
       "name": "workspaces",
       "schema": "",
       "columns": {
@@ -101,34 +99,37 @@
       "uniqueConstraints": {
         "workspaces_id_unique": {
           "name": "workspaces_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "workspaces_slug_unique": {
           "name": "workspaces_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     }
   },
   "enums": {
-    "workspace_type": {
+    "public.workspace_type": {
       "name": "workspace_type",
-      "values": {
-        "user": "user",
-        "organization": "organization"
-      }
+      "schema": "public",
+      "values": [
+        "user",
+        "organization"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "6a7d344f-b4cc-4ca2-8439-1d7d7ede71bd",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }
