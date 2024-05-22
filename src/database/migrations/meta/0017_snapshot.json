@@ -1,10 +1,10 @@
 {
-  "id": "acbd28fa-b3d3-4603-aa58-bfbcd0560969",
+  "id": "941f2512-88f6-440d-bf56-eede6d06618e",
   "prevId": "c7adeee5-d1e7-4f25-92ee-93c7fec29f6f",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "approval_group_members": {
+    "public.approval_group_members": {
       "name": "approval_group_members",
       "schema": "",
       "columns": {
@@ -67,7 +67,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "approval_groups": {
+    "public.approval_groups": {
       "name": "approval_groups",
       "schema": "",
       "columns": {
@@ -137,7 +137,7 @@
         }
       }
     },
-    "approvals": {
+    "public.approvals": {
       "name": "approvals",
       "schema": "",
       "columns": {
@@ -156,6 +156,7 @@
         "type": {
           "name": "type",
           "type": "gate_types",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -233,7 +234,7 @@
         }
       }
     },
-    "component_versions": {
+    "public.component_versions": {
       "name": "component_versions",
       "schema": "",
       "columns": {
@@ -304,7 +305,7 @@
         }
       }
     },
-    "components": {
+    "public.components": {
       "name": "components",
       "schema": "",
       "columns": {
@@ -374,7 +375,7 @@
         }
       }
     },
-    "deployments": {
+    "public.deployments": {
       "name": "deployments",
       "schema": "",
       "columns": {
@@ -399,6 +400,7 @@
         "status": {
           "name": "status",
           "type": "deployment_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -457,7 +459,7 @@
         }
       }
     },
-    "environment_types": {
+    "public.environment_types": {
       "name": "environment_types",
       "schema": "",
       "columns": {
@@ -482,6 +484,7 @@
         "style": {
           "name": "style",
           "type": "environment_type_styles",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -533,7 +536,7 @@
         }
       }
     },
-    "environments": {
+    "public.environments": {
       "name": "environments",
       "schema": "",
       "columns": {
@@ -622,7 +625,7 @@
         }
       }
     },
-    "members": {
+    "public.members": {
       "name": "members",
       "schema": "",
       "columns": {
@@ -686,7 +689,7 @@
         }
       }
     },
-    "notifications": {
+    "public.notifications": {
       "name": "notifications",
       "schema": "",
       "columns": {
@@ -750,7 +753,7 @@
         }
       }
     },
-    "release_components": {
+    "public.release_components": {
       "name": "release_components",
       "schema": "",
       "columns": {
@@ -820,7 +823,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "release_steps": {
+    "public.release_steps": {
       "name": "release_steps",
       "schema": "",
       "columns": {
@@ -845,6 +848,7 @@
         "status": {
           "name": "status",
           "type": "release_step_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -909,7 +913,7 @@
         }
       }
     },
-    "release_strategies": {
+    "public.release_strategies": {
       "name": "release_strategies",
       "schema": "",
       "columns": {
@@ -979,7 +983,7 @@
         }
       }
     },
-    "release_strategy_steps": {
+    "public.release_strategy_steps": {
       "name": "release_strategy_steps",
       "schema": "",
       "columns": {
@@ -1010,6 +1014,7 @@
         "action": {
           "name": "action",
           "type": "release_step_actions",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1112,7 +1117,7 @@
         }
       }
     },
-    "releases": {
+    "public.releases": {
       "name": "releases",
       "schema": "",
       "columns": {
@@ -1131,6 +1136,7 @@
         "status": {
           "name": "status",
           "type": "release_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1213,7 +1219,7 @@
         }
       }
     },
-    "workspaces": {
+    "public.workspaces": {
       "name": "workspaces",
       "schema": "",
       "columns": {
@@ -1226,6 +1232,7 @@
         "type": {
           "name": "type",
           "type": "workspace_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1284,88 +1291,95 @@
     }
   },
   "enums": {
-    "gate_types": {
+    "public.gate_types": {
       "name": "gate_types",
-      "values": {
-        "preparation": "preparation",
-        "post_deployment": "post_deployment",
-        "approval_gate": "approval_gate"
-      }
+      "schema": "public",
+      "values": [
+        "preparation",
+        "post_deployment",
+        "approval_gate"
+      ]
     },
-    "deployment_status": {
+    "public.deployment_status": {
       "name": "deployment_status",
-      "values": {
-        "queued": "queued",
-        "cancelled": "cancelled",
-        "in_progress": "in_progress",
-        "complete": "complete",
-        "failed": "failed"
-      }
+      "schema": "public",
+      "values": [
+        "queued",
+        "cancelled",
+        "in_progress",
+        "complete",
+        "failed"
+      ]
     },
-    "environment_type_styles": {
+    "public.environment_type_styles": {
       "name": "environment_type_styles",
-      "values": {
-        "slate": "slate",
-        "gray": "gray",
-        "zinc": "zinc",
-        "neutral": "neutral",
-        "stone": "stone",
-        "red": "red",
-        "orange": "orange",
-        "amber": "amber",
-        "yellow": "yellow",
-        "lime": "lime",
-        "green": "green",
-        "emerald": "emerald",
-        "teal": "teal",
-        "cyan": "cyan",
-        "sky": "sky",
-        "blue": "blue",
-        "indigo": "indigo",
-        "violet": "violet",
-        "purple": "purple",
-        "fuchsia": "fuchsia",
-        "pink": "pink",
-        "rose": "rose"
-      }
+      "schema": "public",
+      "values": [
+        "slate",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "rose"
+      ]
     },
-    "release_status": {
+    "public.release_status": {
       "name": "release_status",
-      "values": {
-        "planning": "planning",
-        "blocked": "blocked",
-        "scheduled": "scheduled",
-        "testing": "testing",
-        "complete": "complete",
-        "cancelled": "cancelled",
-        "archived": "archived"
-      }
+      "schema": "public",
+      "values": [
+        "planning",
+        "blocked",
+        "scheduled",
+        "testing",
+        "complete",
+        "cancelled",
+        "archived"
+      ]
     },
-    "release_step_actions": {
+    "public.release_step_actions": {
       "name": "release_step_actions",
-      "values": {
-        "prepare": "prepare",
-        "deployment": "deployment",
-        "approval_gate": "approval_gate"
-      }
+      "schema": "public",
+      "values": [
+        "prepare",
+        "deployment",
+        "approval_gate"
+      ]
     },
-    "release_step_status": {
+    "public.release_step_status": {
       "name": "release_step_status",
-      "values": {
-        "pending": "pending",
-        "in_progress": "in_progress",
-        "complete": "complete",
-        "failed": "failed",
-        "cancelled": "cancelled",
-        "archived": "archived"
-      }
+      "schema": "public",
+      "values": [
+        "pending",
+        "in_progress",
+        "complete",
+        "failed",
+        "cancelled",
+        "archived"
+      ]
     },
-    "workspace_type": {
+    "public.workspace_type": {
       "name": "workspace_type",
-      "values": {
-        "user": "user",
-        "organization": "organization"
-      }
+      "schema": "public",
+      "values": [
+        "user",
+        "organization"
+      ]
     }
   },
   "schemas": {},
