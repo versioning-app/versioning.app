@@ -13,6 +13,9 @@ export const getLogger = (context?: LoggerContext) => {
   const logLevel = process.env.APP_LOG_LEVEL || 'info';
   let logger = pinoLogger({
     level: logLevel,
+    browser: {
+      write: (o) => console.log(JSON.stringify(o)),
+    },
   });
 
   if (context) {
