@@ -1,7 +1,7 @@
-import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import { InferInsertModel, InferSelectModel, SQLWrapper } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 
-export interface QueryCriteria {
+export interface QueryLimits {
   limit?: number;
   offset?: number;
 }
@@ -12,7 +12,10 @@ export interface BaseRepository<
 > {
   findAll(): Promise<InferSelectModel<T>[]>;
   findOne(id: T['$inferSelect'][ID]): Promise<InferSelectModel<T> | undefined>;
-  findAllBy(criteria: QueryCriteria): Promise<InferSelectModel<T>[]>;
+  findAllBy(
+    criteria: SQLWrapper,
+    limits?: QueryLimits,
+  ): Promise<InferSelectModel<T>[]>;
 
   create(entity: InferInsertModel<T>): Promise<InferSelectModel<T>>;
   update(
