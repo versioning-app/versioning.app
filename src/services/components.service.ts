@@ -2,13 +2,15 @@ import { db } from '@/database/db';
 import { Component, NewComponent, components } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
-import { WorkspaceScopedService } from '@/services/workspace-scoped-service';
+import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { and, eq } from 'drizzle-orm';
 import 'server-only';
 
-export class ComponentsService extends WorkspaceScopedService {
+export class ComponentsService extends WorkspaceScopedRepository<
+  typeof components
+> {
   public constructor() {
-    super();
+    super(components);
   }
 
   public async getComponents(): Promise<Component[] | undefined> {

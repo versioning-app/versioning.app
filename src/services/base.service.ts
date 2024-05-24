@@ -10,7 +10,7 @@ export abstract class BaseService {
   }
 
   public get logger() {
-    return serverLogger({ source: this.serviceName });
+    return serverLogger({ name: this.serviceName });
   }
 
   public initialise() {
