@@ -9,7 +9,6 @@ import {
   deleteComponentSchema,
 } from '@/validation/component';
 import { revalidatePath } from 'next/cache';
-import { ApiError } from 'next/dist/server/api-utils';
 
 export const createComponentAction = workspaceAction(
   createComponentSchema,
@@ -34,13 +33,11 @@ export const deleteComponentAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting component');
 
-    const success = await get(ComponentsService).delete(input.id);
-
-    if (!success) {
-      throw new ApiError(500, 'Failed to delete component');
-    }
+    await get(ComponentsService).delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+
+    return { success: true };
   },
 );
