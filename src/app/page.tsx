@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'; // defaults to auto
 export const revalidate = 0;
 
 export default async function RootPage() {
-  const logger = serverLogger({ source: 'index' });
+  const logger = serverLogger({ name: 'index' });
 
   const workspaceService = ServiceFactory.get(WorkspaceService);
 

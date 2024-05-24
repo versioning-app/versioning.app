@@ -17,6 +17,11 @@ export const Navigation = {
   DASHBOARD_RELEASE_STRATEGIES_NEW: '/release-strategies/new',
 } as const;
 
+export const RouterPaths = {
+  DASHBOARD_ROOT: '(dashboard)/[slug]',
+  DASHBOARD_COMPONENTS: '(dashboard)/[slug]/components',
+};
+
 export type NavigationItem = (typeof Navigation)[keyof typeof Navigation];
 
 export const dashboardRoute = (

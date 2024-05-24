@@ -14,7 +14,7 @@ import { revalidatePath } from 'next/cache';
 export const createEnvironmentTypeAction = workspaceAction(
   createEnvironmentTypeSchema,
   async (input, context) => {
-    const logger = serverLogger({ source: 'createEnvironmentType' });
+    const logger = serverLogger({ name: 'createEnvironmentType' });
 
     logger.debug({ input }, 'Creating environment type');
 
@@ -34,7 +34,7 @@ export const createEnvironmentTypeAction = workspaceAction(
 export const deleteEnvironmentTypeAction = workspaceAction(
   deleteEnvironmentSchema,
   async (input, context) => {
-    const logger = serverLogger({ source: 'deleteEnvironmentType' });
+    const logger = serverLogger({ name: 'deleteEnvironmentType' });
 
     logger.debug({ input }, 'Deleting environment type');
 
@@ -52,7 +52,7 @@ export const deleteEnvironmentTypeAction = workspaceAction(
 export const createEnvironmentAction = workspaceAction(
   createEnvironmentSchema,
   async (input, context) => {
-    const logger = serverLogger({ source: 'createEnvironmentAction' });
+    const logger = serverLogger({ name: 'createEnvironmentAction' });
 
     logger.debug({ input }, 'Creating environment');
 
@@ -69,7 +69,7 @@ export const createEnvironmentAction = workspaceAction(
 export const deleteEnvironmentAction = workspaceAction(
   deleteEnvironmentSchema,
   async (input, context) => {
-    const logger = serverLogger({ source: 'deleteEnvironmentAction' });
+    const logger = serverLogger({ name: 'deleteEnvironmentAction' });
 
     logger.debug({ input }, 'Deleting environment');
 

@@ -7,8 +7,7 @@ export default async function Components({
 }: {
   params: { slug: string };
 }) {
-  const components =
-    await ServiceFactory.get(ComponentsService).getComponents();
+  const components = await ServiceFactory.get(ComponentsService).findAll();
 
   return <ComponentList slug={slug} components={components} />;
 }

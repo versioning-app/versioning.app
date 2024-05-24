@@ -13,7 +13,7 @@ import { revalidatePath } from 'next/cache';
 export const createReleaseStrategyAction = workspaceAction(
   createReleaseStrategySchema,
   async (input, context) => {
-    const logger = serverLogger({ source: 'createReleaseStrategyAction' });
+    const logger = serverLogger({ name: 'createReleaseStrategyAction' });
 
     logger.debug({ input }, 'Creating release strategy');
 
@@ -32,7 +32,7 @@ export const createReleaseStrategyAction = workspaceAction(
 export const deleteReleaseStrategyAction = workspaceAction(
   deleteReleaseStrategySchema,
   async (input, context) => {
-    const logger = serverLogger({ source: 'deleteReleaseStrategyAction' });
+    const logger = serverLogger({ name: 'deleteReleaseStrategyAction' });
 
     logger.debug({ input }, 'Deleting release strategy');
 
