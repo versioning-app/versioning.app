@@ -18,14 +18,14 @@ export async function POST(request: Request) {
       return err.toResponse();
     }
 
-    serverLogger({ source: 'api/billing/webhooks/stripe' }).error(
+    serverLogger({ name: 'api/billing/webhooks/stripe' }).error(
       { err },
-      'Error handling webhook event'
+      'Error handling webhook event',
     );
 
     const unknownError = new AppError(
       'Unknown error occurred while handling webhook event',
-      ErrorCodes.UNHANDLED_ERROR
+      ErrorCodes.UNHANDLED_ERROR,
     );
 
     return unknownError.toResponse();

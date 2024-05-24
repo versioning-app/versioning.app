@@ -9,7 +9,7 @@ import { createCheckoutSessionSchema } from '@/validation/billing';
 import { redirect } from 'next/navigation';
 
 export const createBillingPortalSession = async () => {
-  const logger = serverLogger({ source: 'createBillingPortalSession' });
+  const logger = serverLogger({ name: 'createBillingPortalSession' });
 
   logger.debug('Creating billing portal session');
 
@@ -23,7 +23,7 @@ export const createBillingPortalSession = async () => {
 export const createCheckoutSession = workspaceAction(
   createCheckoutSessionSchema,
   async ({ priceId }) => {
-    const logger = serverLogger({ source: 'createCheckoutSession' });
+    const logger = serverLogger({ name: 'createCheckoutSession' });
 
     logger.debug({ priceId }, 'Creating checkout session');
 
@@ -34,10 +34,10 @@ export const createCheckoutSession = workspaceAction(
     if (!session || !session.url) {
       throw new AppError(
         'Stripe checkout session is not available',
-        ErrorCodes.STRIPE_CHECKOUT_SESSION_STALE
+        ErrorCodes.STRIPE_CHECKOUT_SESSION_STALE,
       );
     }
 
     redirect(session.url);
-  }
+  },
 );
