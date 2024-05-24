@@ -2,6 +2,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
+  PgTable,
   boolean,
   pgEnum,
   pgTable,
@@ -126,29 +127,36 @@ export const workspaces = pgTable('workspaces', {
 export type Workspace = typeof workspaces.$inferSelect;
 export type NewWorkspace = typeof workspaces.$inferInsert;
 
-export const members = pgTable('members', {
-  id: identifierColumn(),
-  clerkId: varchar('clerk_id', { length: 255 }).notNull(),
+export const WORKSPACE_COLUMNS = {
   workspaceId: varchar('workspace_id')
     .references(() => workspaces.id, {
       onDelete: 'cascade',
     })
     .notNull(),
+};
+export const members = pgTable('members', {
+  id: identifierColumn(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull(),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
 
-export const approval_groups = pgTable('approval_groups', {
-  id: identifierColumn(),
-  name: varchar('name', { length: 42 }).notNull(),
-  description: varchar('description', { length: 255 }),
+export const withWorkspace = pgTable('with_workspace', {
   workspaceId: varchar('workspace_id')
     .references(() => workspaces.id, {
       onDelete: 'cascade',
     })
     .notNull(),
+});
+
+export const approval_groups = pgTable('approval_groups', {
+  id: identifierColumn(),
+  name: varchar('name', { length: 42 }).notNull(),
+  description: varchar('description', { length: 255 }),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
@@ -173,11 +181,7 @@ export const components = pgTable('components', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
   description: varchar('description', { length: 255 }),
-  workspaceId: varchar('workspace_id')
-    .references(() => workspaces.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
@@ -204,11 +208,7 @@ export const environmentTypes = pgTable('environment_types', {
   label: varchar('name', { length: 42 }).notNull(),
   description: varchar('description', { length: 255 }),
   style: environment_type_styles('style').notNull(),
-  workspaceId: varchar('workspace_id')
-    .references(() => workspaces.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
@@ -222,9 +222,7 @@ export const environments = pgTable('environments', {
     .references(() => environmentTypes.id, { onDelete: 'cascade' })
     .notNull(),
   description: varchar('description', { length: 255 }),
-  workspaceId: varchar('workspace_id')
-    .references(() => workspaces.id, { onDelete: 'cascade' })
-    .notNull(),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
@@ -249,9 +247,7 @@ export const releaseStrategies = pgTable('release_strategies', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
   description: text('description'),
-  workspaceId: varchar('workspace_id')
-    .references(() => workspaces.id, { onDelete: 'cascade' })
-    .notNull(),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
@@ -328,9 +324,7 @@ export const releases = pgTable('releases', {
   strategyId: varchar('release_strategy_id')
     .references(() => releaseStrategies.id, { onDelete: 'cascade' })
     .notNull(),
-  workspaceId: varchar('workspace_id')
-    .references(() => workspaces.id, { onDelete: 'cascade' })
-    .notNull(),
+  ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
 
