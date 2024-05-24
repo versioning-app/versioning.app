@@ -8,7 +8,7 @@ import { changeSlugSchema } from '@/validation/workspace';
 export const changeSlugAction = workspaceAction(
   changeSlugSchema,
   async ({ slug }) => {
-    const logger = serverLogger({ source: 'changeSlugAction' });
+    const logger = serverLogger({ name: 'changeSlugAction' });
 
     logger.debug({ changeSlugAction }, 'Attempting to change slug');
 

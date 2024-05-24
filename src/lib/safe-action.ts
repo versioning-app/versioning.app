@@ -35,9 +35,8 @@ export const action = createSafeActionClient({
 
 export const workspaceAction = createSafeActionClient({
   middleware: async () => {
-    const workspace = await ServiceFactory.get(
-      WorkspaceService
-    ).currentWorkspace();
+    const workspace =
+      await ServiceFactory.get(WorkspaceService).currentWorkspace();
 
     if (!workspace) {
       throw new AppError('No workspace found', ErrorCodes.WORKSPACE_NOT_FOUND);
@@ -46,7 +45,7 @@ export const workspaceAction = createSafeActionClient({
     return { workspace };
   },
   handleServerErrorLog: (e) => {
-    const logger = serverLogger({ source: 'workspaceAction' });
+    const logger = serverLogger({ name: 'workspaceAction' });
     const { message, ...errorMeta } =
       e instanceof AppError ? e.toJSON() : { message: e.message };
     logger.error(errorMeta, message);
