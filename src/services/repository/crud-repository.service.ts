@@ -8,7 +8,7 @@ import {
   eq,
 } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
-import { BaseRepository, QueryCriteria } from './base-repository.service';
+import { BaseRepository, QueryLimits } from './base-repository.service';
 
 export abstract class CrudRepository<
     M extends PgTable,
@@ -53,17 +53,21 @@ export abstract class CrudRepository<
   }
 
   public async findAllBy(
-    criteria: QueryCriteria,
+    criteria: SQLWrapper,
+    limits?: QueryLimits,
     clause?: SQLWrapper,
   ): Promise<InferSelectModel<M>[]> {
-    const query = this.db.select().from(this.schema).where(and(clause));
+    const query = this.db
+      .select()
+      .from(this.schema)
+      .where(and(criteria, clause));
 
-    if (criteria.limit) {
-      query.limit(criteria.limit);
+    if (limits?.limit) {
+      query.limit(limits.limit);
     }
 
-    if (criteria.offset) {
-      query.offset(criteria.offset);
+    if (limits?.offset) {
+      query.offset(limits.offset);
     }
 
     return query as Promise<InferSelectModel<M>[]>;
