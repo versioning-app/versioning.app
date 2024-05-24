@@ -17,7 +17,7 @@ export const createComponentAction = workspaceAction(
 
     logger.debug({ input }, 'Creating component');
 
-    const component = get(ComponentsService).create(input);
+    const component = await get(ComponentsService).create(input);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));

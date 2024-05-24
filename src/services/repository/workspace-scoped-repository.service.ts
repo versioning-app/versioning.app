@@ -2,9 +2,15 @@ import { db as AppDb } from '@/database/db';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { WorkspaceService } from '@/services/workspace.service';
-import { InferInsertModel, InferSelectModel, eq } from 'drizzle-orm';
+import {
+  InferInsertModel,
+  InferSelectModel,
+  SQLWrapper,
+  eq,
+} from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { CrudRepository } from './crud-repository.service';
+import { QueryLimits } from '@/services/repository/base-repository.service';
 
 export abstract class WorkspaceScopedRepository<
   M extends PgTable,
@@ -63,7 +69,8 @@ export abstract class WorkspaceScopedRepository<
   }
 
   public async findAllBy(
-    criteria: Record<string, any>,
+    criteria: SQLWrapper,
+    limits?: QueryLimits,
   ): Promise<InferSelectModel<M>[]> {
     const workspaceId = await this.currentWorkspaceId;
 
@@ -74,11 +81,15 @@ export abstract class WorkspaceScopedRepository<
 
     const results = await super.findAllBy(
       criteria,
+      limits,
       // @ts-expect-error - Workspace ID is defined
       eq(this.schema.workspaceId, workspaceId),
     );
 
-    this.logger.debug({ results, criteria, workspaceId }, 'Records found');
+    this.logger.debug(
+      { results, criteria, workspaceId },
+      'Records all records by criteria',
+    );
 
     return results;
   }
