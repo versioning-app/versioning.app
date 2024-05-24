@@ -11,6 +11,7 @@ import {
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { CrudRepository } from './crud-repository.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
+import { get } from '@/services/service-factory';
 
 export abstract class WorkspaceScopedRepository<
   M extends PgTable,
@@ -24,7 +25,7 @@ export abstract class WorkspaceScopedRepository<
     primaryKey?: ID,
   ) {
     super(db ?? AppDb, schema, primaryKey ?? ('id' as ID));
-    this.workspaceService = new WorkspaceService();
+    this.workspaceService = get(WorkspaceService);
   }
 
   public get currentWorkspaceId(): Promise<string> {
