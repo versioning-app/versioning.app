@@ -1,4 +1,6 @@
 import { db as AppDb } from '@/database/db';
+import { AppError } from '@/lib/error/app.error';
+import { ErrorCodes } from '@/lib/error/error-codes';
 import { WorkspaceService } from '@/services/workspace.service';
 import { InferInsertModel, InferSelectModel, eq } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
@@ -129,10 +131,16 @@ export abstract class WorkspaceScopedRepository<
 
     if (!result) {
       this.logger.warn({ id, workspaceId }, 'Failed to delete record');
-      return false;
+      throw new AppError(
+        'Failed to delete record',
+        ErrorCodes.RECORD_DELETE_FAILURE,
+      );
     }
 
-    this.logger.info({ result, id, workspaceId }, 'Record deleted');
+    this.logger.info(
+      { result, id, workspaceId },
+      'Record deleted successfully',
+    );
 
     return result;
   }
