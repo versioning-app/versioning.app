@@ -1,16 +1,25 @@
-import { ReleaseStrategiesList } from '@/components/dashboard/lists/release-strategies';
+import { deleteReleaseStrategyAction } from '@/actions/release';
+import { List } from '@/components/dashboard/lists/list-item';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { ReleaseService } from '@/services/release.service';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 
 export default async function ReleaseStrategiesPage({
   params: { slug },
 }: {
   params: { slug: string };
 }) {
-  const releaseService = ServiceFactory.get(ReleaseService);
+  const releaseService = get(ReleaseService);
   const releaseStrategies = await releaseService.getReleaseStrategies();
 
   return (
-    <ReleaseStrategiesList slug={slug} releaseStrategies={releaseStrategies} />
+    <List
+      createLink={dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGIES)}
+      resourceName="Release Strategy"
+      resources={releaseStrategies}
+      actions={{
+        delete: deleteReleaseStrategyAction,
+      }}
+    />
   );
 }
