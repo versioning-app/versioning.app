@@ -1,16 +1,25 @@
-import { EnvironmentTypeList } from '@/components/dashboard/lists/environment-type';
+import { deleteEnvironmentTypeAction } from '@/actions/environment';
+import { List } from '@/components/dashboard/lists/list-item';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { EnvironmentsService } from '@/services/environments.service';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 
 export default async function EnvironmentTypesPage({
   params: { slug },
 }: {
   params: { slug: string };
 }) {
-  const environmentService = ServiceFactory.get(EnvironmentsService);
+  const environmentService = get(EnvironmentsService);
   const environmentTypes = await environmentService.getEnvironmentTypes();
 
   return (
-    <EnvironmentTypeList slug={slug} environmentTypes={environmentTypes} />
+    <List
+      createLink={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENT_TYPES)}
+      resourceName="Environment Type"
+      resources={environmentTypes}
+      actions={{
+        delete: deleteEnvironmentTypeAction,
+      }}
+    />
   );
 }

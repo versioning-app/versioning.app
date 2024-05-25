@@ -1,9 +1,9 @@
 import { BillingManagement } from '@/components/dashboard/billing';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { StripeService } from '@/services/stripe.service';
 
 export default async function Billing() {
-  const stripeService = ServiceFactory.get(StripeService);
+  const stripeService = get(StripeService);
   const prices = await stripeService.getAllPrices();
   return (
     <div>
