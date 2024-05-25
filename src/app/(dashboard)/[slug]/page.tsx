@@ -1,4 +1,4 @@
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { auth } from '@clerk/nextjs/server';
 
@@ -7,8 +7,7 @@ export const revalidate = 0;
 export default async function Dashboard() {
   const { orgId, sessionClaims } = auth();
 
-  const workspaceId =
-    await ServiceFactory.get(WorkspaceService).currentWorkspaceId();
+  const workspaceId = await get(WorkspaceService).currentWorkspaceId();
 
   return (
     <div>

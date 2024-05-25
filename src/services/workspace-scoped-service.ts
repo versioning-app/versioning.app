@@ -1,5 +1,5 @@
 import { BaseService } from '@/services/base.service';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 
 export class WorkspaceScopedService extends BaseService {
@@ -8,7 +8,7 @@ export class WorkspaceScopedService extends BaseService {
   public constructor() {
     super();
 
-    this.workspaceService = ServiceFactory.get(WorkspaceService);
+    this.workspaceService = get(WorkspaceService);
   }
 
   public get currentWorkspaceId(): Promise<string> {

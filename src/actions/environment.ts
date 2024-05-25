@@ -3,7 +3,7 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
 import { workspaceAction } from '@/lib/safe-action';
 import { EnvironmentsService } from '@/services/environments.service';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import {
   createEnvironmentSchema,
   createEnvironmentTypeSchema,
@@ -18,7 +18,7 @@ export const createEnvironmentTypeAction = workspaceAction(
 
     logger.debug({ input }, 'Creating environment type');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
+    const environmentsService = get(EnvironmentsService);
     const environmentType =
       await environmentsService.createEnvironmentType(input);
 
@@ -38,7 +38,7 @@ export const deleteEnvironmentTypeAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting environment type');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
+    const environmentsService = get(EnvironmentsService);
 
     await environmentsService.deleteEnvironmentType(input.id);
 
@@ -56,7 +56,7 @@ export const createEnvironmentAction = workspaceAction(
 
     logger.debug({ input }, 'Creating environment');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
+    const environmentsService = get(EnvironmentsService);
     const environment = await environmentsService.createEnvironment(input);
 
     const { slug } = context.workspace;
@@ -73,7 +73,7 @@ export const deleteEnvironmentAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting environment');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
+    const environmentsService = get(EnvironmentsService);
 
     await environmentsService.deleteEnvironment(input.id);
 

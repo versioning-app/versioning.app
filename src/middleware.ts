@@ -1,6 +1,6 @@
 import { StorageKeys } from '@/config/storage';
 import { generateRequestId } from '@/lib/utils';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
@@ -29,7 +29,7 @@ export default clerkMiddleware(async (auth, req, event) => {
     return auth().redirectToSignIn({ returnBackUrl: req.url });
   }
 
-  await ServiceFactory.get(WorkspaceService).ensureWorkspace({
+  await get(WorkspaceService).ensureWorkspace({
     userId,
     orgId,
     sessionClaims,

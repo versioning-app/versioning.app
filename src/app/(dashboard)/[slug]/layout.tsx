@@ -3,7 +3,7 @@ import { MainLayout } from '@/components/dashboard/dashboard';
 import { Sidebar } from '@/components/dashboard/sidebar';
 import { Navigation, dashboardRoute } from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
@@ -27,7 +27,7 @@ export default async function DashboardLayout({
   }
 
   if (!slug) {
-    const workspaceService = ServiceFactory.get(WorkspaceService);
+    const workspaceService = get(WorkspaceService);
 
     const workspace = await workspaceService.currentWorkspace({
       userId,
