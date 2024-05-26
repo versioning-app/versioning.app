@@ -71,9 +71,7 @@ export class ReleaseService extends WorkspaceScopedService {
     }
   }
 
-  public async checkReleaseStrategyDependents(
-    releaseStrategyId: string,
-  ): Promise<boolean> {
+  public async hasDependents(releaseStrategyId: string): Promise<boolean> {
     const workspaceId = await this.currentWorkspaceId;
 
     const results = await db.query.releaseStrategies.findFirst({
@@ -95,7 +93,7 @@ export class ReleaseService extends WorkspaceScopedService {
     const workspaceId = await this.currentWorkspaceId;
 
     // First check to see if anything depends
-    if (await this.checkReleaseStrategyDependents(releaseStrategyId)) {
+    if (await this.hasDependents(releaseStrategyId)) {
       throw new AppError(
         'Release Strategy has dependents',
         ErrorCodes.RESOURCE_HAS_DEPENDENTS,

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "FORCE_COLOR=1 next dev --experimental-https | pino-pretty -c -C -t -S -l",
+    "debug": "NODE_OPTIONS='--inspect' FORCE_COLOR=1 next dev | pino-pretty -c -C -t -S -l",
     "build": "next build",
     "vercel-build": "next build && yarn db:migrate",
     "start": "next start",

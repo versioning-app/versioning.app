@@ -1,9 +1,8 @@
-import { db } from '@/database/db';
-import { Component, NewComponent, components } from '@/database/schema';
+import { NewComponent, components } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
-import { InferInsertModel, InferSelectModel, eq } from 'drizzle-orm';
+import { InferSelectModel, eq } from 'drizzle-orm';
 import 'server-only';
 
 export class ComponentsService extends WorkspaceScopedRepository<
@@ -11,6 +10,10 @@ export class ComponentsService extends WorkspaceScopedRepository<
 > {
   public constructor() {
     super(components);
+  }
+
+  public async hasDependents(_id: string): Promise<boolean> {
+    return false;
   }
 
   public async create(

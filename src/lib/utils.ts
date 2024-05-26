@@ -44,3 +44,8 @@ export const getURL = () => {
   url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
   return url;
 };
+
+export const snakeToCamel = (input: string) =>
+  input
+    .toLowerCase()
+    .replace(/[-_][a-z]/g, (group) => group.slice(-1).toUpperCase());
