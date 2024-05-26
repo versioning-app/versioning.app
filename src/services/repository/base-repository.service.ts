@@ -12,6 +12,7 @@ export interface BaseRepository<
 > {
   findAll(): Promise<InferSelectModel<T>[]>;
   findOne(id: T['$inferSelect'][ID]): Promise<InferSelectModel<T> | undefined>;
+  findOneBy(criteria: SQLWrapper): Promise<InferSelectModel<T> | undefined>;
   findAllBy(
     criteria: SQLWrapper,
     limits?: QueryLimits,

@@ -6,12 +6,15 @@ import {
   InferInsertModel,
   InferSelectModel,
   SQLWrapper,
+  and,
   eq,
+  getTableName,
 } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { CrudRepository } from './crud-repository.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
 import { get } from '@/services/service-factory';
+import { Many } from 'drizzle-orm';
 
 export abstract class WorkspaceScopedRepository<
   M extends PgTable,
@@ -34,6 +37,71 @@ export abstract class WorkspaceScopedRepository<
 
   public async currentWorkspace() {
     return this.workspaceService.currentWorkspace();
+  }
+
+  public async hasDependents(id: string): Promise<boolean> {
+    this.logger.debug({ id }, 'Checking for dependents');
+
+    const manyRelations =
+      // @ts-expect-error
+      Object.entries(this.db._.schema[this.drizzleTableKey].relations).map(
+        ([key, relation]) => {
+          if (relation instanceof Many) {
+            return { key, relation };
+          }
+        },
+      );
+
+    // if we do not have any relations, we can safely return false
+    if (!manyRelations?.length) {
+      this.logger.info({ id }, 'No dependents found');
+      return false;
+    }
+
+    const workspaceId = await this.currentWorkspaceId;
+
+    // @ts-expect-error
+    const rows = await this.db.query[this.drizzleTableKey].findFirst({
+      where: (fields: any, { eq }: any) =>
+        and(eq(fields.id, id), eq(fields.workspaceId, workspaceId)),
+      columns: {
+        id: true,
+      },
+      with: {
+        ...manyRelations.reduce((acc, relation) => {
+          if (!relation) {
+            return acc;
+          }
+
+          acc[relation.key] = true;
+          return acc;
+        }, {} as any),
+      },
+    });
+
+    const hasDependents = manyRelations.some((relation) => {
+      if (!relation) {
+        return false;
+      }
+
+      const { key } = relation;
+
+      this.logger.debug({ key }, 'Checking dependent relation');
+
+      const relationHasDependents = rows?.[key]?.length > 0;
+
+      this.logger.debug({ key, relationHasDependents }, 'Relation check done');
+
+      return relationHasDependents;
+    });
+
+    if (!hasDependents) {
+      this.logger.info({ id }, 'Resource does not have dependents');
+      return false;
+    }
+
+    this.logger.info({ id }, 'Resource has dependents');
+    return true;
   }
 
   public async findAll(): Promise<InferSelectModel<M>[]> {
@@ -132,6 +200,14 @@ export abstract class WorkspaceScopedRepository<
 
   public async delete(id: string): Promise<boolean> {
     const workspaceId = await this.currentWorkspaceId;
+
+    // First check to see if anything depends
+    if (await this.hasDependents(id)) {
+      throw new AppError(
+        'Resource has dependents',
+        ErrorCodes.RESOURCE_HAS_DEPENDENTS,
+      );
+    }
 
     this.logger.debug({ id, workspaceId }, 'Deleting record');
 

@@ -1,14 +1,24 @@
 import { db as AppDb } from '@/database/db';
+import { AppError } from '@/lib/error/app.error';
+import { ErrorCodes } from '@/lib/error/error-codes';
 import { BaseService } from '@/services/base.service';
 import {
+  ExtractTableRelationsFromSchema,
   InferInsertModel,
   InferSelectModel,
   SQLWrapper,
   and,
   eq,
+  getTableName,
 } from 'drizzle-orm';
-import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
+import {
+  PgUpdateSetSource,
+  getTableConfig,
+  type PgTable,
+} from 'drizzle-orm/pg-core';
 import { BaseRepository, QueryLimits } from './base-repository.service';
+import { snakeToCamel } from '@/lib/utils';
+import * as schema from '@/database/schema';
 
 export abstract class CrudRepository<
     M extends PgTable,
@@ -25,13 +35,21 @@ export abstract class CrudRepository<
     super();
   }
 
+  public get tableName(): string {
+    return getTableName(this.schema);
+  }
+
+  public get drizzleTableKey(): string {
+    return snakeToCamel(this.tableName);
+  }
+
   public async findAll(clause?: SQLWrapper): Promise<InferSelectModel<M>[]> {
     return this.db.select().from(this.schema).where(and(clause)) as Promise<
       InferSelectModel<M>[]
     >;
   }
 
-  async findOne(
+  public async findOne(
     id: M['$inferSelect'][ID],
     clause?: SQLWrapper,
   ): Promise<InferSelectModel<M>> {
@@ -50,6 +68,25 @@ export abstract class CrudRepository<
     }
 
     return result[0] as InferSelectModel<M>;
+  }
+
+  public async findOneBy(
+    criteria: SQLWrapper,
+    clause?: SQLWrapper,
+  ): Promise<InferSelectModel<M>> {
+    const result = await this.db
+      .select()
+      .from(this.schema)
+      .where(and(criteria, clause))
+      .limit(1);
+
+    const [resource] = result;
+
+    if (!resource) {
+      throw new AppError('Resource not found', ErrorCodes.RESOURCE_NOT_FOUND);
+    }
+
+    return resource;
   }
 
   public async findAllBy(

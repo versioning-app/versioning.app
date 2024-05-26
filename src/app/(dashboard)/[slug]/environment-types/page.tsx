@@ -1,7 +1,7 @@
 import { deleteEnvironmentTypeAction } from '@/actions/environment';
 import { List } from '@/components/dashboard/lists/list-item';
 import { Navigation, dashboardRoute } from '@/config/navigation';
-import { EnvironmentsService } from '@/services/environments.service';
+import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { get } from '@/services/service-factory';
 
 export default async function EnvironmentTypesPage({
@@ -9,8 +9,13 @@ export default async function EnvironmentTypesPage({
 }: {
   params: { slug: string };
 }) {
-  const environmentService = get(EnvironmentsService);
-  const environmentTypes = await environmentService.getEnvironmentTypes();
+  const environmentTypesService = get(EnvironmentTypesService);
+  const environmentTypes = await environmentTypesService.findAll();
+
+  const deps = await environmentTypesService.hasDependents('dev_env_type');
+  const aa = await environmentTypesService.hasDependents(
+    'dmzozvqh6okncjg5qqmuofgl',
+  );
 
   return (
     <List
