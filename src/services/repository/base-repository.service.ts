@@ -18,7 +18,10 @@ export interface BaseRepository<
     limits?: QueryLimits,
   ): Promise<InferSelectModel<T>[]>;
 
-  create(entity: InferInsertModel<T>): Promise<InferSelectModel<T>>;
+  create(
+    entity: InferInsertModel<T>,
+    existingCheck?: SQLWrapper,
+  ): Promise<InferSelectModel<T>>;
   update(
     id: T['$inferSelect'][ID],
     updateSet: PgUpdateSetSource<T>,
