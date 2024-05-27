@@ -2,7 +2,7 @@
 import { Navigation, dashboardRoute } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
 import { workspaceAction } from '@/lib/safe-action';
-import { ReleaseService } from '@/services/release.service';
+import { ReleaseStrategiesService } from '@/services/release-strategies.service';
 import { get } from '@/services/service-factory';
 import {
   createReleaseStrategySchema,
@@ -17,8 +17,8 @@ export const createReleaseStrategyAction = workspaceAction(
 
     logger.debug({ input }, 'Creating release strategy');
 
-    const releaseService = get(ReleaseService);
-    const releaseStrategy = await releaseService.createReleaseStrategy(input);
+    const releaseStrategiesService = get(ReleaseStrategiesService);
+    const releaseStrategy = await releaseStrategiesService.create(input);
 
     const { slug } = context.workspace;
     revalidatePath(
@@ -36,9 +36,9 @@ export const deleteReleaseStrategyAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting release strategy');
 
-    const releaseService = get(ReleaseService);
+    const releaseStrategiesService = get(ReleaseStrategiesService);
 
-    await releaseService.deleteReleaseStrategy(input.id);
+    await releaseStrategiesService.delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));

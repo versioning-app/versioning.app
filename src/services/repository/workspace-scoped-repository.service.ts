@@ -165,15 +165,25 @@ export abstract class WorkspaceScopedRepository<
 
   public async create(
     entity: Omit<InferInsertModel<M>, 'workspaceId'>,
+    checkExisting?: SQLWrapper,
   ): Promise<InferSelectModel<M>> {
     const workspaceId = await this.currentWorkspaceId;
 
     this.logger.debug({ entity, workspaceId }, 'Creating record');
 
-    const created = await super.create({
-      ...entity,
-      workspaceId,
-    } as InferInsertModel<M>);
+    const created = await super.create(
+      {
+        ...entity,
+        workspaceId,
+      } as InferInsertModel<M>,
+      checkExisting
+        ? and(
+            // @ts-expect-error - Workspace ID is defined
+            eq(this.schema.workspaceId, workspaceId),
+            checkExisting,
+          )
+        : undefined,
+    );
 
     this.logger.debug({ created, entity, workspaceId }, 'Record created');
 

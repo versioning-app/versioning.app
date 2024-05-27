@@ -1,12 +1,12 @@
 import { CreateEnvironmentForm } from '@/components/dashboard/forms/create-environment';
 import { PageDialog } from '@/components/dashboard/page-dialog';
 import { DialogContent } from '@/components/ui/dialog';
-import { EnvironmentsService } from '@/services/environments.service';
+import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { get } from '@/services/service-factory';
 
 export default async function NewEnvironmentModal() {
-  const environmentsService = get(EnvironmentsService);
-  const environmentTypes = await environmentsService.getEnvironmentTypes();
+  const environmentTypesService = get(EnvironmentTypesService);
+  const environmentTypes = await environmentTypesService.findAll();
 
   if (!environmentTypes) {
     return <div>Please create an environment type first</div>;
