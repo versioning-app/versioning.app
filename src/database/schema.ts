@@ -143,14 +143,6 @@ export const members = pgTable('members', {
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
 
-export const withWorkspace = pgTable('with_workspace', {
-  workspaceId: varchar('workspace_id')
-    .references(() => workspaces.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
-});
-
 export const approval_groups = pgTable('approval_groups', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
@@ -187,7 +179,7 @@ export const components = pgTable('components', {
 export type Component = typeof components.$inferSelect;
 export type NewComponent = typeof components.$inferInsert;
 
-export const componentVersions = pgTable('component_versions', {
+export const component_versions = pgTable('component_versions', {
   id: identifierColumn(),
   componentId: varchar('component_id')
     .references(() => components.id, {
@@ -199,10 +191,10 @@ export const componentVersions = pgTable('component_versions', {
   ...TIME_COLUMNS,
 });
 
-export type ComponentVersion = typeof componentVersions.$inferSelect;
-export type NewComponentVersion = typeof componentVersions.$inferInsert;
+export type ComponentVersion = typeof component_versions.$inferSelect;
+export type NewComponentVersion = typeof component_versions.$inferInsert;
 
-export const environmentTypes = pgTable('environment_types', {
+export const environment_types = pgTable('environment_types', {
   id: identifierColumn(),
   label: varchar('name', { length: 42 }).notNull(),
   description: varchar('description', { length: 255 }),
@@ -211,14 +203,14 @@ export const environmentTypes = pgTable('environment_types', {
   ...TIME_COLUMNS,
 });
 
-export type EnvironmentType = typeof environmentTypes.$inferSelect;
-export type NewEnvironmentType = typeof environmentTypes.$inferInsert;
+export type EnvironmentType = typeof environment_types.$inferSelect;
+export type NewEnvironmentType = typeof environment_types.$inferInsert;
 
 export const environments = pgTable('environments', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
   typeId: varchar('type_id')
-    .references(() => environmentTypes.id, { onDelete: 'cascade' })
+    .references(() => environment_types.id, { onDelete: 'cascade' })
     .notNull(),
   description: varchar('description', { length: 255 }),
   ...WORKSPACE_COLUMNS,
@@ -229,20 +221,20 @@ export type Environment = typeof environments.$inferSelect;
 export type NewEnvironment = typeof environments.$inferInsert;
 
 export const environmentTypeRelations = relations(
-  environmentTypes,
+  environment_types,
   ({ many }) => ({
     environments: many(environments),
   }),
 );
 
-export const environmentRelations = relations(environments, ({ one }) => ({
-  environmentTypes: one(environmentTypes, {
+export const environment_relations = relations(environments, ({ one }) => ({
+  environmentTypes: one(environment_types, {
     fields: [environments.typeId],
-    references: [environmentTypes.id],
+    references: [environment_types.id],
   }),
 }));
 
-export const releaseStrategies = pgTable('release_strategies', {
+export const release_strategies = pgTable('release_strategies', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
   description: text('description'),
@@ -250,24 +242,24 @@ export const releaseStrategies = pgTable('release_strategies', {
   ...TIME_COLUMNS,
 });
 
-export const releaseStrategyRelations = relations(
-  releaseStrategies,
+export const release_strategy_relations = relations(
+  release_strategies,
   ({ one, many }) => ({
     workspace: one(workspaces, {
-      fields: [releaseStrategies.workspaceId],
+      fields: [release_strategies.workspaceId],
       references: [workspaces.id],
     }),
-    releaseStrategySteps: many(releaseStrategySteps),
+    releaseStrategySteps: many(release_strategy_steps),
   }),
 );
 
-export type ReleaseStrategy = typeof releaseStrategies.$inferSelect;
-export type NewReleaseStrategy = typeof releaseStrategies.$inferInsert;
+export type ReleaseStrategy = typeof release_strategies.$inferSelect;
+export type NewReleaseStrategy = typeof release_strategies.$inferInsert;
 
-export const releaseStrategySteps = pgTable('release_strategy_steps', {
+export const release_strategy_steps = pgTable('release_strategy_steps', {
   id: identifierColumn(),
   strategyId: varchar('release_strategy_id').references(
-    () => releaseStrategies.id,
+    () => release_strategies.id,
     { onDelete: 'cascade' },
   ),
   name: varchar('name', { length: 42 }).notNull(),
@@ -283,32 +275,32 @@ export const releaseStrategySteps = pgTable('release_strategy_steps', {
     { onDelete: 'cascade' },
   ),
   parentId: varchar('parent_id').references(
-    (): AnyPgColumn => releaseStrategySteps.id,
+    (): AnyPgColumn => release_strategy_steps.id,
     { onDelete: 'cascade' },
   ),
   ...TIME_COLUMNS,
 });
 
-export type ReleaseStrategyStep = typeof releaseStrategySteps.$inferSelect;
-export type NewReleaseStrategyStep = typeof releaseStrategySteps.$inferInsert;
+export type ReleaseStrategyStep = typeof release_strategy_steps.$inferSelect;
+export type NewReleaseStrategyStep = typeof release_strategy_steps.$inferInsert;
 
-export const releaseStrategyStepRelations = relations(
-  releaseStrategySteps,
+export const release_strategy_step_relations = relations(
+  release_strategy_steps,
   ({ one }) => ({
-    releaseStrategySteps: one(releaseStrategySteps, {
-      fields: [releaseStrategySteps.parentId],
-      references: [releaseStrategySteps.id],
+    releaseStrategySteps: one(release_strategy_steps, {
+      fields: [release_strategy_steps.parentId],
+      references: [release_strategy_steps.id],
     }),
-    releaseStrategies: one(releaseStrategies, {
-      fields: [releaseStrategySteps.strategyId],
-      references: [releaseStrategies.id],
+    releaseStrategies: one(release_strategies, {
+      fields: [release_strategy_steps.strategyId],
+      references: [release_strategies.id],
     }),
     environments: one(environments, {
-      fields: [releaseStrategySteps.environmentId],
+      fields: [release_strategy_steps.environmentId],
       references: [environments.id],
     }),
     approvalGroups: one(approval_groups, {
-      fields: [releaseStrategySteps.approvalGroupId],
+      fields: [release_strategy_steps.approvalGroupId],
       references: [approval_groups.id],
     }),
   }),
@@ -321,7 +313,7 @@ export const releases = pgTable('releases', {
   version: varchar('version', { length: 42 }).notNull(),
   description: text('description'),
   strategyId: varchar('release_strategy_id')
-    .references(() => releaseStrategies.id, { onDelete: 'cascade' })
+    .references(() => release_strategies.id, { onDelete: 'cascade' })
     .notNull(),
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
@@ -330,42 +322,40 @@ export const releases = pgTable('releases', {
 export type Release = typeof releases.$inferSelect;
 export type NewRelease = typeof releases.$inferInsert;
 
-export const releaseComponentVersions = pgTable('release_components', {
+export const release_components = pgTable('release_components', {
   releaseId: varchar('release_id')
     .references(() => releases.id, { onDelete: 'cascade' })
     .notNull(),
   componentVersionId: varchar('component_version_id')
-    .references(() => componentVersions.id, { onDelete: 'cascade' })
+    .references(() => component_versions.id, { onDelete: 'cascade' })
     .notNull(),
   active: boolean('active').notNull().default(false),
   ...TIME_COLUMNS,
 });
 
-export type ReleaseComponentVersion =
-  typeof releaseComponentVersions.$inferSelect;
-export type NewReleaseComponentVersion =
-  typeof releaseComponentVersions.$inferInsert;
+export type ReleaseComponentVersion = typeof release_components.$inferSelect;
+export type NewReleaseComponentVersion = typeof release_components.$inferInsert;
 
-export const releaseSteps = pgTable('release_steps', {
+export const release_steps = pgTable('release_steps', {
   id: identifierColumn(),
   releaseId: varchar('release_id')
     .references(() => releases.id, { onDelete: 'cascade' })
     .notNull(),
   releaseStrategyStepId: varchar('release_strategy_step_id')
-    .references(() => releaseStrategySteps.id, { onDelete: 'cascade' })
+    .references(() => release_strategy_steps.id, { onDelete: 'cascade' })
     .notNull(),
   status: release_step_status('status').notNull(),
   finalizedAt: timestamp('finalized_at'),
   ...TIME_COLUMNS,
 });
 
-export type ReleaseStep = typeof releaseSteps.$inferSelect;
-export type NewReleaseStep = typeof releaseSteps.$inferInsert;
+export type ReleaseStep = typeof release_steps.$inferSelect;
+export type NewReleaseStep = typeof release_steps.$inferInsert;
 
 export const deployments = pgTable('deployments', {
   id: identifierColumn(),
   releaseStepId: varchar('release_step_id')
-    .references(() => releaseSteps.id, { onDelete: 'cascade' })
+    .references(() => release_steps.id, { onDelete: 'cascade' })
     .notNull(),
   environmentId: varchar('environment_id')
     .references(() => environments.id, { onDelete: 'cascade' })
@@ -380,7 +370,7 @@ export type NewDeployment = typeof deployments.$inferInsert;
 export const approvals = pgTable('approvals', {
   id: identifierColumn(),
   releaseStepId: varchar('release_step_id')
-    .references(() => releaseSteps.id, { onDelete: 'cascade' })
+    .references(() => release_steps.id, { onDelete: 'cascade' })
     .notNull(),
   type: approval_types('type').notNull(),
   // False if the approval was rejected
@@ -398,7 +388,212 @@ export const notifications = pgTable('notifications', {
   id: identifierColumn(),
   message: text('message').notNull(),
   releaseStepId: varchar('release_step_id')
-    .references(() => releaseSteps.id, { onDelete: 'cascade' })
+    .references(() => release_steps.id, { onDelete: 'cascade' })
     .notNull(),
   ...TIME_COLUMNS,
 });
+
+export const approvals_relations = relations(approvals, ({ one }) => ({
+  release_step: one(release_steps, {
+    fields: [approvals.releaseStepId],
+    references: [release_steps.id],
+  }),
+  member: one(members, {
+    fields: [approvals.member_id],
+    references: [members.id],
+  }),
+}));
+
+export const release_stepsRelations = relations(
+  release_steps,
+  ({ one, many }) => ({
+    approvals: many(approvals),
+    deployments: many(deployments),
+    release: one(releases, {
+      fields: [release_steps.releaseId],
+      references: [releases.id],
+    }),
+    release_strategy_step: one(release_strategy_steps, {
+      fields: [release_steps.releaseStrategyStepId],
+      references: [release_strategy_steps.id],
+    }),
+    notifications: many(notifications),
+  }),
+);
+
+export const membersRelations = relations(members, ({ one, many }) => ({
+  approvals: many(approvals),
+  approval_group_members: many(approval_group_members),
+  workspace: one(workspaces, {
+    fields: [members.workspaceId],
+    references: [workspaces.id],
+  }),
+}));
+
+export const approval_group_membersRelations = relations(
+  approval_group_members,
+  ({ one }) => ({
+    member: one(members, {
+      fields: [approval_group_members.memberId],
+      references: [members.id],
+    }),
+    approval_group: one(approval_groups, {
+      fields: [approval_group_members.groupId],
+      references: [approval_groups.id],
+    }),
+  }),
+);
+
+export const approval_groupsRelations = relations(
+  approval_groups,
+  ({ one, many }) => ({
+    approval_group_members: many(approval_group_members),
+    workspace: one(workspaces, {
+      fields: [approval_groups.workspaceId],
+      references: [workspaces.id],
+    }),
+    release_strategy_steps: many(release_strategy_steps),
+  }),
+);
+
+export const release_strategiesRelations = relations(
+  release_strategies,
+  ({ one, many }) => ({
+    workspace: one(workspaces, {
+      fields: [release_strategies.workspaceId],
+      references: [workspaces.id],
+    }),
+    releases: many(releases),
+    release_strategy_steps: many(release_strategy_steps),
+  }),
+);
+
+export const workspacesRelations = relations(workspaces, ({ many }) => ({
+  release_strategies: many(release_strategies),
+  releases: many(releases),
+  components: many(components),
+  environment_types: many(environment_types),
+  environments: many(environments),
+  members: many(members),
+  approval_groups: many(approval_groups),
+}));
+
+export const releasesRelations = relations(releases, ({ one, many }) => ({
+  workspace: one(workspaces, {
+    fields: [releases.workspaceId],
+    references: [workspaces.id],
+  }),
+  release_strategy: one(release_strategies, {
+    fields: [releases.strategyId],
+    references: [release_strategies.id],
+  }),
+  release_components: many(release_components),
+  release_steps: many(release_steps),
+}));
+
+export const componentsRelations = relations(components, ({ one, many }) => ({
+  workspace: one(workspaces, {
+    fields: [components.workspaceId],
+    references: [workspaces.id],
+  }),
+  component_versions: many(component_versions),
+}));
+
+export const environment_typesRelations = relations(
+  environment_types,
+  ({ one, many }) => ({
+    workspace: one(workspaces, {
+      fields: [environment_types.workspaceId],
+      references: [workspaces.id],
+    }),
+    environments: many(environments),
+  }),
+);
+
+export const environmentsRelations = relations(
+  environments,
+  ({ one, many }) => ({
+    workspace: one(workspaces, {
+      fields: [environments.workspaceId],
+      references: [workspaces.id],
+    }),
+    environment_type: one(environment_types, {
+      fields: [environments.typeId],
+      references: [environment_types.id],
+    }),
+    deployments: many(deployments),
+    release_strategy_steps: many(release_strategy_steps),
+  }),
+);
+
+export const component_versionsRelations = relations(
+  component_versions,
+  ({ one, many }) => ({
+    component: one(components, {
+      fields: [component_versions.componentId],
+      references: [components.id],
+    }),
+    release_components: many(release_components),
+  }),
+);
+
+export const deploymentsRelations = relations(deployments, ({ one }) => ({
+  environment: one(environments, {
+    fields: [deployments.environmentId],
+    references: [environments.id],
+  }),
+  release_step: one(release_steps, {
+    fields: [deployments.releaseStepId],
+    references: [release_steps.id],
+  }),
+}));
+
+export const release_componentRelations = relations(
+  release_components,
+  ({ one }) => ({
+    component_version: one(component_versions, {
+      fields: [release_components.componentVersionId],
+      references: [component_versions.id],
+    }),
+    release: one(releases, {
+      fields: [release_components.releaseId],
+      references: [releases.id],
+    }),
+  }),
+);
+
+export const release_strategy_stepsRelations = relations(
+  release_strategy_steps,
+  ({ one, many }) => ({
+    release_steps: many(release_steps),
+    release_strategy_step: one(release_strategy_steps, {
+      fields: [release_strategy_steps.parentId],
+      references: [release_strategy_steps.id],
+      relationName:
+        'release_strategy_steps_parent_id_release_strategy_steps_id',
+    }),
+    release_strategy_steps: many(release_strategy_steps, {
+      relationName:
+        'release_strategy_steps_parent_id_release_strategy_steps_id',
+    }),
+    environment: one(environments, {
+      fields: [release_strategy_steps.environmentId],
+      references: [environments.id],
+    }),
+    release_strategy: one(release_strategies, {
+      fields: [release_strategy_steps.strategyId],
+      references: [release_strategies.id],
+    }),
+    approval_group: one(approval_groups, {
+      fields: [release_strategy_steps.approvalGroupId],
+      references: [approval_groups.id],
+    }),
+  }),
+);
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  release_step: one(release_steps, {
+    fields: [notifications.releaseStepId],
+    references: [release_steps.id],
+  }),
+}));
