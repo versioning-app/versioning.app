@@ -1,18 +1,18 @@
-import { NewEnvironmentType, environmentTypes } from '@/database/schema';
+import { NewEnvironmentType, environment_types } from '@/database/schema';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { InferSelectModel, eq } from 'drizzle-orm';
 import 'server-only';
 
 export class EnvironmentTypesService extends WorkspaceScopedRepository<
-  typeof environmentTypes
+  typeof environment_types
 > {
   public constructor() {
-    super(environmentTypes);
+    super(environment_types);
   }
 
   public async create(
     resource: Omit<NewEnvironmentType, 'workspaceId'>,
-  ): Promise<InferSelectModel<typeof environmentTypes>> {
-    return super.create(resource, eq(environmentTypes.label, resource.label));
+  ): Promise<InferSelectModel<typeof environment_types>> {
+    return super.create(resource, eq(environment_types.label, resource.label));
   }
 }
