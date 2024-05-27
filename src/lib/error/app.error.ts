@@ -19,7 +19,7 @@ export class AppError extends Error {
     public readonly errorCode: ErrorCode,
     public readonly context?: Omit<AppErrorContext, 'requestId'> & {
       requestId?: never;
-    }
+    },
   ) {
     super(message);
   }
@@ -49,7 +49,7 @@ export class AppError extends Error {
           'Content-Type': 'application/json',
           [StorageKeys.REQUEST_ID_HEADER_KEY]: asJson.context.requestId,
         },
-      }
+      },
     );
   }
 }
