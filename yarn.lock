@@ -811,6 +811,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fullcalendar/core@npm:^6.1.13":
+  version: 6.1.13
+  resolution: "@fullcalendar/core@npm:6.1.13"
+  dependencies:
+    preact: "npm:~10.12.1"
+  checksum: 10c0/876c5f539e1a5ac41cd4db7f170e1a4e9f47debabc5416e38efbd817ea2e99232e20689fb98b1f0703e3dbd11f3b92cad8d70ae93414e6f2dde5fd9a9503a5ed
+  languageName: node
+  linkType: hard
+
+"@fullcalendar/daygrid@npm:^6.1.13":
+  version: 6.1.13
+  resolution: "@fullcalendar/daygrid@npm:6.1.13"
+  peerDependencies:
+    "@fullcalendar/core": ~6.1.13
+  checksum: 10c0/a00292ebcea289c4921bca22270b1c52a6b83770537f6977c24093bd0d4ea01555888ffa09f477d43b135e8d10834338e6459035b47813754daec0f8b9f7b7e6
+  languageName: node
+  linkType: hard
+
+"@fullcalendar/interaction@npm:^6.1.13":
+  version: 6.1.13
+  resolution: "@fullcalendar/interaction@npm:6.1.13"
+  peerDependencies:
+    "@fullcalendar/core": ~6.1.13
+  checksum: 10c0/b4e79d0bdc26867e82fe6686aa08b0f6286ea45e31ed32a329012c47fb228bc76bfe3a502fd4f32cdb121566f02f700e19b3fdaeb510d77bbabbf9e093296a5e
+  languageName: node
+  linkType: hard
+
+"@fullcalendar/react@npm:^6.1.13":
+  version: 6.1.13
+  resolution: "@fullcalendar/react@npm:6.1.13"
+  peerDependencies:
+    "@fullcalendar/core": ~6.1.13
+    react: ^16.7.0 || ^17 || ^18
+    react-dom: ^16.7.0 || ^17 || ^18
+  checksum: 10c0/803078c5751f76d067d23be83df0d6a60753c91de4c57a91ed4b26e56d1d5a0c42532fce8526fa01b871bab18cc69024f10c7b306fdb847ff0cb451e73ac5a5f
+  languageName: node
+  linkType: hard
+
 "@hookform/resolvers@npm:^3.4.2":
   version: 3.4.2
   resolution: "@hookform/resolvers@npm:3.4.2"
@@ -9271,6 +9309,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"preact@npm:~10.12.1":
+  version: 10.12.1
+  resolution: "preact@npm:10.12.1"
+  checksum: 10c0/c77a55e897dcf298b7aa13637fed29744d3cf6c083f2832856e8551dbf27303c8b6946569736de16b05cba15c0e44ad404beb236ad9e36583a6fc5e2efad7777
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -10714,6 +10759,10 @@ __metadata:
     "@clerk/backend": "npm:^1.2.1"
     "@clerk/nextjs": "npm:^5.1.2"
     "@clerk/themes": "npm:^2.1.7"
+    "@fullcalendar/core": "npm:^6.1.13"
+    "@fullcalendar/daygrid": "npm:^6.1.13"
+    "@fullcalendar/interaction": "npm:^6.1.13"
+    "@fullcalendar/react": "npm:^6.1.13"
     "@hookform/resolvers": "npm:^3.4.2"
     "@iconify/react": "npm:^4.1.1"
     "@neondatabase/serverless": "npm:^0.9.3"
