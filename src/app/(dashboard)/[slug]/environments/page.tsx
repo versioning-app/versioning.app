@@ -9,7 +9,7 @@ export default async function EnvironmentsPage({
 }: {
   params: { slug: string };
 }) {
-  const environments = await get(EnvironmentsService).getEnvironments();
+  const environments = await get(EnvironmentsService).findAll();
 
   return (
     <List

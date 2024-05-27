@@ -2,7 +2,6 @@ import { createId } from '@paralleldrive/cuid2';
 import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
-  PgTable,
   boolean,
   pgEnum,
   pgTable,
@@ -237,7 +236,7 @@ export const environmentTypeRelations = relations(
 );
 
 export const environmentRelations = relations(environments, ({ one }) => ({
-  type: one(environmentTypes, {
+  environmentTypes: one(environmentTypes, {
     fields: [environments.typeId],
     references: [environmentTypes.id],
   }),
@@ -258,7 +257,7 @@ export const releaseStrategyRelations = relations(
       fields: [releaseStrategies.workspaceId],
       references: [workspaces.id],
     }),
-    steps: many(releaseStrategySteps),
+    releaseStrategySteps: many(releaseStrategySteps),
   }),
 );
 
@@ -296,19 +295,19 @@ export type NewReleaseStrategyStep = typeof releaseStrategySteps.$inferInsert;
 export const releaseStrategyStepRelations = relations(
   releaseStrategySteps,
   ({ one }) => ({
-    parent: one(releaseStrategySteps, {
+    releaseStrategySteps: one(releaseStrategySteps, {
       fields: [releaseStrategySteps.parentId],
       references: [releaseStrategySteps.id],
     }),
-    strategy: one(releaseStrategies, {
+    releaseStrategies: one(releaseStrategies, {
       fields: [releaseStrategySteps.strategyId],
       references: [releaseStrategies.id],
     }),
-    environment: one(environments, {
+    environments: one(environments, {
       fields: [releaseStrategySteps.environmentId],
       references: [environments.id],
     }),
-    approvalGroup: one(approval_groups, {
+    approvalGroups: one(approval_groups, {
       fields: [releaseStrategySteps.approvalGroupId],
       references: [approval_groups.id],
     }),
@@ -319,7 +318,7 @@ export const releases = pgTable('releases', {
   id: identifierColumn(),
   date: timestamp('date'),
   status: release_status('status'),
-  version: varchar('version', { length: 42 }),
+  version: varchar('version', { length: 42 }).notNull(),
   description: text('description'),
   strategyId: varchar('release_strategy_id')
     .references(() => releaseStrategies.id, { onDelete: 'cascade' })

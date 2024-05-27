@@ -112,7 +112,19 @@ export abstract class CrudRepository<
 
   public async create(
     entity: InferInsertModel<M>,
+    existingCheck?: SQLWrapper,
   ): Promise<InferSelectModel<M>> {
+    if (existingCheck) {
+      const existing = await this.findAllBy(existingCheck);
+
+      if (existing?.length > 0) {
+        throw new AppError(
+          'Resource already exists',
+          ErrorCodes.RESOURCE_ALREADY_EXISTS,
+        );
+      }
+    }
+
     const [inserted] = await this.db
       .insert(this.schema)
       .values({ ...entity })
