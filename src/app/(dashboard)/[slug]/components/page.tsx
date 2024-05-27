@@ -1,13 +1,24 @@
-import { ComponentList } from '@/components/dashboard/lists/components';
+import { deleteComponentAction } from '@/actions/components';
+import { List } from '@/components/dashboard/lists/list-item';
+import { Navigation, dashboardRoute } from '@/config/navigation';
 import { ComponentsService } from '@/services/components.service';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 
 export default async function Components({
   params: { slug },
 }: {
   params: { slug: string };
 }) {
-  const components = await ServiceFactory.get(ComponentsService).findAll();
+  const components = await get(ComponentsService).findAll();
 
-  return <ComponentList slug={slug} components={components} />;
+  return (
+    <List
+      createLink={dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS)}
+      resourceName="Component"
+      resources={components}
+      actions={{
+        delete: deleteComponentAction,
+      }}
+    />
+  );
 }

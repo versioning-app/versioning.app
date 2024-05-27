@@ -1,11 +1,11 @@
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { serverLogger } from '@/lib/logger/server';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { StripeService } from '@/services/stripe.service';
 
 export async function POST(request: Request) {
-  const stripeService = ServiceFactory.get(StripeService);
+  const stripeService = get(StripeService);
 
   const body = await request.text();
   const signature = request.headers.get('stripe-signature') as string;

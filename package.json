@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "FORCE_COLOR=1 next dev --experimental-https | pino-pretty -c -C -t -S -l",
+    "debug": "NODE_OPTIONS='--inspect' FORCE_COLOR=1 next dev | pino-pretty -c -C -t -S -l",
     "build": "next build",
     "vercel-build": "next build && yarn db:migrate",
     "start": "next start",
@@ -12,6 +13,7 @@
     "db:migrate": "tsx src/database/migrate.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit introspect",
     "db:drop": "drizzle-kit drop",
     "stripe:listen": "stripe listen --forward-to=https://localhost:3000/api/billing/webhooks/stripe"
   },

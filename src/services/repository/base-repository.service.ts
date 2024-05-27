@@ -12,12 +12,16 @@ export interface BaseRepository<
 > {
   findAll(): Promise<InferSelectModel<T>[]>;
   findOne(id: T['$inferSelect'][ID]): Promise<InferSelectModel<T> | undefined>;
+  findOneBy(criteria: SQLWrapper): Promise<InferSelectModel<T> | undefined>;
   findAllBy(
     criteria: SQLWrapper,
     limits?: QueryLimits,
   ): Promise<InferSelectModel<T>[]>;
 
-  create(entity: InferInsertModel<T>): Promise<InferSelectModel<T>>;
+  create(
+    entity: InferInsertModel<T>,
+    existingCheck?: SQLWrapper,
+  ): Promise<InferSelectModel<T>>;
   update(
     id: T['$inferSelect'][ID],
     updateSet: PgUpdateSetSource<T>,
