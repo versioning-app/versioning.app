@@ -40,7 +40,7 @@ export abstract class CrudRepository<
   }
 
   public get drizzleTableKey(): string {
-    return snakeToCamel(this.tableName);
+    return this.tableName;
   }
 
   public async findAll(clause?: SQLWrapper): Promise<InferSelectModel<M>[]> {

@@ -227,13 +227,6 @@ export const environmentTypeRelations = relations(
   }),
 );
 
-export const environment_relations = relations(environments, ({ one }) => ({
-  environmentTypes: one(environment_types, {
-    fields: [environments.typeId],
-    references: [environment_types.id],
-  }),
-}));
-
 export const release_strategies = pgTable('release_strategies', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
@@ -241,17 +234,6 @@ export const release_strategies = pgTable('release_strategies', {
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
-
-export const release_strategy_relations = relations(
-  release_strategies,
-  ({ one, many }) => ({
-    workspace: one(workspaces, {
-      fields: [release_strategies.workspaceId],
-      references: [workspaces.id],
-    }),
-    releaseStrategySteps: many(release_strategy_steps),
-  }),
-);
 
 export type ReleaseStrategy = typeof release_strategies.$inferSelect;
 export type NewReleaseStrategy = typeof release_strategies.$inferInsert;
@@ -283,28 +265,6 @@ export const release_strategy_steps = pgTable('release_strategy_steps', {
 
 export type ReleaseStrategyStep = typeof release_strategy_steps.$inferSelect;
 export type NewReleaseStrategyStep = typeof release_strategy_steps.$inferInsert;
-
-export const release_strategy_step_relations = relations(
-  release_strategy_steps,
-  ({ one }) => ({
-    releaseStrategySteps: one(release_strategy_steps, {
-      fields: [release_strategy_steps.parentId],
-      references: [release_strategy_steps.id],
-    }),
-    releaseStrategies: one(release_strategies, {
-      fields: [release_strategy_steps.strategyId],
-      references: [release_strategies.id],
-    }),
-    environments: one(environments, {
-      fields: [release_strategy_steps.environmentId],
-      references: [environments.id],
-    }),
-    approvalGroups: one(approval_groups, {
-      fields: [release_strategy_steps.approvalGroupId],
-      references: [approval_groups.id],
-    }),
-  }),
-);
 
 export const releases = pgTable('releases', {
   id: identifierColumn(),

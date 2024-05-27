@@ -1,20 +1,19 @@
 import { db as AppDb } from '@/database/db';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
+import { QueryLimits } from '@/services/repository/base-repository.service';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import {
   InferInsertModel,
   InferSelectModel,
+  Many,
   SQLWrapper,
   and,
   eq,
-  getTableName,
 } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { CrudRepository } from './crud-repository.service';
-import { QueryLimits } from '@/services/repository/base-repository.service';
-import { get } from '@/services/service-factory';
-import { Many } from 'drizzle-orm';
 
 export abstract class WorkspaceScopedRepository<
   M extends PgTable,
@@ -42,9 +41,8 @@ export abstract class WorkspaceScopedRepository<
   public async hasDependents(id: string): Promise<boolean> {
     this.logger.debug({ id }, 'Checking for dependents');
 
-    const manyRelations =
-      // @ts-expect-error
-      Object.entries(this.db._.schema[this.drizzleTableKey].relations).map(
+    const manyRelations = // @ts-expect-error
+      Object.entries(this.db._.schema?.[this.drizzleTableKey]?.relations)?.map(
         ([key, relation]) => {
           if (relation instanceof Many) {
             return { key, relation };
@@ -208,11 +206,15 @@ export abstract class WorkspaceScopedRepository<
     return updated;
   }
 
-  public async delete(id: string): Promise<boolean> {
+  public async delete(
+    id: string,
+    clause?: SQLWrapper,
+    preventDependentCheck?: boolean,
+  ): Promise<boolean> {
     const workspaceId = await this.currentWorkspaceId;
 
     // First check to see if anything depends
-    if (await this.hasDependents(id)) {
+    if (!preventDependentCheck && (await this.hasDependents(id))) {
       throw new AppError(
         'Resource has dependents',
         ErrorCodes.RESOURCE_HAS_DEPENDENTS,
@@ -224,7 +226,7 @@ export abstract class WorkspaceScopedRepository<
     const result = await super.delete(
       id,
       // @ts-expect-error - Workspace ID is defined
-      eq(this.schema.workspaceId, workspaceId),
+      and(eq(this.schema.workspaceId, workspaceId), clause),
     );
 
     if (!result) {
