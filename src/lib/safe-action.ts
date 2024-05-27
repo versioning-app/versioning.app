@@ -2,7 +2,7 @@ import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { getLogger, getRequestId } from '@/lib/logger';
 import { serverLogger } from '@/lib/logger/server';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { createSafeActionClient } from 'next-safe-action';
 import { headers } from 'next/headers';
@@ -35,8 +35,7 @@ export const action = createSafeActionClient({
 
 export const workspaceAction = createSafeActionClient({
   middleware: async () => {
-    const workspace =
-      await ServiceFactory.get(WorkspaceService).currentWorkspace();
+    const workspace = await get(WorkspaceService).currentWorkspace();
 
     if (!workspace) {
       throw new AppError('No workspace found', ErrorCodes.WORKSPACE_NOT_FOUND);

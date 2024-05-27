@@ -2,8 +2,9 @@
 import { Navigation, dashboardRoute } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
 import { workspaceAction } from '@/lib/safe-action';
+import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { EnvironmentsService } from '@/services/environments.service';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import {
   createEnvironmentSchema,
   createEnvironmentTypeSchema,
@@ -18,9 +19,9 @@ export const createEnvironmentTypeAction = workspaceAction(
 
     logger.debug({ input }, 'Creating environment type');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
-    const environmentType =
-      await environmentsService.createEnvironmentType(input);
+    const environmentTypesService = get(EnvironmentTypesService);
+
+    const environmentType = await environmentTypesService.create(input);
 
     const { slug } = context.workspace;
     revalidatePath(
@@ -38,9 +39,9 @@ export const deleteEnvironmentTypeAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting environment type');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
+    const environmentTypesService = get(EnvironmentTypesService);
 
-    await environmentsService.deleteEnvironmentType(input.id);
+    await environmentTypesService.delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(
@@ -56,8 +57,8 @@ export const createEnvironmentAction = workspaceAction(
 
     logger.debug({ input }, 'Creating environment');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
-    const environment = await environmentsService.createEnvironment(input);
+    const environmentsService = get(EnvironmentsService);
+    const environment = await environmentsService.create(input);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
@@ -73,9 +74,9 @@ export const deleteEnvironmentAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting environment');
 
-    const environmentsService = ServiceFactory.get(EnvironmentsService);
+    const environmentsService = get(EnvironmentsService);
 
-    await environmentsService.deleteEnvironment(input.id);
+    await environmentsService.delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));

@@ -1,6 +1,6 @@
 import { Navigation } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
-import { ServiceFactory } from '@/services/service-factory';
+import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
@@ -11,7 +11,7 @@ export const revalidate = 0;
 export default async function RootPage() {
   const logger = serverLogger({ name: 'index' });
 
-  const workspaceService = ServiceFactory.get(WorkspaceService);
+  const workspaceService = get(WorkspaceService);
 
   const { userId, orgId, sessionClaims } = auth();
 
