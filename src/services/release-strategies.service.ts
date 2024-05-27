@@ -1,17 +1,17 @@
 import {
   NewReleaseStrategy,
   ReleaseStrategy,
-  releaseStrategies,
+  release_strategies,
 } from '@/database/schema';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { eq } from 'drizzle-orm';
 import 'server-only';
 
 export class ReleaseStrategiesService extends WorkspaceScopedRepository<
-  typeof releaseStrategies
+  typeof release_strategies
 > {
   public constructor() {
-    super(releaseStrategies);
+    super(release_strategies);
   }
 
   public async create(
@@ -19,7 +19,7 @@ export class ReleaseStrategiesService extends WorkspaceScopedRepository<
   ): Promise<ReleaseStrategy> {
     return super.create(
       newReleaseStrategy,
-      eq(releaseStrategies.name, newReleaseStrategy.name),
+      eq(release_strategies.name, newReleaseStrategy.name),
     );
   }
 }
