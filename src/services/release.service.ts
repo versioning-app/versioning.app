@@ -11,12 +11,7 @@ export class ReleaseService extends WorkspaceScopedRepository<typeof releases> {
   public async create(
     newRelease: Pick<
       NewRelease,
-      | 'description'
-      | 'status'
-      | 'version'
-      | 'strategyId'
-      | 'date'
-      | 'workspaceId'
+      'description' | 'status' | 'version' | 'strategyId' | 'date'
     >,
   ): Promise<Release> {
     return super.create(newRelease, eq(releases.version, newRelease.version));
