@@ -15,12 +15,8 @@ export default async function Releases() {
   );
 
   return (
-    <div className="h-full mb-10">
-      <h1>Releases</h1>
-
-      <div className="h-full">
-        <Calendar events={events ?? []} height={'100%'} />
-      </div>
+    <div className="h-full mb-20">
+      <Calendar events={events ?? []} height={'100%'} />
     </div>
   );
 }
