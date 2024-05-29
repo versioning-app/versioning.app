@@ -60,11 +60,11 @@ export const GeneralNavLinks: BasicNavLink[] = [
     title: 'Components',
     href: Navigation.DASHBOARD_COMPONENTS,
   },
-  {
-    icon: CableIcon,
-    title: 'Integrations',
-    href: Navigation.DASHBOARD_INTEGRATIONS,
-  },
+  // {
+  //   icon: CableIcon,
+  //   title: 'Integrations',
+  //   href: Navigation.DASHBOARD_INTEGRATIONS,
+  // },
   {
     icon: CreditCardIcon,
     title: 'Billing',

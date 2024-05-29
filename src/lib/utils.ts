@@ -33,6 +33,26 @@ export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+export const pluralize = (str: string) => {
+  if (typeof str !== 'string' || str.length === 0) {
+    return '';
+  }
+
+  if (str.endsWith('y')) {
+    return `${str.slice(0, -1)}ies`;
+  }
+
+  if (str.endsWith('x')) {
+    return `${str}es`;
+  }
+
+  if (str.endsWith('ch') || str.endsWith('sh')) {
+    return `${str}es`;
+  }
+
+  return str.endsWith('s') ? str : `${str}s`;
+};
+
 export const getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.

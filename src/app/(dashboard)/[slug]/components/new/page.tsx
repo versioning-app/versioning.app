@@ -1,9 +1,3 @@
-import { CreateComponentForm } from '@/components/dashboard/forms/create-component';
+import NewComponent from '@/app/(dashboard)/[slug]/components/create';
 
-export default function NewComponentPage() {
-  return (
-    <div>
-      <CreateComponentForm />
-    </div>
-  );
-}
+export default NewComponent;
