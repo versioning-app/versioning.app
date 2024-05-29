@@ -1,7 +1,7 @@
 import DashboardPageLayout from '@/components/dashboard/layouts/page-layout';
 import { Navigation } from '@/config/navigation';
 
-export default function EnvironmentTypesLayout({
+export default function ReleaseLayout({
   children,
   modal,
   params: { slug },
@@ -15,9 +15,9 @@ export default function EnvironmentTypesLayout({
       slug={slug}
       page={children}
       modal={modal}
-      resource="Environment Type"
-      href={Navigation.DASHBOARD_ENVIRONMENT_TYPES}
-      createHref={Navigation.DASHBOARD_ENVIRONMENT_TYPES_NEW}
+      resource="Release"
+      href={Navigation.DASHBOARD_RELEASES}
+      createHref={Navigation.DASHBOARD_RELEASES_NEW}
     />
   );
 }

@@ -12,11 +12,6 @@ export default async function EnvironmentTypesPage({
   const environmentTypesService = get(EnvironmentTypesService);
   const environmentTypes = await environmentTypesService.findAll();
 
-  const deps = await environmentTypesService.hasDependents('dev_env_type');
-  const aa = await environmentTypesService.hasDependents(
-    'dmzozvqh6okncjg5qqmuofgl',
-  );
-
   return (
     <List
       createLink={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENT_TYPES)}

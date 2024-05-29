@@ -5,7 +5,6 @@ export const Navigation = {
   DASHBOARD_ROOT: '/',
   DASHBOARD_COMPONENTS: '/components',
   DASHBOARD_COMPONENTS_NEW: '/components/new',
-  DASHBOARD_RELEASES: '/releases',
   DASHBOARD_INTEGRATIONS: '/integrations',
   DASHBOARD_SETTINGS: '/settings',
   DASHBOARD_BILLING: '/billing',
@@ -15,6 +14,8 @@ export const Navigation = {
   DASHBOARD_ENVIRONMENT_TYPES_NEW: '/environment-types/new',
   DASHBOARD_RELEASE_STRATEGIES: '/release-strategies',
   DASHBOARD_RELEASE_STRATEGIES_NEW: '/release-strategies/new',
+  DASHBOARD_RELEASES: '/releases',
+  DASHBOARD_RELEASES_NEW: '/releases/new',
 } as const;
 
 export const RouterPaths = {

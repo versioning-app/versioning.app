@@ -15,6 +15,12 @@ export function beautifyObjectName(string: string) {
   // if numbers only return the string
   let output = string.replace(/([A-Z])/g, ' $1');
   output = output.charAt(0).toUpperCase() + output.slice(1);
+
+  // if the output ends with id, trim it to the nearest space
+  if (output.endsWith(' Id')) {
+    output = output.slice(0, -3);
+  }
+
   return output;
 }
 
@@ -23,7 +29,7 @@ export function beautifyObjectName(string: string) {
  * This will unpack optionals, refinements, etc.
  */
 export function getBaseSchema<
-  ChildType extends z.ZodAny | z.AnyZodObject = z.ZodAny
+  ChildType extends z.ZodAny | z.AnyZodObject = z.ZodAny,
 >(schema: ChildType | z.ZodEffects<ChildType>): ChildType | null {
   if (!schema) return null;
   if ('innerType' in schema._def) {
@@ -59,12 +65,12 @@ export function getDefaultValueInZodStack(schema: z.ZodAny): any {
 
   if ('innerType' in typedSchema._def) {
     return getDefaultValueInZodStack(
-      typedSchema._def.innerType as unknown as z.ZodAny
+      typedSchema._def.innerType as unknown as z.ZodAny,
     );
   }
   if ('schema' in typedSchema._def) {
     return getDefaultValueInZodStack(
-      (typedSchema._def as any).schema as z.ZodAny
+      (typedSchema._def as any).schema as z.ZodAny,
     );
   }
 
@@ -75,7 +81,7 @@ export function getDefaultValueInZodStack(schema: z.ZodAny): any {
  * Get all default values from a Zod schema.
  */
 export function getDefaultValues<Schema extends z.ZodObject<any, any>>(
-  schema: Schema
+  schema: Schema,
 ) {
   if (!schema) return null;
   const { shape } = schema;
@@ -88,7 +94,7 @@ export function getDefaultValues<Schema extends z.ZodObject<any, any>>(
 
     if (getBaseType(item) === 'ZodObject') {
       const defaultItems = getDefaultValues(
-        getBaseSchema(item) as unknown as z.ZodObject<any, any>
+        getBaseSchema(item) as unknown as z.ZodObject<any, any>,
       );
 
       if (defaultItems !== null) {
@@ -109,7 +115,7 @@ export function getDefaultValues<Schema extends z.ZodObject<any, any>>(
 }
 
 export function getObjectFormSchema(
-  schema: ZodObjectOrWrapped
+  schema: ZodObjectOrWrapped,
 ): z.ZodObject<any, any> {
   if (schema?._def.typeName === 'ZodEffects') {
     const typedSchema = schema as z.ZodEffects<z.ZodObject<any, any>>;
@@ -127,7 +133,7 @@ export function zodToHtmlInputProps(
     | z.ZodNumber
     | z.ZodString
     | z.ZodOptional<z.ZodNumber | z.ZodString>
-    | any
+    | any,
 ): React.InputHTMLAttributes<HTMLInputElement> {
   if (['ZodOptional', 'ZodNullable'].includes(schema._def.typeName)) {
     const typedSchema = schema as z.ZodOptional<z.ZodNumber | z.ZodString>;

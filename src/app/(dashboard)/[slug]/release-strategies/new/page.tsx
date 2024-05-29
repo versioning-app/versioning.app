@@ -1,9 +1,3 @@
-import { CreateReleaseStrategiesForm } from '@/components/dashboard/forms/create-release-strategies';
+import NewReleaseStrategy from '@/app/(dashboard)/[slug]/environments/create';
 
-export default async function NewReleaseStrategyPage() {
-  return (
-    <div>
-      <CreateReleaseStrategiesForm />
-    </div>
-  );
-}
+export default NewReleaseStrategy;
