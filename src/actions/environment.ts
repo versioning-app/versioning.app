@@ -19,16 +19,15 @@ export const createEnvironmentTypeAction = workspaceAction(
 
     logger.debug({ input }, 'Creating environment type');
 
-    const environmentTypesService = get(EnvironmentTypesService);
-
-    const environmentType = await environmentTypesService.create(input);
+    const resource = await get(EnvironmentTypesService).create(input);
 
     const { slug } = context.workspace;
+
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENT_TYPES),
     );
 
-    return { environmentType, success: true };
+    return { resource, success: true };
   },
 );
 
@@ -39,14 +38,15 @@ export const deleteEnvironmentTypeAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting environment type');
 
-    const environmentTypesService = get(EnvironmentTypesService);
-
-    await environmentTypesService.delete(input.id);
+    await get(EnvironmentTypesService).delete(input.id);
 
     const { slug } = context.workspace;
+
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENT_TYPES),
     );
+
+    return { success: true };
   },
 );
 
@@ -57,13 +57,12 @@ export const createEnvironmentAction = workspaceAction(
 
     logger.debug({ input }, 'Creating environment');
 
-    const environmentsService = get(EnvironmentsService);
-    const environment = await environmentsService.create(input);
+    const resource = await get(EnvironmentsService).create(input);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
 
-    return { environment, success: true };
+    return { resource, success: true };
   },
 );
 
@@ -74,11 +73,11 @@ export const deleteEnvironmentAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting environment');
 
-    const environmentsService = get(EnvironmentsService);
-
-    await environmentsService.delete(input.id);
+    await get(EnvironmentsService).delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
+
+    return { success: true };
   },
 );

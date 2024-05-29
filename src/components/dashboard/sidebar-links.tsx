@@ -15,6 +15,7 @@ import {
   CreditCardIcon,
   HomeIcon,
   Settings,
+  SquareStackIcon,
 } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 
@@ -59,6 +60,11 @@ export const GeneralNavLinks: BasicNavLink[] = [
     icon: ComponentIcon,
     title: 'Components',
     href: Navigation.DASHBOARD_COMPONENTS,
+  },
+  {
+    icon: SquareStackIcon,
+    title: 'Component Versions',
+    href: Navigation.DASHBOARD_COMPONENT_VERSIONS,
   },
   // {
   //   icon: CableIcon,
