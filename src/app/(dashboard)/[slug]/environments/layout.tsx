@@ -1,9 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { Navigation, dashboardRoute } from '@/config/navigation';
-import { Plus } from 'lucide-react';
-import Link from 'next/link';
+import DashboardPageLayout from '@/components/dashboard/layouts/page-layout';
+import { Navigation } from '@/config/navigation';
 
-export default function EnvironmentsLayout({
+export default function EnvironmentLayout({
   children,
   modal,
   params: { slug },
@@ -13,42 +11,13 @@ export default function EnvironmentsLayout({
   params: { slug: string };
 }) {
   return (
-    <>
-      <div className="h-full">
-        <div className="flex">
-          <div className="flex-1">
-            <Link
-              href={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS)}
-            >
-              <h1 className="text-2xl">Environments</h1>
-            </Link>
-          </div>
-          <div className="mb-4">
-            <Link
-              href={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS_NEW)}
-              className="inline-block items-center"
-            >
-              <Button className="mr-2">
-                <Plus className="w-4 h-4 mr-2" />
-                New environment
-              </Button>
-            </Link>
-            <Link
-              href={dashboardRoute(
-                slug,
-                Navigation.DASHBOARD_ENVIRONMENT_TYPES,
-              )}
-              className="inline-block items-center"
-            >
-              <Button className="mr-2" variant="outline">
-                View environment types
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="flex flex-col mt-4 h-full">{children}</div>
-      </div>
-      {modal}
-    </>
+    <DashboardPageLayout
+      slug={slug}
+      page={children}
+      modal={modal}
+      resource="Environment"
+      href={Navigation.DASHBOARD_ENVIRONMENTS}
+      createHref={Navigation.DASHBOARD_ENVIRONMENTS_NEW}
+    />
   );
 }

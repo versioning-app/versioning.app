@@ -1,9 +1,3 @@
-import { CreateEnvironmentTypeForm } from '@/components/dashboard/forms/create-environment-type';
+import NewEnvironmentType from '@/app/(dashboard)/[slug]/environment-types/create';
 
-export default async function NewEnvironmentPage() {
-  return (
-    <div>
-      <CreateEnvironmentTypeForm />
-    </div>
-  );
-}
+export default NewEnvironmentType;

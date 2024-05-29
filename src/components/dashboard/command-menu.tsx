@@ -30,7 +30,7 @@ import {
   SlashIcon,
   SunIcon,
 } from '@radix-ui/react-icons';
-import { LucideIcon } from 'lucide-react';
+import { Command, LucideIcon, SunMoonIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useParams, useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -184,17 +184,27 @@ export function CommandMenu({ ...props }: DialogProps) {
           )}
 
           <CommandGroup heading="Theme">
+            <CommandItem
+              onSelect={() =>
+                runCommand(() =>
+                  setTheme(resolvedTheme === 'dark' ? 'light' : 'dark'),
+                )
+              }
+            >
+              <SunMoonIcon className="mr-2 h-4 w-4" />
+              Toggle Theme
+            </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
               <SunIcon className="mr-2 h-4 w-4" />
-              Light
+              Light Theme
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('dark'))}>
               <MoonIcon className="mr-2 h-4 w-4" />
-              Dark
+              Dark Theme
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('system'))}>
               <LaptopIcon className="mr-2 h-4 w-4" />
-              System
+              System Theme
             </CommandItem>
           </CommandGroup>
         </CommandList>
