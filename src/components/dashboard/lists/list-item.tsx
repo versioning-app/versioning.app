@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { parseServerError } from '@/lib/actions/parse-server-error';
-import { capitalizeFirstLetter, cn, prettyPrint } from '@/lib/utils';
+import { capitalizeFirstLetter, cn, pluralize, prettyPrint } from '@/lib/utils';
 import { TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -116,11 +116,12 @@ export function List<T extends Listable>({
 
   if (!resources || resources.length === 0) {
     return (
-      <div className="flex -mt-12 justify-center items-center h-full">
+      <div className="flex -mt-12 justify-center items-center h-full min-h-96">
         <div>
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold tracking-tighter">
-              It looks like you have not created any {resourceName}s yet...
+            <h1 className="text-3xl font-bold">
+              It looks like you have not created any {pluralize(resourceName)}{' '}
+              yet...
             </h1>
             <p className="mx-auto text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
               You can create a new {resourceName} by clicking the button below!

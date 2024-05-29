@@ -1,13 +1,3 @@
-import { CreateComponentForm } from '@/components/dashboard/forms/create-component';
-import { PageDialog } from '@/components/dashboard/page-dialog';
-import { DialogContent } from '@/components/ui/dialog';
+import NewComponent from '@/app/(dashboard)/[slug]/components/create';
 
-export default function NewComponentModal() {
-  return (
-    <PageDialog>
-      <DialogContent>
-        <CreateComponentForm />
-      </DialogContent>
-    </PageDialog>
-  );
-}
+export default NewComponent;

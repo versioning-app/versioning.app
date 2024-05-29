@@ -1,13 +1,3 @@
-import { CreateReleaseStrategiesForm } from '@/components/dashboard/forms/create-release-strategies';
-import { PageDialog } from '@/components/dashboard/page-dialog';
-import { DialogContent } from '@/components/ui/dialog';
+import NewReleaseStrategy from '@/app/(dashboard)/[slug]/release-strategies/create';
 
-export default async function NewReleaseStrategyModal() {
-  return (
-    <PageDialog>
-      <DialogContent>
-        <CreateReleaseStrategiesForm />
-      </DialogContent>
-    </PageDialog>
-  );
-}
+export default NewReleaseStrategy;
