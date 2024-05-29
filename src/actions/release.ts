@@ -18,17 +18,16 @@ export const createReleaseAction = workspaceAction(
   async (input, context) => {
     const logger = serverLogger({ name: 'createReleaseAction' });
 
-    logger.debug({ input }, 'Creating release strategy');
+    logger.debug({ input }, 'Creating release');
 
-    const releaseService = get(ReleaseService);
-    const release = await releaseService.create(input);
+    const resource = await get(ReleaseService).create(input);
 
     const { slug } = context.workspace;
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGIES),
     );
 
-    return { release, success: true };
+    return { resource, success: true };
   },
 );
 
@@ -39,12 +38,12 @@ export const deleteReleaseAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting release');
 
-    const releaseService = get(ReleaseService);
-
-    await releaseService.delete(input.id);
+    await get(ReleaseService).delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+
+    return { success: true };
   },
 );
 
@@ -55,15 +54,14 @@ export const createReleaseStrategyAction = workspaceAction(
 
     logger.debug({ input }, 'Creating release strategy');
 
-    const releaseStrategiesService = get(ReleaseStrategiesService);
-    const releaseStrategy = await releaseStrategiesService.create(input);
+    const resource = await get(ReleaseStrategiesService).create(input);
 
     const { slug } = context.workspace;
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGIES),
     );
 
-    return { releaseStrategy, success: true };
+    return { resource, success: true };
   },
 );
 
@@ -74,11 +72,11 @@ export const deleteReleaseStrategyAction = workspaceAction(
 
     logger.debug({ input }, 'Deleting release strategy');
 
-    const releaseStrategiesService = get(ReleaseStrategiesService);
-
-    await releaseStrategiesService.delete(input.id);
+    await get(ReleaseStrategiesService).delete(input.id);
 
     const { slug } = context.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+
+    return { success: true };
   },
 );
