@@ -16,6 +16,8 @@ export const Navigation = {
   DASHBOARD_RELEASE_STRATEGIES_NEW: '/release-strategies/new',
   DASHBOARD_RELEASES: '/releases',
   DASHBOARD_RELEASES_NEW: '/releases/new',
+  DASHBOARD_COMPONENT_VERSIONS: '/component-versions',
+  DASHBOARD_COMPONENT_VERSIONS_NEW: '/component-versions/new',
 } as const;
 
 export const RouterPaths = {

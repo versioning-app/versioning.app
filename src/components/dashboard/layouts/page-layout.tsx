@@ -39,7 +39,7 @@ export default function DashboardPageLayout({
             >
               <Button className="mr-2">
                 <Plus className="w-4 h-4 mr-2" />
-                New {resource}
+                Create {resource}
               </Button>
             </Link>
           </div>
