@@ -17,6 +17,7 @@ import {
   Settings,
   SquareCheckBigIcon,
   SquareStackIcon,
+  UsersIcon,
 } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 
@@ -77,6 +78,11 @@ export const GeneralNavLinks: BasicNavLink[] = [
   //   title: 'Integrations',
   //   href: Navigation.DASHBOARD_INTEGRATIONS,
   // },
+  {
+    icon: UsersIcon,
+    title: 'Members',
+    href: Navigation.DASHBOARD_MEMBERS,
+  },
   {
     icon: CreditCardIcon,
     title: 'Billing',
