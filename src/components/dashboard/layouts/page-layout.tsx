@@ -17,7 +17,7 @@ export default function DashboardPageLayout({
   createHref,
 }: {
   page: React.ReactNode;
-  modal: React.ReactNode;
+  modal?: React.ReactNode;
   slug: string;
   resource: string;
   href: NavigationItem;
