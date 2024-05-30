@@ -25,15 +25,18 @@ export default async function DashboardLayout({
   if (!userId) {
     return redirect(Navigation.HOME);
   }
+  const workspaceService = get(WorkspaceService);
 
-  if (!slug) {
-    const workspaceService = get(WorkspaceService);
+  const workspace = await workspaceService.currentWorkspace({
+    userId,
+    orgId,
+  });
 
-    const workspace = await workspaceService.currentWorkspace({
-      userId,
-      orgId,
-    });
+  if (!workspace) {
+    return redirect(Navigation.HOME);
+  }
 
+  if (!slug || slug !== workspace.slug) {
     return redirect(dashboardRoute(workspace.slug));
   }
 
