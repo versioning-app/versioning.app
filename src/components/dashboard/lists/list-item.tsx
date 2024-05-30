@@ -1,10 +1,17 @@
 'use client';
 
+import { DataTable } from '@/components/dashboard/data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { parseServerError } from '@/lib/actions/parse-server-error';
-import { capitalizeFirstLetter, cn, pluralize, prettyPrint } from '@/lib/utils';
+import {
+  camelToHumanReadable,
+  capitalizeFirstLetter,
+  cn,
+  pluralize,
+  prettyPrint,
+} from '@/lib/utils';
 import { TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -114,6 +121,35 @@ export function List<T extends Listable>({
 }) {
   const resourceName = props.resourceName ?? 'resource';
 
+  const [isDeleting, setDeleting] = useState(false);
+
+  const onDelete = async ({ id }: Listable) => {
+    if (isDeleting || !actions?.delete) {
+      return { serverError: 'Already deleting' };
+    }
+
+    setDeleting(true);
+
+    const loadingToast = toast.loading(`Deleting ${resourceName}`, {
+      closeButton: false,
+    });
+
+    const { serverError } = await actions.delete({ id });
+    toast.dismiss(loadingToast);
+
+    if (serverError) {
+      const error = parseServerError(serverError);
+      let errorMessage = error.message.replaceAll('Resource', resourceName);
+
+      toast.error(`${errorMessage} (Request Id: ${error.context?.requestId})`);
+      setDeleting(false);
+      return { serverError };
+    }
+
+    toast.success(`${resourceName} deleted`);
+    return { serverError };
+  };
+
   if (!resources || resources.length === 0) {
     return (
       <div className="flex -mt-12 justify-center items-center h-full min-h-96">
@@ -137,16 +173,29 @@ export function List<T extends Listable>({
     );
   }
 
+  const columns = Object.keys(resources[0]).map((key) => ({
+    header: camelToHumanReadable(key),
+    accessorKey: key,
+  }));
+
   return (
-    <ul className="grid grid-cols-3 lg:grid-cols-4 gap-4">
-      {resources.map((resource) => (
-        <ListItem
-          key={resource.id}
-          resource={resource}
-          resourceName={resourceName}
-          actions={actions}
-        />
-      ))}
-    </ul>
+    <DataTable
+      columns={columns}
+      data={resources}
+      actions={actions?.delete ? { delete: onDelete } : undefined}
+    />
   );
+
+  // return (
+  //   <ul className="grid grid-cols-3 lg:grid-cols-4 gap-4">
+  //     {resources.map((resource) => (
+  //       <ListItem
+  //         key={resource.id}
+  //         resource={resource}
+  //         resourceName={resourceName}
+  //         actions={actions}
+  //       />
+  //     ))}
+  //   </ul>
+  // );
 }
