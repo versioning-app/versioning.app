@@ -15,6 +15,7 @@ import {
   CreditCardIcon,
   HomeIcon,
   Settings,
+  SquareCheckBigIcon,
   SquareStackIcon,
 } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
@@ -56,6 +57,11 @@ export const ReleaseNavLinks: BasicNavLink[] = [
 ] as const;
 
 export const GeneralNavLinks: BasicNavLink[] = [
+  {
+    icon: SquareCheckBigIcon,
+    title: 'Approval Groups',
+    href: Navigation.DASHBOARD_APPROVAL_GROUPS,
+  },
   {
     icon: ComponentIcon,
     title: 'Components',
