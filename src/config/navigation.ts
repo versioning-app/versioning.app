@@ -18,6 +18,8 @@ export const Navigation = {
   DASHBOARD_RELEASES_NEW: '/releases/new',
   DASHBOARD_COMPONENT_VERSIONS: '/component-versions',
   DASHBOARD_COMPONENT_VERSIONS_NEW: '/component-versions/new',
+  DASHBOARD_APPROVAL_GROUPS: '/approval-groups',
+  DASHBOARD_APPROVAL_GROUPS_NEW: '/approval-groups/new',
 } as const;
 
 export const RouterPaths = {
