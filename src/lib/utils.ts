@@ -33,6 +33,12 @@ export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+export const camelToHumanReadable = (input: string) =>
+  input
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
+
 export const pluralize = (str: string) => {
   if (typeof str !== 'string' || str.length === 0) {
     return '';

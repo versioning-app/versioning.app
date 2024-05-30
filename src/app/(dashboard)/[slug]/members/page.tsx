@@ -1,43 +1,27 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { deleteComponentAction } from '@/actions/components';
+import { DataTable } from '@/components/dashboard/data-table';
+import * as schema from '@/database/schema';
+import { camelToHumanReadable } from '@/lib/utils';
 import { MembersService } from '@/services/members.service';
 import { get } from '@/services/service-factory';
+import { getTableColumns } from 'drizzle-orm';
 
 export default async function Members() {
+  const memberColumns = getTableColumns(schema.members);
   const members = await get(MembersService).findAll();
 
   return (
-    <Table>
-      <TableCaption>Workspace Members</TableCaption>
-      <TableHeader>
-        <TableRow className="font-mono">
-          <TableHead className="w-[100px]">Member Id</TableHead>
-          <TableHead className="w-[100px]">Clerk Id</TableHead>
-          <TableHead className="text-right">Created At</TableHead>
-          <TableHead className="text-right">Modified At</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody className="font-mono">
-        {members.map((member) => (
-          <TableRow key={member.id}>
-            <TableCell className="font-medium">{member.id}</TableCell>
-            <TableCell>{member.clerkId}</TableCell>
-            <TableCell className="text-right">
-              {member.createdAt.toISOString()}
-            </TableCell>
-            <TableCell className="text-right">
-              {member.modifiedAt.toISOString()}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="h-full">
+      <DataTable
+        columns={Object.keys(memberColumns).map((key) => {
+          return {
+            header: camelToHumanReadable(key),
+            accessorKey: key,
+          };
+        })}
+        actions={{ delete: deleteComponentAction }}
+        data={members}
+      />
+    </div>
   );
 }

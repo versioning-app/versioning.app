@@ -89,7 +89,10 @@ export abstract class CrudRepository<
       return false;
     }
 
-    this.logger.info({ id }, 'Resource has dependents');
+    this.logger.info(
+      { id },
+      'Resource cannot be deleted as it has dependent resources',
+    );
     return true;
   }
 
@@ -245,7 +248,7 @@ export abstract class CrudRepository<
       (await this.hasDependents(id, dependentCheckClause))
     ) {
       throw new AppError(
-        'Resource has dependents',
+        'Resource cannot be deleted as it has dependent resources',
         ErrorCodes.RESOURCE_HAS_DEPENDENTS,
       );
     }
