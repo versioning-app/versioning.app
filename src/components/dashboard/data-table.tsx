@@ -147,7 +147,7 @@ export function DataTable<TData, TValue>({
   const { rows } = table.getCoreRowModel();
 
   return (
-    <div className="rounded-md border h-full">
+    <div className="rounded-md border h-full mb-20">
       <TableVirtuoso
         style={{ height: height ?? '100%' }}
         totalCount={rows.length}
