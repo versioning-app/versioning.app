@@ -16,7 +16,9 @@ export default function Error({
     <div>
       <div className="flex">
         <div className="flex-1">
-          <h1 className="text-2xl">Oops, that's not supposed to happen!</h1>
+          <h1 className="text-2xl">
+            Oops, that&apos;s not supposed to happen!
+          </h1>
         </div>
       </div>
       <div className="flex flex-col mt-4">
