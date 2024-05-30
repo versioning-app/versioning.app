@@ -7,6 +7,7 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
   varchar,
 } from 'drizzle-orm/pg-core';
 
@@ -133,12 +134,18 @@ export const WORKSPACE_COLUMNS = {
     })
     .notNull(),
 };
-export const members = pgTable('members', {
-  id: identifierColumn(),
-  clerkId: varchar('clerk_id', { length: 255 }).notNull(),
-  ...WORKSPACE_COLUMNS,
-  ...TIME_COLUMNS,
-});
+export const members = pgTable(
+  'members',
+  {
+    id: identifierColumn(),
+    clerkId: varchar('clerk_id', { length: 255 }).notNull(),
+    ...WORKSPACE_COLUMNS,
+    ...TIME_COLUMNS,
+  },
+  (table) => ({
+    unq: unique().on(table.clerkId, table.workspaceId),
+  }),
+);
 
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
