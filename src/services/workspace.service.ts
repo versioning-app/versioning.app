@@ -7,8 +7,8 @@ import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
 import { BaseService } from '@/services/base.service';
-import { auth, clerkClient } from '@clerk/nextjs/server';
 import { AuthObject, SignedInAuthObject } from '@clerk/backend/internal';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import cryptoRandomString from 'crypto-random-string';
 import { and, eq, sql } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -585,7 +585,7 @@ export class WorkspaceService extends BaseService {
 
         await this.linkWorkspaceMembership({
           workspaceId,
-          clerkId: orgId || userId,
+          clerkId: userId,
         });
 
         this.logger.info('Workspace already linked and exists');
@@ -628,7 +628,7 @@ export class WorkspaceService extends BaseService {
     await Promise.all([
       this.linkWorkspaceMembership({
         workspaceId,
-        clerkId: orgId || userId,
+        clerkId: userId,
       }),
       this.linkWorkspaceToClerk({
         workspaceId,
