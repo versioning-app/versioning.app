@@ -2,7 +2,7 @@ import { appConfig } from '@/config/app';
 import { DisallowedSlugs } from '@/config/navigation';
 import { DEFAULT_DB_CACHE_MS } from '@/config/storage';
 import { db } from '@/database/db';
-import { Workspace, workspaces } from '@/database/schema';
+import { Workspace, members, workspaces } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
@@ -10,7 +10,7 @@ import { BaseService } from '@/services/base.service';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { AuthObject, SignedInAuthObject } from '@clerk/backend/internal';
 import cryptoRandomString from 'crypto-random-string';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
 import 'server-only';
 import slugify from 'slugify';
@@ -575,13 +575,18 @@ export class WorkspaceService extends BaseService {
             'Workspace slug does not match, updating',
           );
 
-          await this.linkWorkspaceToClerk({
+          await this.link({
             workspaceId,
             slug: workspace.slug,
             userId,
             orgId,
           });
         }
+
+        await this.linkWorkspaceMembership({
+          workspaceId,
+          clerkId: orgId || userId,
+        });
 
         this.logger.info('Workspace already linked and exists');
         return { status: 'ready', workspace };
@@ -599,7 +604,7 @@ export class WorkspaceService extends BaseService {
       orgId: orgId ?? undefined,
     });
 
-    await this.linkWorkspaceToClerk({
+    await this.link({
       workspaceId: workspace.id,
       slug: workspace.slug,
       userId: userId,
@@ -607,6 +612,78 @@ export class WorkspaceService extends BaseService {
     });
 
     return { status: 'linked', workspace };
+  }
+
+  public async link({
+    workspaceId,
+    slug,
+    userId,
+    orgId,
+  }: Pick<AuthObject, 'userId' | 'orgId'> & {
+    workspaceId: string;
+    slug: string;
+  }) {
+    const workspace = await this.getWorkspaceById(workspaceId);
+
+    await Promise.all([
+      this.linkWorkspaceMembership({
+        workspaceId,
+        clerkId: orgId || userId,
+      }),
+      this.linkWorkspaceToClerk({
+        workspaceId,
+        slug,
+        userId,
+        orgId,
+      }),
+    ]);
+
+    return workspace;
+  }
+
+  public async linkWorkspaceMembership({
+    workspaceId,
+    clerkId,
+  }: {
+    workspaceId: string;
+    clerkId?: string | null;
+  }) {
+    if (!clerkId) {
+      this.logger.warn('No clerk provided to create workspace membership');
+      return;
+    }
+
+    this.logger.debug({ workspaceId, clerkId }, 'Linking workspace membership');
+
+    const data = await db
+      .insert(members)
+      .values({
+        workspaceId,
+        clerkId,
+      })
+      .onConflictDoUpdate({
+        target: [members.workspaceId, members.clerkId],
+        set: {
+          modifiedAt: sql`NOW()`,
+        },
+      })
+      .returning();
+
+    if (
+      data?.length > 0 &&
+      data[0].createdAt.getTime() !== data[0].modifiedAt.getTime()
+    ) {
+      this.logger.debug(
+        { workspaceId, clerkId },
+        'Workspace membership already linked',
+      );
+      return;
+    }
+
+    this.logger.info(
+      { workspaceId, clerkId },
+      'Successfully linked workspace membership',
+    );
   }
 
   public async linkWorkspaceToClerk({
