@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, TrashIcon } from 'lucide-react';
 import { HTMLAttributes, forwardRef, useState } from 'react';
 import { TableVirtuoso } from 'react-virtuoso';
 
@@ -108,10 +108,10 @@ const actionsColumn = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => actions.delete({ id: resource.id as string })}
           >
+            <TrashIcon className="h-4 w-4 mr-2" />
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
