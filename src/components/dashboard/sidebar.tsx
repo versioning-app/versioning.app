@@ -18,7 +18,7 @@ interface DashboardProps {
 }
 
 export function Sidebar({
-  defaultLayout = [180, 440],
+  defaultLayout = [50, 220],
   defaultCollapsed,
   navCollapsedSize,
   children,
@@ -59,10 +59,9 @@ export function Sidebar({
             }:collapsed=${JSON.stringify(value)}`;
           }}
           className={cn(
-            isCollapsed &&
-              'min-w-[50px] transition-all duration-300 ease-in-out',
-            'max-w-[200px]',
-            'hidden md:block',
+            isCollapsed && 'min-w[50px] min-w-[50px]',
+            !isCollapsed && 'min-w-[220px] max-w-[220px]',
+            'transition-all duration-300 ease-soft-spring hidden md:block',
           )}
         >
           <DashboardLinks isCollapsed={isCollapsed} />

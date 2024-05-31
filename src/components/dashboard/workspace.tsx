@@ -45,9 +45,18 @@ export function ChangeSlugForm() {
 
     if (serverError) {
       const error = parseServerError(serverError);
-      toast.error('Error whilst updating workspace', {
-        description: `${error.message} (Request Id: ${error.context.requestId})`,
-      });
+      let errorMessage = error.message;
+
+      toast.error(
+        <span>
+          <p className="font-bold text-md">Failed to change slug</p>
+          <p className="text-sm">{errorMessage}</p>
+          <br />
+          <p className="text-xxs font-mono">
+            Request Id: {error.context.requestId}
+          </p>
+        </span>,
+      );
       setError(error);
       return;
     }
