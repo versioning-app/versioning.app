@@ -59,15 +59,16 @@ export function InputForm<
 
     if (serverError) {
       const error = parseServerError(serverError);
-      toast.error(`Error whilst creating ${resource}`, {
-        description: (
-          <span>
-            ${error.message}
-            <br />
-            <p className="text-xs">Request Id: ${error.context.requestId}</p>
-          </span>
-        ),
-      });
+      toast.error(
+        <span>
+          <p className="font-bold text-md">Failed to create {resource}</p>
+          <p className="text-sm">{error?.message}</p>
+          <br />
+          <p className="text-xxs font-mono">
+            Request Id: {error.context.requestId}
+          </p>
+        </span>,
+      );
       setError(error);
       return;
     }

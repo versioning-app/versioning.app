@@ -143,9 +143,12 @@ export function List<T extends Listable>({
 
       toast.error(
         <span>
-          {errorMessage}
+          <p className="font-bold text-md">Failed to delete {resourceName}</p>
+          <p className="text-sm">{errorMessage}</p>
           <br />
-          <p className="text-xs">Request Id: {error.context.requestId}</p>
+          <p className="text-xxs font-mono">
+            Request Id: {error.context.requestId}
+          </p>
         </span>,
       );
       setDeleting(false);
