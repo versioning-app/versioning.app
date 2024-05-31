@@ -141,7 +141,13 @@ export function List<T extends Listable>({
       const error = parseServerError(serverError);
       let errorMessage = error.message.replaceAll('Resource', resourceName);
 
-      toast.error(`${errorMessage} (Request Id: ${error.context?.requestId})`);
+      toast.error(
+        <span>
+          {errorMessage}
+          <br />
+          <p className="text-xs">Request Id: {error.context.requestId}</p>
+        </span>,
+      );
       setDeleting(false);
       return { serverError };
     }

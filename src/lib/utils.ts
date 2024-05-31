@@ -1,5 +1,8 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { customAlphabet } from 'nanoid';
+
+export const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -10,7 +13,7 @@ export function delay(ms: number) {
 }
 
 export function generateRequestId() {
-  return crypto.randomUUID();
+  return nanoid(12);
 }
 
 export const prettyPrint = (obj: any) => {
