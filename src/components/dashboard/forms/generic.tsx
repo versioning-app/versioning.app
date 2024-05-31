@@ -60,7 +60,13 @@ export function InputForm<
     if (serverError) {
       const error = parseServerError(serverError);
       toast.error(`Error whilst creating ${resource}`, {
-        description: `${error.message} (Request Id: ${error.context.requestId})`,
+        description: (
+          <span>
+            ${error.message}
+            <br />
+            <p className="text-xs">Request Id: ${error.context.requestId}</p>
+          </span>
+        ),
       });
       setError(error);
       return;
