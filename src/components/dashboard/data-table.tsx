@@ -1,6 +1,3 @@
-// same as your regular shadcn datatable implementation (which uses tanstack table)
-// note that the shadcn datatable uses shadcn table for the ui. see https://ui.shadcn.com/docs/components/data-table
-
 import {
   ColumnFiltersState,
   SortingState,
