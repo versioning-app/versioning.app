@@ -8,8 +8,10 @@ import {
   Many,
   SQLWrapper,
   and,
+  desc,
   eq,
   getTableName,
+  sql,
 } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { BaseRepository, QueryLimits } from './base-repository.service';
@@ -107,7 +109,11 @@ export abstract class CrudRepository<
   public async findAll(clause?: SQLWrapper): Promise<InferSelectModel<M>[]> {
     this.logger.debug({ clause }, 'Finding all records');
 
-    const records = await this.db.select().from(this.schema).where(and(clause));
+    const records = await this.db
+      .select()
+      .from(this.schema)
+      .where(and(clause))
+      .orderBy(desc(sql`created_at`));
 
     this.logger.debug({ records }, 'Records found');
 
@@ -124,7 +130,8 @@ export abstract class CrudRepository<
       .select()
       .from(this.schema)
       // @ts-expect-error - Primary key is derived from schema
-      .where(and(eq(this.schema[this.primaryKey], id), clause));
+      .where(and(eq(this.schema[this.primaryKey], id), clause))
+      .orderBy(desc(sql`created_at`));
 
     if (results.length === 0) {
       throw new AppError('Resource not found', ErrorCodes.RESOURCE_NOT_FOUND);
@@ -147,6 +154,7 @@ export abstract class CrudRepository<
       .select()
       .from(this.schema)
       .where(and(criteria, clause))
+      .orderBy(desc(sql`created_at`))
       .limit(1);
 
     const [resource] = result;
@@ -170,7 +178,8 @@ export abstract class CrudRepository<
     const query = this.db
       .select()
       .from(this.schema)
-      .where(and(criteria, clause));
+      .where(and(criteria, clause))
+      .orderBy(desc(sql`created_at`));
 
     if (limits?.limit) {
       query.limit(limits.limit);
