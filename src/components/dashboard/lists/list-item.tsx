@@ -2,6 +2,7 @@
 
 import {
   DataTable,
+  DataTableCellRenderer,
   DataTableColumnHeader,
 } from '@/components/dashboard/data-table';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ import { TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { formatDistance } from 'date-fns';
 
 type Listable = {
   id: string;
@@ -197,27 +197,7 @@ export function List<T extends Listable>({
           />
         ),
         accessorKey: key,
-        cell: ({ getValue }) => {
-          const value = getValue();
-          if (typeof value === 'boolean') {
-            return value ? 'Yes' : 'No';
-          }
-
-          if (typeof value === 'object' && value instanceof Date) {
-            const when = formatDistance(value, new Date(), {
-              includeSeconds: true,
-              addSuffix: true,
-            });
-
-            if (when === 'less than 5 seconds ago') {
-              return 'just now';
-            }
-
-            return when;
-          }
-
-          return String(value);
-        },
+        cell: DataTableCellRenderer,
       }) satisfies ColumnDef<any, any>,
   );
 
