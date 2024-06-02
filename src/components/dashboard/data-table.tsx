@@ -1,3 +1,4 @@
+'use client';
 import {
   ColumnFiltersState,
   SortingState,
@@ -50,6 +51,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Column, ColumnDef } from '@tanstack/react-table';
+import { formatDistance } from 'date-fns';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -111,6 +113,28 @@ interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
+}
+
+export function DataTableCellRenderer({ getValue }: { getValue(): unknown }) {
+  const value = getValue();
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+
+  if (typeof value === 'object' && value instanceof Date) {
+    const when = formatDistance(value, new Date(), {
+      includeSeconds: true,
+      addSuffix: true,
+    });
+
+    if (when === 'less than 5 seconds ago') {
+      return 'just now';
+    }
+
+    return when;
+  }
+
+  return String(value);
 }
 
 export function DataTableColumnHeader<TData, TValue>({
