@@ -1,6 +1,9 @@
 'use client';
 
-import { DataTable } from '@/components/dashboard/data-table';
+import {
+  DataTable,
+  DataTableColumnHeader,
+} from '@/components/dashboard/data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -12,10 +15,12 @@ import {
   pluralize,
   prettyPrint,
 } from '@/lib/utils';
+import { ColumnDef } from '@tanstack/react-table';
 import { TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { formatDistance } from 'date-fns';
 
 type Listable = {
   id: string;
@@ -182,10 +187,39 @@ export function List<T extends Listable>({
     );
   }
 
-  const columns = Object.keys(resources[0]).map((key) => ({
-    header: camelToHumanReadable(key),
-    accessorKey: key,
-  }));
+  const columns = Object.keys(resources[0]).map(
+    (key) =>
+      ({
+        header: ({ column }: any) => (
+          <DataTableColumnHeader
+            column={column}
+            title={camelToHumanReadable(key)}
+          />
+        ),
+        accessorKey: key,
+        cell: ({ getValue }) => {
+          const value = getValue();
+          if (typeof value === 'boolean') {
+            return value ? 'Yes' : 'No';
+          }
+
+          if (typeof value === 'object' && value instanceof Date) {
+            const when = formatDistance(value, new Date(), {
+              includeSeconds: true,
+              addSuffix: true,
+            });
+
+            if (when === 'less than 5 seconds ago') {
+              return 'just now';
+            }
+
+            return when;
+          }
+
+          return String(value);
+        },
+      }) satisfies ColumnDef<any, any>,
+  );
 
   return (
     <DataTable
