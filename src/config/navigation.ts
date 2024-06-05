@@ -8,6 +8,8 @@ export const Navigation = {
   DASHBOARD_INTEGRATIONS: '/integrations',
   DASHBOARD_SETTINGS: '/settings',
   DASHBOARD_BILLING: '/billing',
+  DASHBOARD_DEPLOYMENTS: '/deployments',
+  DASHBOARD_DEPLOYMENTS_NEW: '/deployments/new',
   DASHBOARD_ENVIRONMENTS: '/environments',
   DASHBOARD_ENVIRONMENTS_NEW: '/environments/new',
   DASHBOARD_ENVIRONMENT_TYPES: '/environment-types',
