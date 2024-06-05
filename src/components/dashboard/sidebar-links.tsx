@@ -17,6 +17,7 @@ import {
   GitPullRequest,
   HomeIcon,
   NotepadText,
+  RocketIcon,
   Settings,
   SquareCheckBigIcon,
   SquareStackIcon,
@@ -46,9 +47,9 @@ export const EnvironmentNavLinks: BasicNavLink[] = [
     href: Navigation.DASHBOARD_ENVIRONMENTS,
   },
   {
-    icon: CombineIcon,
-    title: 'Release Steps',
-    href: Navigation.DASHBOARD_RELEASE_STEPS,
+    icon: RocketIcon,
+    title: 'Deployments',
+    href: Navigation.DASHBOARD_DEPLOYMENTS,
   },
 ] as const;
 
@@ -57,6 +58,11 @@ export const ReleaseNavLinks: BasicNavLink[] = [
     icon: CalendarClock,
     title: 'Releases',
     href: Navigation.DASHBOARD_RELEASES,
+  },
+  {
+    icon: CombineIcon,
+    title: 'Release Steps',
+    href: Navigation.DASHBOARD_RELEASE_STEPS,
   },
   {
     icon: CableIcon,
