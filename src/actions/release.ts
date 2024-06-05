@@ -3,13 +3,16 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { serverLogger } from '@/lib/logger/server';
 import { workspaceAction } from '@/lib/safe-action';
 import { ReleaseStrategiesService } from '@/services/release-strategies.service';
+import { ReleaseStrategyStepService } from '@/services/release-strategy-steps.service';
 import { ReleaseService } from '@/services/release.service';
 import { get } from '@/services/service-factory';
 import {
   createReleaseSchema,
   createReleaseStrategySchema,
+  createReleaseStrategyStepSchema,
   deleteReleaseSchema,
   deleteReleaseStrategySchema,
+  deleteReleaseStrategyStepSchema,
 } from '@/validation/release';
 import { revalidatePath } from 'next/cache';
 
@@ -23,9 +26,7 @@ export const createReleaseAction = workspaceAction(
     const resource = await get(ReleaseService).create(input);
 
     const { slug } = context.workspace;
-    revalidatePath(
-      dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGIES),
-    );
+    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_RELEASES));
 
     return { resource, success: true };
   },
@@ -41,7 +42,7 @@ export const deleteReleaseAction = workspaceAction(
     await get(ReleaseService).delete(input.id);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_RELEASES));
 
     return { success: true };
   },
@@ -75,7 +76,45 @@ export const deleteReleaseStrategyAction = workspaceAction(
     await get(ReleaseStrategiesService).delete(input.id);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGIES),
+    );
+
+    return { success: true };
+  },
+);
+
+export const createReleaseStrategyStepAction = workspaceAction(
+  createReleaseStrategyStepSchema,
+  async (input, context) => {
+    const logger = serverLogger({ name: 'createReleaseStrategyStepAction' });
+
+    logger.debug({ input }, 'Creating release strategy step');
+
+    const resource = await get(ReleaseStrategyStepService).create(input);
+
+    const { slug } = context.workspace;
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGY_STEPS),
+    );
+
+    return { resource, success: true };
+  },
+);
+
+export const deleteReleaseStrategyStepAction = workspaceAction(
+  deleteReleaseStrategyStepSchema,
+  async (input, context) => {
+    const logger = serverLogger({ name: 'deleteReleaseStrategyStepAction' });
+
+    logger.debug({ input }, 'Deleting release strategy step');
+
+    await get(ReleaseStrategyStepService).delete(input.id);
+
+    const { slug } = context.workspace;
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGY_STEPS),
+    );
 
     return { success: true };
   },

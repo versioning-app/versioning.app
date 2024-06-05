@@ -19,10 +19,10 @@ const config = {
         '2xl': '1400px',
       },
     },
-    fontSize: {
-      xxs: '0.65rem',
-    },
     extend: {
+      fontSize: {
+        xxs: '0.65rem',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
