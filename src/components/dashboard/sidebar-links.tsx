@@ -14,6 +14,7 @@ import {
   ContainerIcon,
   CreditCardIcon,
   HomeIcon,
+  NotepadText,
   Settings,
   SquareCheckBigIcon,
   SquareStackIcon,
@@ -54,6 +55,11 @@ export const ReleaseNavLinks: BasicNavLink[] = [
     icon: CableIcon,
     title: 'Release Strategies',
     href: Navigation.DASHBOARD_RELEASE_STRATEGIES,
+  },
+  {
+    icon: NotepadText,
+    title: 'Release Strategy Steps',
+    href: Navigation.DASHBOARD_RELEASE_STRATEGY_STEPS,
   },
 ] as const;
 
