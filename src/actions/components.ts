@@ -73,7 +73,9 @@ export const deleteComponentVersionAction = workspaceAction(
     await get(ComponentVersionService).delete(input.id);
 
     const { slug } = context.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_COMPONENT_VERSIONS),
+    );
 
     return { success: true };
   },

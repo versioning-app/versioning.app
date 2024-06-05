@@ -18,7 +18,7 @@ interface DashboardProps {
 }
 
 export function Sidebar({
-  defaultLayout = [50, 220],
+  defaultLayout = [60, 240],
   defaultCollapsed,
   navCollapsedSize,
   children,
@@ -60,7 +60,7 @@ export function Sidebar({
           }}
           className={cn(
             isCollapsed && 'min-w[50px] min-w-[50px]',
-            !isCollapsed && 'min-w-[220px] max-w-[220px]',
+            !isCollapsed && 'min-w-[240px] max-w-[240px]',
             'transition-all duration-300 ease-soft-spring hidden md:block',
           )}
         >
@@ -68,7 +68,7 @@ export function Sidebar({
         </ResizablePanel>
         <ResizableHandle withHandle className="hidden md:flex" />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          <main className="flex flex-1 flex-col gap-4 p-4 h-full">
+          <main className="flex flex-1 flex-col gap-4 m-4 h-full">
             {children}
           </main>
         </ResizablePanel>
