@@ -13,6 +13,7 @@ import {
   ComponentIcon,
   ContainerIcon,
   CreditCardIcon,
+  GitPullRequest,
   HomeIcon,
   NotepadText,
   Settings,
@@ -60,6 +61,11 @@ export const ReleaseNavLinks: BasicNavLink[] = [
     icon: NotepadText,
     title: 'Release Strategy Steps',
     href: Navigation.DASHBOARD_RELEASE_STRATEGY_STEPS,
+  },
+  {
+    icon: GitPullRequest,
+    title: 'Release Components',
+    href: Navigation.DASHBOARD_RELEASE_COMPONENTS,
   },
 ] as const;
 

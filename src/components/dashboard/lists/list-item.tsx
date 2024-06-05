@@ -23,12 +23,12 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 type Listable = {
-  id: string;
+  id?: string;
   name?: string;
   label?: string;
   style?: string;
   hidden?: boolean;
-};
+} & Record<string, any>;
 
 export function ListItem<T extends Listable>({
   resourceName,
@@ -48,7 +48,7 @@ export function ListItem<T extends Listable>({
   const [isDeleting, setDeleting] = useState(false);
 
   const onDelete = async ({ id }: Listable) => {
-    if (isDeleting || !actions?.delete) {
+    if (isDeleting || !actions?.delete || !id) {
       return;
     }
 
@@ -129,7 +129,11 @@ export function List<T extends Listable>({
   const [isDeleting, setDeleting] = useState(false);
 
   const onDelete = async ({ id }: Listable) => {
-    if (isDeleting || !actions?.delete) {
+    if (!id || !actions?.delete) {
+      return;
+    }
+
+    if (isDeleting) {
       return { serverError: 'Already deleting' };
     }
 
