@@ -10,6 +10,7 @@ import {
   CableIcon,
   CalendarClock,
   CloudIcon,
+  CombineIcon,
   ComponentIcon,
   ContainerIcon,
   CreditCardIcon,
@@ -43,6 +44,11 @@ export const EnvironmentNavLinks: BasicNavLink[] = [
     icon: ContainerIcon,
     title: 'Environments',
     href: Navigation.DASHBOARD_ENVIRONMENTS,
+  },
+  {
+    icon: CombineIcon,
+    title: 'Release Steps',
+    href: Navigation.DASHBOARD_RELEASE_STEPS,
   },
 ] as const;
 

@@ -16,6 +16,8 @@ export const Navigation = {
   DASHBOARD_RELEASE_STRATEGIES_NEW: '/release-strategies/new',
   DASHBOARD_RELEASE_STRATEGY_STEPS: '/release-strategy-steps',
   DASHBOARD_RELEASE_STRATEGY_STEPS_NEW: '/release-strategy-steps/new',
+  DASHBOARD_RELEASE_STEPS: '/release-steps',
+  DASHBOARD_RELEASE_STEPS_NEW: '/release-steps/new',
   DASHBOARD_RELEASES: '/releases',
   DASHBOARD_RELEASES_NEW: '/releases/new',
   DASHBOARD_RELEASE_COMPONENTS: '/release-components',
