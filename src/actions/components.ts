@@ -4,10 +4,12 @@ import { serverLogger } from '@/lib/logger/server';
 import { workspaceAction } from '@/lib/safe-action';
 import { ComponentVersionService } from '@/services/component-version.service';
 import { ComponentsService } from '@/services/components.service';
+import { ReleaseComponentService } from '@/services/release-component.service';
 import { get } from '@/services/service-factory';
 import {
   createComponentSchema,
   createComponentVersionSchema,
+  createReleaseComponentSchema,
   deleteComponentSchema,
   deleteComponentVersionSchema,
 } from '@/validation/component';
@@ -78,5 +80,23 @@ export const deleteComponentVersionAction = workspaceAction(
     );
 
     return { success: true };
+  },
+);
+
+export const createReleaseComponentAction = workspaceAction(
+  createReleaseComponentSchema,
+  async (input, context) => {
+    const logger = serverLogger({ name: 'createReleaseComponentAction' });
+
+    logger.debug({ input }, 'Creating component version');
+
+    const resource = await get(ReleaseComponentService).create(input);
+
+    const { slug } = context.workspace;
+    revalidatePath(
+      dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_COMPONENTS),
+    );
+
+    return { resource, success: true };
   },
 );
