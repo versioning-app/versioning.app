@@ -18,7 +18,7 @@ import { BaseRepository, QueryLimits } from './base-repository.service';
 
 export abstract class CrudRepository<
     M extends PgTable,
-    ID extends keyof M['$inferSelect'],
+    ID extends keyof M['$inferSelect'] = 'id',
   >
   extends BaseService
   implements BaseRepository<M, ID>
