@@ -1,4 +1,8 @@
-import { release_strategy_steps, releases } from '@/database/schema';
+import {
+  release_steps,
+  release_strategy_steps,
+  releases,
+} from '@/database/schema';
 import { DEFAULT_OMITTED_FIELDS } from '@/validation/defaults';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
@@ -24,6 +28,17 @@ export const createReleaseStrategyStepSchema =
 
 export const deleteReleaseStrategyStepSchema =
   selectReleaseStrategyStepSchema.pick({ id: true });
+
+const insertReleaseStepSchema = createInsertSchema(release_steps);
+const selectReleaseStepSchema = createSelectSchema(release_steps);
+
+export const createReleaseStepSchema = insertReleaseStepSchema.omit(
+  DEFAULT_OMITTED_FIELDS,
+);
+
+export const deleteReleaseStepSchema = selectReleaseStepSchema.pick({
+  id: true,
+});
 
 export const createReleaseStrategySchema = z.object({
   name: z.string().max(32),
