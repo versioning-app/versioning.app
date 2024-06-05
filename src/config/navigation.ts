@@ -18,6 +18,8 @@ export const Navigation = {
   DASHBOARD_RELEASE_STRATEGY_STEPS_NEW: '/release-strategy-steps/new',
   DASHBOARD_RELEASES: '/releases',
   DASHBOARD_RELEASES_NEW: '/releases/new',
+  DASHBOARD_RELEASE_COMPONENTS: '/release-components',
+  DASHBOARD_RELEASE_COMPONENTS_NEW: '/release-components/new',
   DASHBOARD_COMPONENT_VERSIONS: '/component-versions',
   DASHBOARD_COMPONENT_VERSIONS_NEW: '/component-versions/new',
   DASHBOARD_APPROVAL_GROUPS: '/approval-groups',
