@@ -64,7 +64,9 @@ export interface DataTableProps {
   columns: ColumnDef<any, any>[];
   disableSelect?: boolean;
   actions?: {
-    delete: (deleteArgs: { id: string }) => Promise<{ serverError?: string }>;
+    delete?: (deleteArgs: {
+      id: string;
+    }) => Promise<{ serverError?: string } | undefined>;
   };
 }
 
@@ -72,7 +74,9 @@ const actionsColumn = ({
   actions,
 }: {
   actions?: {
-    delete: (deleteArgs: { id: string }) => Promise<{ serverError?: string }>;
+    delete?: (deleteArgs: {
+      id: string;
+    }) => Promise<{ serverError?: string } | undefined>;
   };
 }) =>
   ({
@@ -82,7 +86,7 @@ const actionsColumn = ({
     maxSize: 40,
     header: ({ table }) => <DataTableViewOptions table={table} />,
     cell: ({ row }) => {
-      if (!actions?.delete) {
+      if (!actions?.delete || actions.delete === undefined) {
         return null;
       }
 
@@ -98,7 +102,7 @@ const actionsColumn = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => actions.delete({ id: resource.id as string })}
+              onClick={() => actions?.delete?.({ id: resource.id as string })}
             >
               <TrashIcon className="h-4 w-4 mr-2" />
               Delete
