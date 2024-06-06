@@ -11,6 +11,7 @@ import { appConfig } from '@/config/app';
 import { AppProviders } from '@/providers/providers';
 import Script from 'next/script';
 import '../styles/globals.css';
+import 'reactflow/dist/style.css';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -33,7 +34,7 @@ export default function RootLayout({
         <body
           className={cn(
             'min-h-screen bg-background font-sans antialiased min-w-[500px]',
-            fontSans.variable
+            fontSans.variable,
           )}
         >
           <AppProviders attribute="class" defaultTheme="system" enableSystem>

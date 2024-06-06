@@ -38,7 +38,13 @@ export class ReleaseService extends WorkspaceScopedRepository<typeof releases> {
         LEFT OUTER JOIN environments E ON (D.environment_id = E.id)
         LEFT OUTER JOIN approvals A ON (A.release_step_id = STEPS.id)
         LEFT OUTER JOIN members M ON (M.id = A.member_id)
+        WHERE R.id = 'release_4'
         ORDER BY R.id, RSSH.release_strategy_id, RSSH.order;`,
+    );
+
+    this.logger.debug(
+      { rows: execution?.rows },
+      'getOverview execution result',
     );
 
     return execution?.rows;
