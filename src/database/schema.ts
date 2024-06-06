@@ -49,8 +49,10 @@ export const release_step_status = pgEnum(
 );
 
 export const ApprovalTypes = [
-  'preparation',
+  'approval',
+  'manual',
   'post_deployment',
+  'preparation',
   'approval_gate',
 ] as const;
 
