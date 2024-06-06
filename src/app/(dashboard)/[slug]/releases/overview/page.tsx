@@ -1,11 +1,8 @@
-import { deleteReleaseStrategyAction } from '@/actions/release';
-import { List } from '@/components/dashboard/lists/list-item';
-import { Navigation, dashboardRoute } from '@/config/navigation';
-import { ReleaseStrategiesService } from '@/services/release-strategies.service';
+import { Overview } from '@/components/dashboard/overview';
 import { ReleaseService } from '@/services/release.service';
 import { get } from '@/services/service-factory';
 
-export default async function Overview({
+export default async function OverviewPage({
   params: { slug },
 }: {
   params: { slug: string };
@@ -14,10 +11,13 @@ export default async function Overview({
   const overviews = await releaseService.getOverview();
 
   return (
-    <List
-      createLink={dashboardRoute(slug, Navigation.DASHBOARD_RELEASES)}
-      resourceName="Release"
-      resources={overviews}
-    />
+    // <List
+    //   createLink={dashboardRoute(slug, Navigation.DASHBOARD_RELEASES)}
+    //   resourceName="Release"
+    //   resources={overviews}
+    // />
+    <div className="mb-24 h-full w-full">
+      <Overview data={overviews} />
+    </div>
   );
 }
