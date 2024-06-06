@@ -247,6 +247,11 @@ export function DataTable({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     enableRowSelection: true,
+    initialState: {
+      pagination: {
+        pageSize: 20,
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -257,7 +262,7 @@ export function DataTable({
 
   return (
     <div className="w-full">
-      <div className="rounded-md border">
+      <div className="rounded-md border flex overflow-auto max-h-[calc(75vh)]">
         <TableComponent>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

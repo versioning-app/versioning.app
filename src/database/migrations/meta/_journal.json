@@ -148,6 +148,20 @@
       "when": 1717095262557,
       "tag": "0020_quiet_fat_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1717699848117,
+      "tag": "0021_young_vector",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1717700071626,
+      "tag": "0022_clever_warstar",
+      "breakpoints": true
     }
   ]
 }
