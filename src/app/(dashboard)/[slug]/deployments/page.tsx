@@ -1,7 +1,7 @@
 import { deleteDeploymentAction } from '@/actions/deployment';
 import { List } from '@/components/dashboard/lists/list-item';
 import { Navigation, dashboardRoute } from '@/config/navigation';
-import { ReleaseStepService } from '@/services/release-steps.service';
+import { DeploymentsService } from '@/services/deployments.service';
 import { get } from '@/services/service-factory';
 
 export default async function ReleaseStrategyStepsPage({
@@ -9,7 +9,7 @@ export default async function ReleaseStrategyStepsPage({
 }: {
   params: { slug: string };
 }) {
-  const deployments = await get(ReleaseStepService).findAll();
+  const deployments = await get(DeploymentsService).findAll();
 
   return (
     <List
