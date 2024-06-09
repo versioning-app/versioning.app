@@ -78,7 +78,7 @@ export class ReleaseStrategyStepService extends CrudRepository<
 
     return super.create(
       newReleaseStrategyStep,
-      eq(release_strategy_steps.name, newReleaseStrategyStep.name),
+      // eq(release_strategy_steps.name, newReleaseStrategyStep.name),
     );
   }
 }
