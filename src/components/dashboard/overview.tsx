@@ -1,152 +1,148 @@
 'use client';
-
-import dagre from 'dagre';
-import { useCallback, useState } from 'react';
 import ReactFlow, {
   Background,
   Controls,
-  DefaultEdgeOptions,
-  Edge,
-  FitViewOptions,
-  Node,
-  OnConnect,
-  OnEdgesChange,
-  OnNodesChange,
-  Position,
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
+  MiniMap,
+  useEdgesState,
+  useNodesInitialized,
+  useNodesState,
 } from 'reactflow';
 
-// const initialNodes: Node[] = [
-//   { id: '1', data: { label: 'Node 1' }, position: { x: 5, y: 5 } },
-//   { id: '2', data: { label: 'Node 2' }, position: { x: 5, y: 100 } },
-// ];
+import { Edge, Node as ReactFlowNode } from 'reactflow';
 
-// const initialEdges: Edge[] = [{ id: 'e1-2', source: '1', target: '2' }];
+import 'reactflow/dist/style.css';
 
-const fitViewOptions: FitViewOptions = {
-  padding: 0.2,
-};
+import { nodeTypes } from '@/components/dashboard/flow/elk-nodes';
+import useLayoutNodes from '@/components/dashboard/flow/use-layout-nodes';
+import { cn } from '@/lib/utils';
 
-const defaultEdgeOptions: DefaultEdgeOptions = {
-  animated: true,
-};
+const panOnDrag = [1, 2];
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-const nodeWidth = 172;
-const nodeHeight = 36;
-
-const getLayoutedElements = (
-  nodes: Node[],
-  edges: Edge[],
-  direction = 'TB',
-) => {
-  const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ rankdir: direction });
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? Position.Left : Position.Top;
-    node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
-
-    // We are shifting the dagre node position (anchor=center center) to the top left
-    // so it matches the React Flow node anchor point (top left).
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
-    };
-
-    return node;
-  });
-
-  return { nodes, edges };
-};
-
-// const nodeTypes: NodeTypes = {
-//   custom: CustomNode,
-// };
 function convertToNodesAndEdges(releaseSteps: any[]): {
-  nodes: Node[];
+  nodes: ReactFlowNode[];
   edges: Edge[];
 } {
-  const nodes: Node[] = [];
+  const nodes: ReactFlowNode[] = [];
   const edges: Edge[] = [];
+  const nodeMap: { [key: string]: ReactFlowNode } = {};
 
   // Create nodes
   releaseSteps.forEach((step) => {
-    const label = step.name ? step.name : step.action;
-    const node: Node = {
+    const node: ReactFlowNode = {
       id: step.release_strategy_step_id,
-      data: { label },
+      data: {
+        ...step,
+        sourceHandles: [],
+        targetHandles: [],
+      },
       position: { x: 0, y: 0 }, // You can adjust the position as needed
+      type: step.action,
     };
     nodes.push(node);
+    nodeMap[step.release_strategy_step_id] = node;
+  });
 
-    // Create edges for steps with parent IDs
+  // Create edges and update node handles
+  releaseSteps.forEach((step) => {
     if (step.parent_id) {
+      const edgeCount =
+        edges.filter(
+          (edge) =>
+            edge.source === step.parent_id &&
+            edge.target === step.release_strategy_step_id,
+        ).length + 1;
+
       const edge: Edge = {
-        id: `e${step.parent_id}-${step.release_strategy_step_id}`,
+        id: `e${step.parent_id}-${step.release_strategy_step_id}-${edgeCount}`,
         source: step.parent_id,
         target: step.release_strategy_step_id,
       };
       edges.push(edge);
+
+      // Update sourceHandles and targetHandles
+      const sourceNode = nodeMap[step.parent_id];
+      const targetNode = nodeMap[step.release_strategy_step_id];
+
+      if (sourceNode) {
+        sourceNode.data.sourceHandles.push({
+          id: `${step.parent_id}-s-${step.release_strategy_step_id}-${edgeCount}`,
+        });
+      }
+      if (targetNode) {
+        targetNode.data.targetHandles.push({
+          id: `${step.parent_id}-t-${step.release_strategy_step_id}-${edgeCount}`,
+        });
+      }
     }
   });
 
   return { nodes, edges };
 }
-export const Overview = ({ data }: { data: any }) => {
-  const { nodes: initialNodes, edges: initialEdges } =
-    convertToNodesAndEdges(data);
 
-  const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-    initialNodes,
-    initialEdges,
-  );
-  const [nodes, setNodes] = useState<Node[]>(layoutedNodes);
-  const [edges, setEdges] = useState<Edge[]>(layoutedEdges);
+export function Overview({ data }: { data: any }) {
+  const { nodes: initNodes, edges: initEdges } = convertToNodesAndEdges(data);
 
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes],
-  );
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges],
-  );
-  const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges],
-  );
+  const [nodes, , onNodesChange] = useNodesState(initNodes);
+  const [edges, , onEdgesChange] = useEdgesState(initEdges);
+
+  useLayoutNodes();
+
+  const nodesInitialized = useNodesInitialized();
 
   return (
     <ReactFlow
+      className={cn({
+        'opacity-0': !nodesInitialized,
+        'opacity-100': nodesInitialized,
+        'transition-all duration-500 ease-in-out': true,
+        // 'opacity-0': !nodesInitialized,
+      })}
       nodes={nodes}
-      edges={edges}
-      proOptions={{ hideAttribution: true }}
       onNodesChange={onNodesChange}
+      edges={edges}
       onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      fitView
-      fitViewOptions={fitViewOptions}
-      defaultEdgeOptions={defaultEdgeOptions}
-      // nodeTypes={nodeTypes}
+      fitViewOptions={{
+        // maxZoom: 0.5,
+        duration: 0.5,
+        // minZoom: 0.5,
+        nodes: nodes,
+      }}
+      // fitView
+      panOnScroll
+      // selectionOnDrag
+      panOnDrag={panOnDrag}
+      // selectionMode={SelectionMode}
+      nodeTypes={nodeTypes}
+      proOptions={{
+        hideAttribution: true,
+      }}
     >
       <Background />
       <Controls />
+      <MiniMap
+        pannable={true}
+        zoomable={true}
+        className="md:hidden lg:block"
+        nodeColor={nodeColor}
+      />
     </ReactFlow>
   );
-};
+}
+
+function nodeColor(node: any) {
+  if (node?.data?.release_step_status === 'complete') {
+    return '#15803d';
+  }
+  if (
+    node?.data?.release_step_status === 'pending' ||
+    node?.data?.release_step_status === 'in_progress'
+  ) {
+    return '#EA580C';
+  }
+
+  if (node.data?.release_step_status === 'failed') {
+    return '#B91C1C';
+  }
+
+  return '';
+}

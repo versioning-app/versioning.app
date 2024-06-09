@@ -73,13 +73,13 @@ export class ReleaseStepService extends CrudRepository<typeof release_steps> {
   ): Promise<ReleaseStep> {
     return super.create(
       newReleaseStep,
-      and(
-        eq(release_steps.releaseId, newReleaseStep.releaseId),
-        eq(
-          release_steps.releaseStrategyStepId,
-          newReleaseStep.releaseStrategyStepId,
-        ),
-      ),
+      // and(
+      //   eq(release_steps.releaseId, newReleaseStep.releaseId),
+      //   eq(
+      //     release_steps.releaseStrategyStepId,
+      //     newReleaseStep.releaseStrategyStepId,
+      //   ),
+      // ),
     );
   }
 }
