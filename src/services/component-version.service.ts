@@ -55,7 +55,7 @@ export class ComponentVersionService extends CrudRepository<
   ): Promise<InferSelectModel<typeof component_versions>> {
     return super.create(
       resource,
-      eq(component_versions.version, resource.version),
+      // and(eq(component_versions.version, resource.version),),
     );
   }
 }
