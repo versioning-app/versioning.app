@@ -31,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+
 import { camelToHumanReadable, cn } from '@/lib/utils';
 import {
   ArrowDownIcon,
@@ -42,6 +43,7 @@ import {
   MixerHorizontalIcon,
 } from '@radix-ui/react-icons';
 
+import { DateRenderer } from '@/components/dashboard/dates';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
@@ -51,7 +53,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Column, ColumnDef } from '@tanstack/react-table';
-import { formatDistance } from 'date-fns';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -126,16 +127,7 @@ export function DataTableCellRenderer({ getValue }: { getValue(): unknown }) {
   }
 
   if (typeof value === 'object' && value instanceof Date) {
-    const when = formatDistance(value, new Date(), {
-      includeSeconds: true,
-      addSuffix: true,
-    });
-
-    if (when === 'less than 5 seconds ago') {
-      return 'just now';
-    }
-
-    return when;
+    return <DateRenderer value={value} />;
   }
 
   return String(value);
@@ -216,8 +208,8 @@ export function DataTable({
             table.getIsAllPageRowsSelected() ||
             (table.getIsSomePageRowsSelected() && 'indeterminate')
           }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all visible rows"
+          onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
+          aria-label="Select all rows"
         />
       ),
       cell: ({ row }) => (

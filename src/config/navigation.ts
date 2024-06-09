@@ -22,7 +22,7 @@ export const Navigation = {
   DASHBOARD_RELEASE_STEPS_NEW: '/release-steps/new',
   DASHBOARD_RELEASES: '/releases',
   DASHBOARD_RELEASES_NEW: '/releases/new',
-  DASHBOARD_RELEASES_OVERVIEW: '/releases/overview',
+  DASHBOARD_RELEASES_OVERVIEW: '/releases/[id]',
   DASHBOARD_RELEASE_COMPONENTS: '/release-components',
   DASHBOARD_RELEASE_COMPONENTS_NEW: '/release-components/new',
   DASHBOARD_COMPONENT_VERSIONS: '/component-versions',
