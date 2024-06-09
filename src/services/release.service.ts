@@ -17,7 +17,7 @@ export class ReleaseService extends WorkspaceScopedRepository<typeof releases> {
     return super.create(newRelease, eq(releases.version, newRelease.version));
   }
 
-  public async getOverview(): Promise<any> {
+  public async getOverview(releaseId: string): Promise<any> {
     const execution = await this.db.execute(
       sql`
         WITH RECURSIVE release_strategy_steps_hierarchy AS (
@@ -29,7 +29,7 @@ export class ReleaseService extends WorkspaceScopedRepository<typeof releases> {
           FROM release_strategy_steps RSS
           JOIN release_strategy_steps_hierarchy RSSH ON RSS.parent_id = RSSH.id
         )
-        SELECT R.id as release_id, RSSH.id as release_strategy_step_id, STEPS.id as release_step_id, RSSH.action, A.approved, A.type as approval_type, M.clerk_id as approval_member, RSSH.name, D.environment_id, E.name, D.status as deployment_status, RSSH.release_strategy_id, RSSH.parent_id, RSSH.order, STEPS.status as release_step_status, STEPS.finalized_at as release_step_finalized_at
+        SELECT R.id as release_id, RSSH.id as release_strategy_step_id, STEPS.id as release_step_id, RSSH.action, A.approved, A.type as approval_type, M.clerk_id as approval_member, RSSH.name, D.environment_id, E.name as environment_name, D.status as deployment_status, RSSH.release_strategy_id, RSSH.parent_id, RSSH.order, STEPS.status as release_step_status, STEPS.finalized_at as release_step_finalized_at
         FROM release_strategy_steps_hierarchy RSSH
         INNER JOIN release_strategies RS ON (RS.id = RSSH.release_strategy_id)
         INNER JOIN releases R ON (R.release_strategy_id = RS.id)
@@ -38,7 +38,7 @@ export class ReleaseService extends WorkspaceScopedRepository<typeof releases> {
         LEFT OUTER JOIN environments E ON (D.environment_id = E.id)
         LEFT OUTER JOIN approvals A ON (A.release_step_id = STEPS.id)
         LEFT OUTER JOIN members M ON (M.id = A.member_id)
-        WHERE R.id = 'release_4'
+        WHERE R.id = ${releaseId}
         ORDER BY R.id, RSSH.release_strategy_id, RSSH.order;`,
     );
 
