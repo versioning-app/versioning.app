@@ -46,7 +46,7 @@ export function MainLayout({
             <MobileSidebar />
             <Logo className="hidden md:inline" />
             <span className="sr-only">Dashboard</span>
-            <span className="hidden md:inline">{appConfig.name}</span>
+            <span className="hidden">{appConfig.name}</span>
           </DashboardLink>
           <div className="w-full flex-1">
             <CommandMenu />
