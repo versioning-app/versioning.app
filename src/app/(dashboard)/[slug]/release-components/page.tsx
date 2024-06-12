@@ -18,7 +18,7 @@ export default async function ComponentVersion({
         slug={slug}
         dependency="Release"
         resource="Release Component"
-        href={Navigation.DASHBOARD_RELEASES}
+        href={Navigation.DASHBOARD_RELEASES_NEW}
       />
     );
   }

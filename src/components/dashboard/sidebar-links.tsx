@@ -16,6 +16,7 @@ import {
   CreditCardIcon,
   GitPullRequest,
   HomeIcon,
+  KeySquareIcon,
   NotepadText,
   RocketIcon,
   Settings,
@@ -115,6 +116,11 @@ export const GeneralNavLinks: BasicNavLink[] = [
 ] as const;
 
 export const SettingsNavLinks: BasicNavLink[] = [
+  {
+    icon: KeySquareIcon,
+    title: 'Api Keys',
+    href: Navigation.DASHBOARD_API_KEYS,
+  },
   {
     icon: Settings,
     title: 'Settings',

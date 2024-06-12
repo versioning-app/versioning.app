@@ -13,7 +13,10 @@ export default async function ApprovalGroups({
 
   return (
     <List
-      createLink={dashboardRoute(slug, Navigation.DASHBOARD_APPROVAL_GROUPS)}
+      createLink={dashboardRoute(
+        slug,
+        Navigation.DASHBOARD_APPROVAL_GROUPS_NEW,
+      )}
       resourceName="Approval Group"
       resources={approvalGroups}
       actions={{

@@ -47,6 +47,10 @@ export const pluralize = (str: string) => {
     return '';
   }
 
+  if (str.endsWith('ey')) {
+    return `${str}s`;
+  }
+
   if (str.endsWith('y')) {
     return `${str.slice(0, -1)}ies`;
   }
