@@ -13,7 +13,7 @@ export default async function EnvironmentsPage({
 
   return (
     <List
-      createLink={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS)}
+      createLink={dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS_NEW)}
       resourceName="Environment"
       resources={environments}
       actions={{
