@@ -13,7 +13,10 @@ export default async function ComponentVersion({
 
   return (
     <List
-      createLink={dashboardRoute(slug, Navigation.DASHBOARD_COMPONENT_VERSIONS)}
+      createLink={dashboardRoute(
+        slug,
+        Navigation.DASHBOARD_COMPONENT_VERSIONS_NEW,
+      )}
       resourceName="Component Version"
       resources={componentVersions}
       actions={{

@@ -13,7 +13,7 @@ export default async function Components({
 
   return (
     <List
-      createLink={dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS)}
+      createLink={dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS_NEW)}
       resourceName="Component"
       resources={components}
       actions={{

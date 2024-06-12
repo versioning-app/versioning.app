@@ -1,6 +1,6 @@
 import { appConfig } from '@/config/app';
 import { DisallowedSlugs } from '@/config/navigation';
-import { DEFAULT_DB_CACHE_MS } from '@/config/storage';
+import { API_KEY_HEADER, DEFAULT_DB_CACHE_MS } from '@/config/storage';
 import { db } from '@/database/db';
 import { Workspace, members, workspaces } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
@@ -12,6 +12,7 @@ import { auth, clerkClient } from '@clerk/nextjs/server';
 import cryptoRandomString from 'crypto-random-string';
 import { and, eq, sql } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
+import { headers } from 'next/headers';
 import 'server-only';
 import slugify from 'slugify';
 
@@ -25,6 +26,31 @@ export class WorkspaceService extends BaseService {
   }
 
   public async currentWorkspaceId(): Promise<string> {
+    const providedApiKey = headers().get(API_KEY_HEADER);
+
+    if (providedApiKey) {
+      this.logger.debug('Getting workspace ID from API key');
+
+      const apiKey = await db.query.api_keys.findFirst({
+        where: (apiKeys, { gt, eq, and }) =>
+          and(eq(apiKeys.key, providedApiKey)),
+      });
+
+      if (
+        !apiKey?.workspaceId ||
+        (apiKey.expiresAt && apiKey.expiresAt < new Date())
+      ) {
+        throw new AppError('API Key is invalid', ErrorCodes.API_KEY_INVALID);
+      }
+
+      const workspaceId = apiKey.workspaceId;
+
+      this.logger.info({ workspaceId }, 'Workspace ID found from API key');
+      return workspaceId;
+    }
+
+    this.logger.debug('Getting workspace ID from session');
+
     const { userId, orgId, sessionClaims } = auth();
 
     return this.getWorkspaceIdFromAuth({

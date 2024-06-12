@@ -14,7 +14,10 @@ export default async function ReleaseStrategiesPage({
 
   return (
     <List
-      createLink={dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGIES)}
+      createLink={dashboardRoute(
+        slug,
+        Navigation.DASHBOARD_RELEASE_STRATEGIES_NEW,
+      )}
       resourceName="Release Strategy"
       resources={releaseStrategies}
       actions={{
