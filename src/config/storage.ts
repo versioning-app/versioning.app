@@ -6,3 +6,5 @@ export const StorageKeys = {
 } as const;
 
 export const DEFAULT_DB_CACHE_MS = 30 * 1000; // 30 seconds
+
+export const API_KEY_HEADER = 'x-api-key';

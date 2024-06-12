@@ -3,20 +3,14 @@ import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
-  integer,
-  jsonb,
   pgEnum,
-  pgSchema,
   pgTable,
-  serial,
   text,
   timestamp,
   unique,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { createSelectSchema } from 'drizzle-zod';
 import { nanoid } from 'nanoid';
-import { z } from 'zod';
 
 // -- Utils
 const identifierColumn = () =>
