@@ -3,13 +3,20 @@ import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
+  integer,
+  jsonb,
   pgEnum,
+  pgSchema,
   pgTable,
+  serial,
   text,
   timestamp,
   unique,
   varchar,
 } from 'drizzle-orm/pg-core';
+import { createSelectSchema } from 'drizzle-zod';
+import { nanoid } from 'nanoid';
+import { z } from 'zod';
 
 // -- Utils
 const identifierColumn = () =>
@@ -362,6 +369,18 @@ export const notifications = pgTable('notifications', {
   ...TIME_COLUMNS,
 });
 
+export const api_keys = pgTable('api_keys', {
+  id: identifierColumn(),
+  key: varchar('key', { length: 128 })
+    .notNull()
+    .$defaultFn(() => nanoid(64))
+    .unique(),
+  expiresAt: timestamp('expires_at'),
+  description: text('description'),
+  ...WORKSPACE_COLUMNS,
+  ...TIME_COLUMNS,
+});
+
 export const approvals_relations = relations(approvals, ({ one }) => ({
   release_step: one(release_steps, {
     fields: [approvals.releaseStepId],
@@ -445,6 +464,7 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
   environments: many(environments),
   members: many(members),
   approval_groups: many(approval_groups),
+  api_keys: many(api_keys),
 }));
 
 export const releasesRelations = relations(releases, ({ one, many }) => ({
@@ -566,3 +586,57 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
     references: [release_steps.id],
   }),
 }));
+
+// /** Record Version Table */
+// export const OPERATIONS = ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE'] as const;
+// export const OP = z.enum(['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE']);
+// export type OP = z.infer<typeof OP>;
+
+// export const AUDITED_TABLES = ['workspaces'] as const;
+// export const AUDITED_TABLE = z.enum(AUDITED_TABLES);
+// export type AUDITED_TABLE = z.infer<typeof AUDITED_TABLE>;
+
+// export const auditSchema = pgSchema('audit');
+// export const RecordVersionTable = auditSchema.table('record_version', {
+//   id: serial('id').primaryKey(),
+//   recordId: text('record_id'),
+//   oldRecordId: text('old_record_id'),
+//   op: text('op', { enum: OPERATIONS }),
+//   ts: timestamp('ts').defaultNow().notNull(),
+//   tableOid: integer('table_oid').notNull(),
+//   tableSchema: text('table_schema').notNull(),
+//   tableName: text('table_name', {
+//     enum: AUDITED_TABLES,
+//   }).notNull(),
+//   record: jsonb('record'),
+//   oldRecord: jsonb('old_record'),
+// });
+
+// export const camelCaseKeys = (object: unknown): unknown => {
+//   if (typeof object !== 'object' || object === null) {
+//     return object;
+//   }
+
+//   if (Array.isArray(object)) {
+//     return object.map(camelCaseKeys);
+//   }
+
+//   return Object.fromEntries(
+//     Object.entries(object).map(([key, value]) => [
+//       key.replace(/_([a-z])/g, (m) => m[1].toUpperCase()),
+//       camelCaseKeys(value),
+//     ]),
+//   );
+// };
+
+// export const RecordVersion = createSelectSchema(RecordVersionTable, {
+//   ts: z.coerce.date(),
+//   op: OP,
+//   tableName: AUDITED_TABLE,
+//   record: z.preprocess(camelCaseKeys, z.union([User, Post, Comment])),
+//   oldRecord: z
+//     .preprocess(camelCaseKeys, z.union([User, Post, Comment]))
+//     .optional(),
+// });
+
+// export type RecordVersion = z.infer<typeof RecordVersion>;

@@ -182,7 +182,7 @@ export function List<T extends Listable>({
             </p>
           </div>
           <div className="justify-center text-center py-4">
-            <Link href={createLink}>
+            <Link href={createLink} prefetch={true}>
               <Button size="lg">Create {resourceName}</Button>
             </Link>
           </div>
