@@ -4,7 +4,7 @@ import { apiMiddleware } from '@/middleware/api';
 import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
   '/',
@@ -16,16 +16,9 @@ const isPublicRoute = createRouteMatcher([
 
 const isApiRoute = createRouteMatcher(['/api/v1/(.*)']);
 
-export default clerkMiddleware(async (auth, req, event) => {
-  // Generate request ID for each request
-  req.headers.set(StorageKeys.REQUEST_ID_HEADER_KEY, generateRequestId());
-
+const clerk = clerkMiddleware(async (auth, req, event) => {
   if (isPublicRoute(req)) {
     return NextResponse.next();
-  }
-
-  if (isApiRoute(req)) {
-    return apiMiddleware(req);
   }
 
   auth().protect();
@@ -44,6 +37,20 @@ export default clerkMiddleware(async (auth, req, event) => {
 
   return NextResponse.next();
 });
+
+export default async function middleware(
+  request: NextRequest,
+  event: NextFetchEvent,
+) {
+  // Generate request ID for each request
+  request.headers.set(StorageKeys.REQUEST_ID_HEADER_KEY, generateRequestId());
+
+  if (isApiRoute(request)) {
+    return apiMiddleware(request);
+  }
+
+  return clerk(request, event);
+}
 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
