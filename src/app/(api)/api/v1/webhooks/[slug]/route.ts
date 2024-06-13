@@ -23,9 +23,9 @@ export const POST = (request: NextRequest) =>
     switch (type.toUpperCase()) {
       case 'LIST':
         const releases = await get(ReleaseService).findAll();
-        return NextResponse.json(releases);
+        return releases;
       case 'PING':
-        return NextResponse.json({ message: 'PONG' });
+        return { message: 'PONG' };
       default:
         throw new AppError(
           'Unsupported Type Provided',
