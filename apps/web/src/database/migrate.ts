@@ -7,7 +7,7 @@ import { ErrorCodes } from '@/lib/error/error-codes';
 import { neonConfig } from '@neondatabase/serverless';
 import 'dotenv/config';
 
-const databaseUrl = process.env.DATABASE_URL!;
+const databaseUrl = process.env.APP_DATABASE_URL!;
 
 neonConfig.fetchEndpoint = (host) => {
   const protocol = host === 'db.localtest.me' ? 'http' : 'https';
