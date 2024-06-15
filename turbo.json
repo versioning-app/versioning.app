@@ -21,6 +21,7 @@
   "globalEnv": [
     "NEXT_PUBLIC_*",
     "STRIPE_*",
+    "UPSTASH_*",
     "APP_*",
     "AUTH_*",
     "DATABASE_*",
