@@ -1,0 +1,1 @@
+ALTER TABLE "environment_types" ADD COLUMN "style" "environment_type_styles" NOT NULL;
