@@ -3,7 +3,7 @@ import { NeonQueryFunction, neon } from '@neondatabase/serverless';
 import { neonConfig } from '@neondatabase/serverless';
 
 neonConfig.fetchEndpoint = (host) => {
-  const offlineProxy = process.env.USE_OFFLINE_DATABASE === 'true';
+  const offlineProxy = process.env.APP_USE_OFFLINE_DATABASE === 'true';
   const protocol =
     process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0'
       ? 'https'
