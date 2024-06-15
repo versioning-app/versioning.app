@@ -1,1 +1,0 @@
-ALTER TABLE "release_components" RENAME COLUMN "current" TO "active";

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "#web": {
+      "env": ["CLERK_*", "RESEND_*"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "persistent": true,
+      "cache": false
+    }
+  },
+  "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "NEXT_PUBLIC_*",
+    "STRIPE_*",
+    "APP_*",
+    "AUTH_*",
+    "NODE_TLS_REJECT_UNAUTHORIZED"
+  ]
+}

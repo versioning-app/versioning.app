@@ -1,1 +1,0 @@
-ALTER TABLE "releases" ALTER COLUMN "version" DROP NOT NULL;

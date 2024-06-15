@@ -1,0 +1,11 @@
+import type { Config } from 'drizzle-kit';
+
+export default {
+  dialect: 'postgresql',
+  schema: ['src/database/schema.ts'],
+  out: 'src/database/migrations',
+  dbCredentials: {
+    url: process.env.APP_DATABASE_URL!,
+  },
+  verbose: true,
+} satisfies Config;

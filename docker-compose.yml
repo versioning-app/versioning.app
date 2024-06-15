@@ -16,7 +16,7 @@ services:
   neon-proxy:
     image: local-neon-http-proxy:latest
     build:
-      context: docker
+      context: build/docker
       dockerfile: Dockerfile
     environment:
       - PG_CONNECTION_STRING=postgres://postgres:postgres@postgres:5432/main

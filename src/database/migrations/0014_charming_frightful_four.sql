@@ -1,1 +1,0 @@
-ALTER TYPE "gate_types" ADD VALUE 'post_deployment';
