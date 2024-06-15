@@ -5590,6 +5590,118 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@versioning.app/eslint-config@workspace:^, @versioning.app/eslint-config@workspace:packages/eslint-config":
+  version: 0.0.0-use.local
+  resolution: "@versioning.app/eslint-config@workspace:packages/eslint-config"
+  dependencies:
+    eslint: "npm:^8.57.0"
+    eslint-config-turbo: "npm:^2.0.4"
+  languageName: unknown
+  linkType: soft
+
+"@versioning.app/turbo@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@versioning.app/turbo@workspace:."
+  dependencies:
+    turbo: "npm:^2.0.4"
+  languageName: unknown
+  linkType: soft
+
+"@versioning.app/web@workspace:apps/web":
+  version: 0.0.0-use.local
+  resolution: "@versioning.app/web@workspace:apps/web"
+  dependencies:
+    "@clerk/backend": "npm:^1.2.3"
+    "@clerk/nextjs": "npm:^5.1.5"
+    "@clerk/themes": "npm:^2.1.9"
+    "@fullcalendar/core": "npm:^6.1.14"
+    "@fullcalendar/daygrid": "npm:^6.1.14"
+    "@fullcalendar/interaction": "npm:^6.1.14"
+    "@fullcalendar/react": "npm:^6.1.14"
+    "@hookform/resolvers": "npm:^3.6.0"
+    "@iconify/react": "npm:^5.0.1"
+    "@neondatabase/serverless": "npm:^0.9.3"
+    "@nextui-org/react": "npm:^2.4.1"
+    "@paralleldrive/cuid2": "npm:^2.2.2"
+    "@radix-ui/react-accordion": "npm:^1.1.2"
+    "@radix-ui/react-alert-dialog": "npm:^1.0.5"
+    "@radix-ui/react-checkbox": "npm:^1.0.4"
+    "@radix-ui/react-collapsible": "npm:^1.0.3"
+    "@radix-ui/react-dialog": "npm:^1.0.5"
+    "@radix-ui/react-dropdown-menu": "npm:^2.0.6"
+    "@radix-ui/react-icons": "npm:^1.3.0"
+    "@radix-ui/react-label": "npm:^2.0.2"
+    "@radix-ui/react-menubar": "npm:^1.0.4"
+    "@radix-ui/react-navigation-menu": "npm:^1.1.4"
+    "@radix-ui/react-popover": "npm:^1.0.7"
+    "@radix-ui/react-radio-group": "npm:^1.1.3"
+    "@radix-ui/react-scroll-area": "npm:^1.0.5"
+    "@radix-ui/react-select": "npm:^2.0.0"
+    "@radix-ui/react-separator": "npm:^1.0.3"
+    "@radix-ui/react-slot": "npm:^1.0.2"
+    "@radix-ui/react-switch": "npm:^1.0.3"
+    "@radix-ui/react-tabs": "npm:^1.0.4"
+    "@radix-ui/react-toast": "npm:^1.1.5"
+    "@radix-ui/react-toggle": "npm:^1.0.3"
+    "@radix-ui/react-tooltip": "npm:^1.0.7"
+    "@stripe/stripe-js": "npm:^3.5.0"
+    "@tanstack/react-table": "npm:^8.17.3"
+    "@types/dagre": "npm:^0.7.52"
+    "@types/node": "npm:^20.14.2"
+    "@types/react": "npm:^18.3.3"
+    "@types/react-dom": "npm:^18.3.0"
+    "@typescript-eslint/parser": "npm:^7.13.0"
+    "@upstash/redis": "npm:^1.31.4"
+    "@vercel/analytics": "npm:^1.3.1"
+    "@vercel/speed-insights": "npm:^1.0.12"
+    "@versioning.app/eslint-config": "workspace:^"
+    autoprefixer: "npm:^10.4.19"
+    class-variance-authority: "npm:^0.7.0"
+    clsx: "npm:^2.1.1"
+    cmdk: "npm:^1.0.0"
+    crypto-random-string: "npm:^5.0.0"
+    dagre: "npm:^0.8.5"
+    date-fns: "npm:^3.6.0"
+    dotenv: "npm:^16.4.5"
+    drizzle-kit: "npm:^0.22.7"
+    drizzle-orm: "npm:^0.31.2"
+    drizzle-zod: "npm:^0.5.1"
+    elkjs: "npm:^0.9.3"
+    eslint: "npm:^8.57.0"
+    eslint-config-next: "npm:14.2.4"
+    framer-motion: "npm:^11.2.10"
+    http-status-codes: "npm:^2.3.0"
+    lucide-react: "npm:^0.394.0"
+    nanoid: "npm:^5.0.7"
+    next: "npm:14.2.4"
+    next-safe-action: "npm:^6.2.0"
+    next-themes: "npm:^0.3.0"
+    pino: "npm:^9.2.0"
+    pino-pretty: "npm:^11.2.1"
+    postcss: "npm:^8.4.38"
+    postgres: "npm:^3.4.4"
+    prettier: "npm:^3.3.2"
+    react: "npm:^18.3.1"
+    react-day-picker: "npm:^8.10.1"
+    react-dom: "npm:^18.3.1"
+    react-hook-form: "npm:^7.51.5"
+    react-resizable-panels: "npm:^2.0.19"
+    react-virtuoso: "npm:^4.7.11"
+    reactflow: "npm:^11.11.3"
+    resend: "npm:^3.3.0"
+    server-only: "npm:^0.0.1"
+    slugify: "npm:^1.6.6"
+    sonner: "npm:^1.5.0"
+    stripe: "npm:^15.10.0"
+    tailwind-merge: "npm:^2.3.0"
+    tailwindcss: "npm:^3.4.4"
+    tailwindcss-animate: "npm:^1.0.7"
+    tsx: "npm:^4.15.2"
+    typescript: "npm:^5.4.5"
+    zod: "npm:^3.22.4"
+  languageName: unknown
+  linkType: soft
+
 "abbrev@npm:^2.0.0":
   version: 2.0.0
   resolution: "abbrev@npm:2.0.0"
@@ -6566,6 +6678,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv@npm:16.0.3":
+  version: 16.0.3
+  resolution: "dotenv@npm:16.0.3"
+  checksum: 10c0/109457ac5f9e930ca8066ea33887b6f839ab24d647a7a8b49ddcd1f32662e2c35591c5e5b9819063e430148a664d0927f0cbe60cf9575d89bc524f47ff7e78f0
+  languageName: node
+  linkType: hard
+
 "dotenv@npm:^16.4.5":
   version: 16.4.5
   resolution: "dotenv@npm:16.4.5"
@@ -7166,6 +7285,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-config-turbo@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "eslint-config-turbo@npm:2.0.4"
+  dependencies:
+    eslint-plugin-turbo: "npm:2.0.4"
+  peerDependencies:
+    eslint: ">6.6.0"
+  checksum: 10c0/a984f6177665694dd0df3b9bcbe4f3a67ff572fbd1db183cbfad5c148b2eb36b19283fd8791d924c8f7fa8ee9d073ebfcfab4db43cbb6c27ec6ee3bb3381adcd
+  languageName: node
+  linkType: hard
+
 "eslint-import-resolver-node@npm:^0.3.6, eslint-import-resolver-node@npm:^0.3.9":
   version: 0.3.9
   resolution: "eslint-import-resolver-node@npm:0.3.9"
@@ -7292,6 +7422,17 @@ __metadata:
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
   checksum: 10c0/f9b247861024bafc396c4bd3c9ac946604b3b23077251c98f23602aa22027a0c33a69157fd49564e4ff7f17b3678e5dc366a46c7ec42a09454d7cbce786d5001
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-turbo@npm:2.0.4":
+  version: 2.0.4
+  resolution: "eslint-plugin-turbo@npm:2.0.4"
+  dependencies:
+    dotenv: "npm:16.0.3"
+  peerDependencies:
+    eslint: ">6.6.0"
+  checksum: 10c0/c0d1e85d029f927676a25ba7b6b54de478caf4a2970cc34d1b262cb6c6a808ba6a35d2aeae4ff7d225449006df10b74b1fe22c8ed0e33b717f98485567532973
   languageName: node
   linkType: hard
 
@@ -10766,6 +10907,77 @@ __metadata:
   languageName: node
   linkType: hard
 
+"turbo-darwin-64@npm:2.0.4":
+  version: 2.0.4
+  resolution: "turbo-darwin-64@npm:2.0.4"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"turbo-darwin-arm64@npm:2.0.4":
+  version: 2.0.4
+  resolution: "turbo-darwin-arm64@npm:2.0.4"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"turbo-linux-64@npm:2.0.4":
+  version: 2.0.4
+  resolution: "turbo-linux-64@npm:2.0.4"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"turbo-linux-arm64@npm:2.0.4":
+  version: 2.0.4
+  resolution: "turbo-linux-arm64@npm:2.0.4"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"turbo-windows-64@npm:2.0.4":
+  version: 2.0.4
+  resolution: "turbo-windows-64@npm:2.0.4"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"turbo-windows-arm64@npm:2.0.4":
+  version: 2.0.4
+  resolution: "turbo-windows-arm64@npm:2.0.4"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"turbo@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "turbo@npm:2.0.4"
+  dependencies:
+    turbo-darwin-64: "npm:2.0.4"
+    turbo-darwin-arm64: "npm:2.0.4"
+    turbo-linux-64: "npm:2.0.4"
+    turbo-linux-arm64: "npm:2.0.4"
+    turbo-windows-64: "npm:2.0.4"
+    turbo-windows-arm64: "npm:2.0.4"
+  dependenciesMeta:
+    turbo-darwin-64:
+      optional: true
+    turbo-darwin-arm64:
+      optional: true
+    turbo-linux-64:
+      optional: true
+    turbo-linux-arm64:
+      optional: true
+    turbo-windows-64:
+      optional: true
+    turbo-windows-arm64:
+      optional: true
+  bin:
+    turbo: bin/turbo
+  checksum: 10c0/5d4fbc5497fbc454e127ef3b8bd31bd556663e2db9fdc0e97f1282c4162e90d499a45809340fe9a5195f246c5c0d3aec57ea64b9d892f46f3f5a18a09619c7d9
+  languageName: node
+  linkType: hard
+
 "type-check@npm:^0.4.0, type-check@npm:~0.4.0":
   version: 0.4.0
   resolution: "type-check@npm:0.4.0"
@@ -10997,100 +11209,6 @@ __metadata:
   checksum: 10c0/41a5bdd214df2f6c3ecf8622745e4a366c4adced864bc3c833739791aeeeb1838119af7daed4ba36428114b5c67dcda034a79c882e97e43c03e66a4dd7389942
   languageName: node
   linkType: hard
-
-"versioning.app@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "versioning.app@workspace:."
-  dependencies:
-    "@clerk/backend": "npm:^1.2.3"
-    "@clerk/nextjs": "npm:^5.1.5"
-    "@clerk/themes": "npm:^2.1.9"
-    "@fullcalendar/core": "npm:^6.1.14"
-    "@fullcalendar/daygrid": "npm:^6.1.14"
-    "@fullcalendar/interaction": "npm:^6.1.14"
-    "@fullcalendar/react": "npm:^6.1.14"
-    "@hookform/resolvers": "npm:^3.6.0"
-    "@iconify/react": "npm:^5.0.1"
-    "@neondatabase/serverless": "npm:^0.9.3"
-    "@nextui-org/react": "npm:^2.4.1"
-    "@paralleldrive/cuid2": "npm:^2.2.2"
-    "@radix-ui/react-accordion": "npm:^1.1.2"
-    "@radix-ui/react-alert-dialog": "npm:^1.0.5"
-    "@radix-ui/react-checkbox": "npm:^1.0.4"
-    "@radix-ui/react-collapsible": "npm:^1.0.3"
-    "@radix-ui/react-dialog": "npm:^1.0.5"
-    "@radix-ui/react-dropdown-menu": "npm:^2.0.6"
-    "@radix-ui/react-icons": "npm:^1.3.0"
-    "@radix-ui/react-label": "npm:^2.0.2"
-    "@radix-ui/react-menubar": "npm:^1.0.4"
-    "@radix-ui/react-navigation-menu": "npm:^1.1.4"
-    "@radix-ui/react-popover": "npm:^1.0.7"
-    "@radix-ui/react-radio-group": "npm:^1.1.3"
-    "@radix-ui/react-scroll-area": "npm:^1.0.5"
-    "@radix-ui/react-select": "npm:^2.0.0"
-    "@radix-ui/react-separator": "npm:^1.0.3"
-    "@radix-ui/react-slot": "npm:^1.0.2"
-    "@radix-ui/react-switch": "npm:^1.0.3"
-    "@radix-ui/react-tabs": "npm:^1.0.4"
-    "@radix-ui/react-toast": "npm:^1.1.5"
-    "@radix-ui/react-toggle": "npm:^1.0.3"
-    "@radix-ui/react-tooltip": "npm:^1.0.7"
-    "@stripe/stripe-js": "npm:^3.5.0"
-    "@tanstack/react-table": "npm:^8.17.3"
-    "@types/dagre": "npm:^0.7.52"
-    "@types/node": "npm:^20.14.2"
-    "@types/react": "npm:^18.3.3"
-    "@types/react-dom": "npm:^18.3.0"
-    "@typescript-eslint/parser": "npm:^7.13.0"
-    "@upstash/redis": "npm:^1.31.4"
-    "@vercel/analytics": "npm:^1.3.1"
-    "@vercel/speed-insights": "npm:^1.0.12"
-    autoprefixer: "npm:^10.4.19"
-    class-variance-authority: "npm:^0.7.0"
-    clsx: "npm:^2.1.1"
-    cmdk: "npm:^1.0.0"
-    crypto-random-string: "npm:^5.0.0"
-    dagre: "npm:^0.8.5"
-    date-fns: "npm:^3.6.0"
-    dotenv: "npm:^16.4.5"
-    drizzle-kit: "npm:^0.22.7"
-    drizzle-orm: "npm:^0.31.2"
-    drizzle-zod: "npm:^0.5.1"
-    elkjs: "npm:^0.9.3"
-    eslint: "npm:^8.57.0"
-    eslint-config-next: "npm:14.2.4"
-    framer-motion: "npm:^11.2.10"
-    http-status-codes: "npm:^2.3.0"
-    lucide-react: "npm:^0.394.0"
-    nanoid: "npm:^5.0.7"
-    next: "npm:14.2.4"
-    next-safe-action: "npm:^6.2.0"
-    next-themes: "npm:^0.3.0"
-    pino: "npm:^9.2.0"
-    pino-pretty: "npm:^11.2.1"
-    postcss: "npm:^8.4.38"
-    postgres: "npm:^3.4.4"
-    prettier: "npm:^3.3.2"
-    react: "npm:^18.3.1"
-    react-day-picker: "npm:^8.10.1"
-    react-dom: "npm:^18.3.1"
-    react-hook-form: "npm:^7.51.5"
-    react-resizable-panels: "npm:^2.0.19"
-    react-virtuoso: "npm:^4.7.11"
-    reactflow: "npm:^11.11.3"
-    resend: "npm:^3.3.0"
-    server-only: "npm:^0.0.1"
-    slugify: "npm:^1.6.6"
-    sonner: "npm:^1.5.0"
-    stripe: "npm:^15.10.0"
-    tailwind-merge: "npm:^2.3.0"
-    tailwindcss: "npm:^3.4.4"
-    tailwindcss-animate: "npm:^1.0.7"
-    tsx: "npm:^4.15.2"
-    typescript: "npm:^5.4.5"
-    zod: "npm:^3.22.4"
-  languageName: unknown
-  linkType: soft
 
 "which-boxed-primitive@npm:^1.0.2":
   version: 1.0.2
