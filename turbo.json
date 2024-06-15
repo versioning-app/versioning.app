@@ -23,6 +23,7 @@
     "STRIPE_*",
     "APP_*",
     "AUTH_*",
+    "DATABASE_*",
     "NODE_TLS_REJECT_UNAUTHORIZED"
   ]
 }

@@ -5,7 +5,7 @@ export default {
   schema: ['src/database/schema.ts'],
   out: 'src/database/migrations',
   dbCredentials: {
-    url: process.env.APP_DATABASE_URL!,
+    url: process.env.DATABASE_URL!,
   },
   verbose: true,
 } satisfies Config;
