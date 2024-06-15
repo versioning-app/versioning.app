@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EnvironmentTypeStyles } from './../database/schema';
+import { EnvironmentTypeStyles } from '../database/schema';
 
 export const createEnvironmentTypeSchema = z.object({
   label: z.string().max(32),

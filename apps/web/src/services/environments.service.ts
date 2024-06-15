@@ -5,7 +5,7 @@ import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { eq } from 'drizzle-orm';
 import 'server-only';
-import { NewEnvironment } from './../database/schema';
+import { NewEnvironment } from '../database/schema';
 
 export class EnvironmentsService extends WorkspaceScopedRepository<
   typeof environments

@@ -22,7 +22,7 @@ export class WorkspaceService extends BaseService {
   }
 
   public get shouldCache(): boolean {
-    return process.env.ENABLE_WORKSPACE_CACHE === 'true';
+    return process.env.APP_ENABLE_WORKSPACE_CACHE === 'true';
   }
 
   public async currentWorkspaceId(): Promise<string> {
