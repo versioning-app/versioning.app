@@ -1,26 +1,26 @@
 {
-	"name": "hello-world",
+	"name": "@versioning.app/cli",
 	"version": "0.0.0",
 	"license": "MIT",
 	"bin": {
-		"vapp": "./dist/cli.js"
+		"versioning": "./dist/cli.js"
 	},
 	"type": "module",
 	"engines": {
 		"node": ">=16"
 	},
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch",
-		"test": "prettier --check . && xo && ava"
+		"build": "tsup",
+		"dev": "tsup --watch"
 	},
 	"files": [
 		"dist"
 	],
 	"dependencies": {
+		"epipebomb": "^1.0.0",
 		"ink": "^4.4.1",
 		"pastel": "^2.0.2",
-		"react": "^18.2.0",
+		"react": "^18.3.1",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
@@ -30,9 +30,9 @@
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"ink-testing-library": "^3.0.0",
-		"prettier": "^2.8.8",
+		"prettier": "^3.3.2",
 		"ts-node": "^10.9.2",
 		"tsup": "^8.1.0",
-		"typescript": "^5.0.3"
+		"typescript": "^5.4.5"
 	}
 }

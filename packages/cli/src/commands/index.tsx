@@ -13,7 +13,9 @@ type Props = {
 export default function Index({ options }: Props) {
 	return (
 		<Text>
-			Hi, <Text color="green">{options.name}</Text>
+			<Text color="cyan" bold={true}>
+				versioning.app
+			</Text>
 		</Text>
 	);
 }
