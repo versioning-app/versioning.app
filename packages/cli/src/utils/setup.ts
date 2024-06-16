@@ -1,7 +1,6 @@
-// import { isError } from '@/utils/error';
-// import epipebomb from 'epipebomb';
+import epipebomb from 'epipebomb';
 
-import { isError } from '../utils/error.js';
+import { isError } from '@/utils/error';
 
 const checkCwdExists = () => {
 	try {
@@ -20,7 +19,7 @@ const checkCwdExists = () => {
 export const setup = () => {
 	// Fix for EPIPE errors when piping output to other commands
 	// Taken from vercel cli
-	// epipebomb();
+	epipebomb();
 
 	checkCwdExists();
 };
