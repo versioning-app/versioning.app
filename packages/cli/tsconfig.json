@@ -1,11 +1,33 @@
 {
-	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
-		"moduleResolution": "node16",
-		"module": "Node16",
-		"outDir": "dist"
+		"target": "ESNext",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
+		"outDir": "dist",
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		}
 	},
 	"include": [
-		"src"
+		"src",
+		"globals.d.ts"
+	],
+	"exclude": [
+		"node_modules"
 	]
 }
