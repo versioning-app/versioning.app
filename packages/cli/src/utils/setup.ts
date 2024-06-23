@@ -1,5 +1,6 @@
 import epipebomb from 'epipebomb';
 
+import { ensureConfigExists } from '@/utils/config';
 import { isError } from '@/utils/error';
 
 const checkCwdExists = () => {
@@ -22,4 +23,6 @@ export const setup = () => {
 	epipebomb();
 
 	checkCwdExists();
+
+	ensureConfigExists();
 };
