@@ -1,9 +1,9 @@
-# @versioning.app/
+# @versioning.app/cli
 
 ## Install
 
 ```bash
-$ npm install --global .
+$ npm install -g @versioning.app/cli
 ```
 
 ## CLI
@@ -11,4 +11,10 @@ $ npm install --global .
 ```
 $ versioning --help
 
+```
+
+## Local development
+
+```
+npm install -g .
 ```
