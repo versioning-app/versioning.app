@@ -1,3 +1,4 @@
 {
-  "name": "@versioning.app/errors"
+  "name": "@versioning.app/errors",
+  "private": true
 }
