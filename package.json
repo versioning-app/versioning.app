@@ -11,7 +11,7 @@
     "build": "yarn turbo build",
     "dev": "yarn turbo dev",
     "lint": "yarn turbo lint",
-    "release": "turbo run build lint && changeset version && changeset publish"
+    "release": "turbo run build lint --filter=\"./packages/*\" && changeset version && changeset publish"
   },
   "packageManager": "yarn@4.3.0",
   "devDependencies": {
