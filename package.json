@@ -10,10 +10,15 @@
   "scripts": {
     "build": "yarn turbo build",
     "dev": "yarn turbo dev",
-    "lint": "yarn turbo lint"
+    "lint": "yarn turbo lint",
+    "release": "turbo run build lint test && changeset version && changeset publish"
   },
   "packageManager": "yarn@4.3.0",
   "devDependencies": {
+    "syncpack": "^12.3.2",
     "turbo": "^2.0.4"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.5"
   }
 }
