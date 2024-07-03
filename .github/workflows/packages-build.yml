@@ -4,10 +4,13 @@ on:
   pull_request:
 
 jobs:
-  release:
+  build:
     name: Build Packages
     runs-on: ubuntu-latest
     if: github.repository == 'versioning-app/versioning.app'
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
