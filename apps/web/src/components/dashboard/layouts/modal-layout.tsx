@@ -1,3 +1,4 @@
+'use client';
 import { PageDialog } from '@/components/dashboard/page-dialog';
 import { DialogContent } from '@/components/ui/dialog';
 
