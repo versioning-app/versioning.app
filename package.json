@@ -12,9 +12,7 @@
     "dev": "yarn turbo dev",
     "lint": "yarn turbo lint",
     "prerelease": "turbo run build lint --filter=\"./packages/*\"",
-    "changeset": "changeset",
-    "release:version": "changeset version",
-    "release:publish": "changeset publish"
+    "release:publish": "yarn prerelease && changeset publish"
   },
   "packageManager": "yarn@4.3.1",
   "devDependencies": {
