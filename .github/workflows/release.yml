@@ -5,14 +5,12 @@ on:
     branches:
       - main
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: github.repository == 'versioning-app/versioning.app'
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -28,5 +26,8 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
+        with:
+          publish: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
