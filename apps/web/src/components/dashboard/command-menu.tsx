@@ -19,7 +19,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useClerk } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
-import { DialogProps } from '@radix-ui/react-alert-dialog';
+import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
 import {
   BackpackIcon,
   ExitIcon,
@@ -35,7 +35,7 @@ import { useTheme } from 'next-themes';
 import { useParams, useRouter } from 'next/navigation';
 import * as React from 'react';
 
-export function CommandMenu({ ...props }: DialogProps) {
+export function CommandMenu({ ...props }: AlertDialogProps) {
   const router = useRouter();
   const { slug } = useParams();
 
