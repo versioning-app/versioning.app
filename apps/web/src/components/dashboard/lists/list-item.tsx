@@ -19,6 +19,7 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import { TrashIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -124,6 +125,7 @@ export function List<T extends Listable>({
     delete?: (deleteArgs: { id: string }) => Promise<{ serverError?: string }>;
   };
 }) {
+  const router = useRouter();
   const resourceName = props.resourceName ?? 'resource';
 
   const [isDeleting, setDeleting] = useState(false);
@@ -165,6 +167,8 @@ export function List<T extends Listable>({
     }
 
     toast.success(`${resourceName} deleted`);
+    router.refresh();
+    setDeleting(false);
     return { serverError };
   };
 

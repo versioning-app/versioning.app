@@ -115,6 +115,7 @@ export const deleteReleaseStrategyStepAction = workspaceAction(
     await get(ReleaseStrategyStepService).delete(input.id);
 
     const { slug } = context.workspace;
+
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STRATEGY_STEPS),
     );
