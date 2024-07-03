@@ -9,10 +9,10 @@
   ],
   "scripts": {
     "build": "yarn turbo build",
+    "build:packages": "turbo build --filter='./packages/*'",
     "dev": "yarn turbo dev",
     "lint": "yarn turbo lint",
-    "prerelease": "turbo run build lint --filter=\"./packages/*\"",
-    "release:publish": "yarn prerelease && changeset publish"
+    "release:publish": "changeset publish"
   },
   "packageManager": "yarn@4.3.1",
   "devDependencies": {

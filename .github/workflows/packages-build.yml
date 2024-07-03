@@ -1,13 +1,11 @@
-name: Release
+name: Packages Build
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
 
 jobs:
   release:
-    name: Release
+    name: Build Packages
     runs-on: ubuntu-latest
     if: github.repository == 'versioning-app/versioning.app'
     steps:
@@ -22,8 +20,5 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Ensure packages build successfully
+        run: yarn build:packages
