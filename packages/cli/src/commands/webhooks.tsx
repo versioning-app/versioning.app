@@ -28,7 +28,7 @@ export default function Webhooks({ options }: Props) {
 				setResponseData(res.data);
 			})
 			.catch((err) => {
-				console.error(err);
+				setResponseData({ error: err.message });
 			});
 	}, []);
 
@@ -36,7 +36,7 @@ export default function Webhooks({ options }: Props) {
 		<>
 			<Header />
 			{!response ? <Spinner type="dots4" /> : null}
-			{response ? <Text>{JSON.stringify(response?.data, null, 2)}</Text> : null}
+			{response ? <Text>{JSON.stringify(response, null, 2)}</Text> : null}
 		</>
 	);
 }
