@@ -35,7 +35,7 @@ export default function Webhooks({ options }: Props) {
 	return (
 		<>
 			<Header />
-			{!response ? <Spinner type="dots4" /> : null}
+			{!response ? <Spinner type="dots5" /> : null}
 			{response ? <Text>{JSON.stringify(response, null, 2)}</Text> : null}
 		</>
 	);
