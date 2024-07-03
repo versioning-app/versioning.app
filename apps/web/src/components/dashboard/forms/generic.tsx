@@ -77,7 +77,9 @@ export function InputForm<
       toast.success(`${resource} created`);
       setError(undefined);
       setValues({});
+      console.log('postSubmitLink', postSubmitLink);
       router.push(dashboardRoute(slug, postSubmitLink));
+      router.refresh();
     }
   };
 

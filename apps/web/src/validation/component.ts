@@ -1,5 +1,8 @@
 import { component_versions, release_components } from '@/database/schema';
-import { DEFAULT_OMITTED_FIELDS } from '@/validation/defaults';
+import {
+  DATE_OMITTED_FIELDS,
+  DEFAULT_OMITTED_FIELDS,
+} from '@/validation/defaults';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
@@ -26,9 +29,8 @@ export const deleteComponentVersionSchema = selectComponentVersion.pick({
 const insertReleaseComponent = createInsertSchema(release_components);
 // const selectReleaseComponent = createSelectSchema(release_components);
 
-export const createReleaseComponentSchema = insertReleaseComponent.omit(
-  DEFAULT_OMITTED_FIELDS,
-);
+export const createReleaseComponentSchema =
+  insertReleaseComponent.omit(DATE_OMITTED_FIELDS);
 
 // export const deleteReleaseComponentSchema = selectReleaseComponent.pick({
 //   id: true,

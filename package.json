@@ -13,12 +13,10 @@
     "lint": "yarn turbo lint",
     "release": "turbo run build lint --filter=\"./packages/*\" && changeset version && changeset publish"
   },
-  "packageManager": "yarn@4.3.0",
+  "packageManager": "yarn@4.3.1",
   "devDependencies": {
-    "syncpack": "^12.3.2",
+    "@changesets/cli": "^2.27.7",
+    "syncpack": "^12.3.3",
     "turbo": "^2.0.6"
-  },
-  "dependencies": {
-    "@changesets/cli": "^2.27.5"
   }
 }
