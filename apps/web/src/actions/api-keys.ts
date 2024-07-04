@@ -7,34 +7,32 @@ import { get } from '@/services/service-factory';
 import { createApiKeySchema, deleteApiKeySchema } from '@/validation/api-keys';
 import { revalidatePath } from 'next/cache';
 
-export const createApiKeyAction = workspaceAction(
-  createApiKeySchema,
-  async (input, context) => {
+export const createApiKeyAction = workspaceAction
+  .schema(createApiKeySchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'createApiKeyAction' });
 
-    logger.debug({ input }, 'Creating API Key');
+    logger.debug({ parsedInput }, 'Creating API Key');
 
-    const resource = await get(ApiKeysService).create(input);
+    const resource = await get(ApiKeysService).create(parsedInput);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_API_KEYS));
 
     return { resource, success: true };
-  },
-);
+  });
 
-export const deleteApiKeyAction = workspaceAction(
-  deleteApiKeySchema,
-  async (input, context) => {
+export const deleteApiKeyAction = workspaceAction
+  .schema(deleteApiKeySchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'deleteApiKeyAction' });
 
-    logger.debug({ input }, 'Deleting API Key');
+    logger.debug({ parsedInput }, 'Deleting API Key');
 
-    await get(ApiKeysService).delete(input.id);
+    await get(ApiKeysService).delete(parsedInput.id);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_API_KEYS));
 
     return { success: true };
-  },
-);
+  });
