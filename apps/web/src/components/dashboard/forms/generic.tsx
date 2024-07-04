@@ -6,6 +6,7 @@ import { NavigationItem, dashboardRoute } from '@/config/navigation';
 import { parseServerError } from '@/lib/actions/parse-server-error';
 import { AppErrorJson } from '@/lib/error/app.error';
 import { Loader2 } from 'lucide-react';
+import { SafeActionFn } from 'next-safe-action';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -34,7 +35,7 @@ export function InputForm<
   fieldConfig,
 }: {
   schema: Schema;
-  action: ActionType;
+  action: SafeActionFn<any, Schema, any, any, any, any>;
   resource?: string;
   postSubmitLink: NavigationItem;
   fieldConfig?: FieldConfig<z.infer<Schema>>;
@@ -52,7 +53,7 @@ export function InputForm<
       closeButton: false,
     });
 
-    const { data, serverError } = await action(values);
+    const { data, serverError } = (await action(values)) ?? {};
 
     toast.dismiss(loadingToast);
     setSubmitting(false);
