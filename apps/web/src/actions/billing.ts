@@ -20,9 +20,9 @@ export const createBillingPortalSession = async () => {
   redirect(url);
 };
 
-export const createCheckoutSession = workspaceAction(
-  createCheckoutSessionSchema,
-  async ({ priceId }) => {
+export const createCheckoutSession = workspaceAction
+  .schema(createCheckoutSessionSchema)
+  .action(async ({ parsedInput: { priceId } }) => {
     const logger = serverLogger({ name: 'createCheckoutSession' });
 
     logger.debug({ priceId }, 'Creating checkout session');
@@ -39,5 +39,4 @@ export const createCheckoutSession = workspaceAction(
     }
 
     redirect(session.url);
-  },
-);
+  });

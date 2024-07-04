@@ -18,6 +18,7 @@ import {
 } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { TrashIcon } from 'lucide-react';
+import { SafeActionFn, SafeActionResult } from 'next-safe-action';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -122,7 +123,7 @@ export function List<T extends Listable>({
   resources?: T[];
   resourceName?: string;
   actions?: {
-    delete?: (deleteArgs: { id: string }) => Promise<{ serverError?: string }>;
+    delete?: SafeActionFn<any, any, any, any, any, any>;
   };
 }) {
   const router = useRouter();
@@ -145,7 +146,7 @@ export function List<T extends Listable>({
       closeButton: false,
     });
 
-    const { serverError } = await actions.delete({ id });
+    const { serverError } = (await actions.delete({ id })) ?? {};
     toast.dismiss(loadingToast);
 
     if (serverError) {
