@@ -38,7 +38,7 @@ export function ChangeSlugForm() {
     );
 
     const { data: updatedWorkspace, serverError } =
-      await changeSlugAction(values);
+      (await changeSlugAction(values)) ?? {};
 
     toast.dismiss(loadingToast);
     setSubmitting(false);

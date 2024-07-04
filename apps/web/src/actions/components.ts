@@ -15,88 +15,83 @@ import {
 } from '@/validation/component';
 import { revalidatePath } from 'next/cache';
 
-export const createComponentAction = workspaceAction(
-  createComponentSchema,
-  async (input, context) => {
+export const createComponentAction = workspaceAction
+  .schema(createComponentSchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'createComponentAction' });
 
-    logger.debug({ input }, 'Creating component');
+    logger.debug({ parsedInput }, 'Creating component');
 
-    const resource = await get(ComponentsService).create(input);
+    const resource = await get(ComponentsService).create(parsedInput);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
 
     return { resource, success: true };
-  },
-);
+  });
 
-export const deleteComponentAction = workspaceAction(
-  deleteComponentSchema,
-  async (input, context) => {
+export const deleteComponentAction = workspaceAction
+  .schema(deleteComponentSchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'deleteComponentAction' });
 
-    logger.debug({ input }, 'Deleting component');
+    logger.debug({ parsedInput }, 'Deleting component');
 
-    await get(ComponentsService).delete(input.id);
+    await get(ComponentsService).delete(parsedInput.id);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
 
     return { success: true };
-  },
-);
+  });
 
-export const createComponentVersionAction = workspaceAction(
-  createComponentVersionSchema,
-  async (input, context) => {
+export const createComponentVersionAction = workspaceAction
+  .schema(createComponentVersionSchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'createComponentVersionAction' });
 
-    logger.debug({ input }, 'Creating component version');
+    logger.debug({ parsedInput }, 'Creating component version');
 
-    const resource = await get(ComponentVersionService).create(input);
+    const resource = await get(ComponentVersionService).create(parsedInput);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_COMPONENT_VERSIONS),
     );
 
     return { resource, success: true };
-  },
-);
+  });
 
-export const deleteComponentVersionAction = workspaceAction(
-  deleteComponentVersionSchema,
-  async (input, context) => {
+export const deleteComponentVersionAction = workspaceAction
+  .schema(deleteComponentVersionSchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'deleteComponentVersionAction' });
 
-    logger.debug({ input }, 'Deleting component version');
+    logger.debug({ parsedInput }, 'Deleting component version');
 
-    await get(ComponentVersionService).delete(input.id);
+    await get(ComponentVersionService).delete(parsedInput.id);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_COMPONENT_VERSIONS),
     );
 
     return { success: true };
-  },
-);
+  });
 
-export const createReleaseComponentAction = workspaceAction(
-  createReleaseComponentSchema,
-  async (input, context) => {
+export const createReleaseComponentAction = workspaceAction
+  .schema(createReleaseComponentSchema)
+  .action(async ({ parsedInput, ctx }) => {
     const logger = serverLogger({ name: 'createReleaseComponentAction' });
 
-    logger.debug({ input }, 'Creating component version');
+    logger.debug({ parsedInput }, 'Creating component version');
 
-    const resource = await get(ReleaseComponentService).create(input);
+    const resource = await get(ReleaseComponentService).create(parsedInput);
 
-    const { slug } = context.workspace;
+    const { slug } = ctx.workspace;
     revalidatePath(
       dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_COMPONENTS),
     );
 
     return { resource, success: true };
-  },
-);
+  });

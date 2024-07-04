@@ -5,9 +5,9 @@ import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { changeSlugSchema } from '@/validation/workspace';
 
-export const changeSlugAction = workspaceAction(
-  changeSlugSchema,
-  async ({ slug }) => {
+export const changeSlugAction = workspaceAction
+  .schema(changeSlugSchema)
+  .action(async ({ parsedInput: { slug } }) => {
     const logger = serverLogger({ name: 'changeSlugAction' });
 
     logger.debug({ changeSlugAction }, 'Attempting to change slug');
@@ -18,5 +18,4 @@ export const changeSlugAction = workspaceAction(
     logger.debug({ updated }, 'Slug changed successfully');
 
     return updated;
-  },
-);
+  });
