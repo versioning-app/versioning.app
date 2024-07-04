@@ -33,16 +33,7 @@ export const action = createSafeActionClient({
   handleReturnedServerError,
 });
 
-export const workspaceAction = createSafeActionClient({
-  middleware: async () => {
-    const workspace = await get(WorkspaceService).currentWorkspace();
-
-    if (!workspace) {
-      throw new AppError('No workspace found', ErrorCodes.WORKSPACE_NOT_FOUND);
-    }
-
-    return { workspace };
-  },
+export const actionClient = createSafeActionClient({
   handleServerErrorLog: (e) => {
     const logger = serverLogger({ name: 'workspaceAction' });
     const { message, ...errorMeta } =
@@ -52,20 +43,12 @@ export const workspaceAction = createSafeActionClient({
   handleReturnedServerError,
 });
 
-// export const authAction = createSafeActionClient({
-//   // You can provide a middleware function. In this case, context is used
-//   // for (fake) auth purposes.
-//   middleware(parsedInput) {
-//     const userId = randomUUID();
+export const workspaceAction = actionClient.use(async ({ next, ctx }) => {
+  const workspace = await get(WorkspaceService).currentWorkspace();
 
-//     console.log(
-//       'HELLO FROM ACTION MIDDLEWARE, USER ID:',
-//       userId,
-//       'PARSED INPUT:',
-//       parsedInput
-//     );
+  if (!workspace) {
+    throw new AppError('No workspace found', ErrorCodes.WORKSPACE_NOT_FOUND);
+  }
 
-//     return userId;
-//   },
-//   handleReturnedServerError,
-// });
+  return next({ ctx: { workspace } });
+});
