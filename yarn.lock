@@ -369,9 +369,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/nextjs@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "@clerk/nextjs@npm:5.2.1"
+"@clerk/nextjs@npm:^5.2.2":
+  version: 5.2.2
+  resolution: "@clerk/nextjs@npm:5.2.2"
   dependencies:
     "@clerk/backend": "npm:1.3.0"
     "@clerk/clerk-react": "npm:5.2.7"
@@ -384,7 +384,7 @@ __metadata:
     next: ^13.5.4 || ^14.0.3 || >=15.0.0-rc
     react: ">=18 || >=19.0.0-beta"
     react-dom: ">=18 || >=19.0.0-beta"
-  checksum: 10c0/fd5405a374d0edcf2610aa9701f05e2aef068cf107e9a44689a1318ccda9e69c974107e6504d6356aa2fc792bd784058469f15c4b0ea9272b44741cf7371dffb
+  checksum: 10c0/b25bb78f77881dc54abf5d2fec9fd6b33cae09b6d9a28cd8058076030d73f1b19716cf98aaf6a97e69395c4b70e0014065564e54544695e9c6acd0ad0de9e29b
   languageName: node
   linkType: hard
 
@@ -434,63 +434,6 @@ __metadata:
   dependencies:
     "@jridgewell/trace-mapping": "npm:0.3.9"
   checksum: 10c0/05c5368c13b662ee4c122c7bfbe5dc0b613416672a829f3e78bc49a357a197e0218d6e74e7c66cfcd04e15a179acab080bd3c69658c9fbefd0e1ccd950a07fc6
-  languageName: node
-  linkType: hard
-
-"@decs/typeschema@npm:^0.12.2":
-  version: 0.12.2
-  resolution: "@decs/typeschema@npm:0.12.2"
-  peerDependencies:
-    "@deepkit/type": ^1.0.1-alpha.113
-    "@effect/schema": ^0.60.6
-    "@sinclair/typebox": ^0.32.11
-    ajv: ^8.12.0
-    arktype: ^1.0.29-alpha
-    effect: ^2.1.2
-    fp-ts: ^2.16.2
-    io-ts: ^2.2.21
-    joi: ^17.12.0
-    ow: ^0.28.2
-    runtypes: ^6.7.0
-    superstruct: ^1.0.3
-    valibot: ^0.26.0
-    vite: ^5.0.12
-    yup: ^1.3.3
-    zod: ^3.22.4
-  peerDependenciesMeta:
-    "@deepkit/type":
-      optional: true
-    "@effect/schema":
-      optional: true
-    "@sinclair/typebox":
-      optional: true
-    ajv:
-      optional: true
-    arktype:
-      optional: true
-    effect:
-      optional: true
-    fp-ts:
-      optional: true
-    io-ts:
-      optional: true
-    joi:
-      optional: true
-    ow:
-      optional: true
-    runtypes:
-      optional: true
-    superstruct:
-      optional: true
-    valibot:
-      optional: true
-    vite:
-      optional: true
-    yup:
-      optional: true
-    zod:
-      optional: true
-  checksum: 10c0/b377dd1202947c38ccdefa4cb7e9df26978208feb13c5977a98977ea9d0837f2bd87094029f693aa850c5693eac3569d26895336fbe0704b4a49326e290dd7b4
   languageName: node
   linkType: hard
 
@@ -6073,6 +6016,103 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typeschema/core@npm:0.13.2":
+  version: 0.13.2
+  resolution: "@typeschema/core@npm:0.13.2"
+  peerDependencies:
+    "@types/json-schema": ^7.0.15
+  peerDependenciesMeta:
+    "@types/json-schema":
+      optional: true
+  checksum: 10c0/143cc3b77bf6097107a7c43ec11d390e8000fb16c70d85fcbe928cc5ddc8ab3e2f831aae802014795ae7c4600f447a463d35fb23aa2c1709109e24f7ba00e3bf
+  languageName: node
+  linkType: hard
+
+"@typeschema/main@npm:^0.13.10":
+  version: 0.13.10
+  resolution: "@typeschema/main@npm:0.13.10"
+  dependencies:
+    "@typeschema/core": "npm:0.13.2"
+  peerDependencies:
+    "@typeschema/arktype": 0.13.2
+    "@typeschema/class-validator": 0.1.2
+    "@typeschema/deepkit": 0.13.4
+    "@typeschema/effect": 0.13.4
+    "@typeschema/fastest-validator": 0.1.0
+    "@typeschema/function": 0.13.2
+    "@typeschema/io-ts": 0.13.3
+    "@typeschema/joi": 0.13.3
+    "@typeschema/json": 0.13.3
+    "@typeschema/ow": 0.13.3
+    "@typeschema/runtypes": 0.13.2
+    "@typeschema/superstruct": 0.13.2
+    "@typeschema/suretype": 0.1.0
+    "@typeschema/typebox": 0.13.4
+    "@typeschema/valibot": 0.13.5
+    "@typeschema/valita": 0.1.0
+    "@typeschema/vine": 0.1.0
+    "@typeschema/yup": 0.13.3
+    "@typeschema/zod": 0.13.3
+  peerDependenciesMeta:
+    "@typeschema/arktype":
+      optional: true
+    "@typeschema/class-validator":
+      optional: true
+    "@typeschema/deepkit":
+      optional: true
+    "@typeschema/effect":
+      optional: true
+    "@typeschema/fastest-validator":
+      optional: true
+    "@typeschema/function":
+      optional: true
+    "@typeschema/io-ts":
+      optional: true
+    "@typeschema/joi":
+      optional: true
+    "@typeschema/json":
+      optional: true
+    "@typeschema/ow":
+      optional: true
+    "@typeschema/runtypes":
+      optional: true
+    "@typeschema/superstruct":
+      optional: true
+    "@typeschema/suretype":
+      optional: true
+    "@typeschema/typebox":
+      optional: true
+    "@typeschema/valibot":
+      optional: true
+    "@typeschema/valita":
+      optional: true
+    "@typeschema/vine":
+      optional: true
+    "@typeschema/yup":
+      optional: true
+    "@typeschema/zod":
+      optional: true
+  checksum: 10c0/967da5a0d0e2f0a12b2f3016a1e02596820ff47d3eed61dfee32ae7a7913263029a8c339450ebee16c6b6fc330757c06e6d15b7fb681e9de608080e39b525849
+  languageName: node
+  linkType: hard
+
+"@typeschema/zod@npm:^0.13.3":
+  version: 0.13.3
+  resolution: "@typeschema/zod@npm:0.13.3"
+  dependencies:
+    "@typeschema/core": "npm:0.13.2"
+  peerDependencies:
+    zod: ^3.22.4
+    zod-to-json-schema: ^3.22.4
+  peerDependenciesMeta:
+    zod:
+      optional: true
+    zod-to-json-schema:
+      optional: true
+  checksum: 10c0/8da6ba345dbc3d08658b140da25d4eb74393ddbb09aa9ea92ddf03787022b350cb4e3e2787eb3aa4afa90d98781d8b02a821872cde87e71f9fcee71f363de9ce
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/parser@npm:^5.4.2 || ^6.0.0 || 7.0.0 - 7.2.0":
   version: 7.2.0
   resolution: "@typescript-eslint/parser@npm:7.2.0"
@@ -6208,12 +6248,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upstash/redis@npm:^1.31.6":
-  version: 1.31.6
-  resolution: "@upstash/redis@npm:1.31.6"
+"@upstash/redis@npm:^1.32.0":
+  version: 1.32.0
+  resolution: "@upstash/redis@npm:1.32.0"
   dependencies:
     crypto-js: "npm:^4.2.0"
-  checksum: 10c0/46b97fda0fc5bca1ea86ad6b8bc03d07165ecdb885ec0c151a1bdc685a8234d418c685ffcb1d897414189d784ec18dc1c233d2d2db42ef40309d9727f2855ec3
+  checksum: 10c0/1644d18e7f7a89a149715d5ce64c067e6a8f39f8ae0cceb49ca4469564f6c2f987110b2bfdd39f52bd7ba301e822dd859606a7e5916026b1bce555204b5267eb
   languageName: node
   linkType: hard
 
@@ -6324,7 +6364,7 @@ __metadata:
   resolution: "@versioning.app/web@workspace:apps/web"
   dependencies:
     "@clerk/backend": "npm:^1.3.0"
-    "@clerk/nextjs": "npm:^5.2.1"
+    "@clerk/nextjs": "npm:^5.2.2"
     "@clerk/themes": "npm:2.1.11"
     "@fullcalendar/core": "npm:^6.1.14"
     "@fullcalendar/daygrid": "npm:^6.1.14"
@@ -6363,7 +6403,7 @@ __metadata:
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@typescript-eslint/parser": "npm:^7.15.0"
-    "@upstash/redis": "npm:^1.31.6"
+    "@upstash/redis": "npm:^1.32.0"
     "@vercel/analytics": "npm:^1.3.1"
     "@vercel/speed-insights": "npm:^1.0.12"
     "@versioning.app/eslint-config": "npm:0.0.0"
@@ -6375,18 +6415,18 @@ __metadata:
     dagre: "npm:^0.8.5"
     date-fns: "npm:^3.6.0"
     dotenv: "npm:^16.4.5"
-    drizzle-kit: "npm:^0.22.7"
+    drizzle-kit: "npm:^0.22.8"
     drizzle-orm: "npm:^0.31.2"
     drizzle-zod: "npm:^0.5.1"
     elkjs: "npm:^0.9.3"
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:^14.2.4"
-    framer-motion: "npm:^11.2.12"
+    framer-motion: "npm:^11.2.13"
     http-status-codes: "npm:^2.3.0"
     lucide-react: "npm:^0.400.0"
     nanoid: "npm:^5.0.7"
     next: "npm:14.2.4"
-    next-safe-action: "npm:^6.2.0"
+    next-safe-action: "npm:^7.1.3"
     next-themes: "npm:^0.3.0"
     pino: "npm:^9.2.0"
     pino-pretty: "npm:^11.2.1"
@@ -7895,16 +7935,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.22.7":
-  version: 0.22.7
-  resolution: "drizzle-kit@npm:0.22.7"
+"drizzle-kit@npm:^0.22.8":
+  version: 0.22.8
+  resolution: "drizzle-kit@npm:0.22.8"
   dependencies:
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
     esbuild: "npm:^0.19.7"
     esbuild-register: "npm:^3.5.0"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/535d22abc657b78438124770210edec5e9d820c8fe07e61aba45ce754a6be2f63ae0328c4daf37884b981d9aea3889b3f0566be7f67290da6257383c07fd6fcc
+  checksum: 10c0/e3bbda283de8d3985644d771fe773fcee3f31dd485cb3d32af077c52a088580921fcaae3f7b383279f8799b223d74701ebc4866b6e4952c8c813cd0cb5f80908
   languageName: node
   linkType: hard
 
@@ -9247,9 +9287,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^11.2.12":
-  version: 11.2.12
-  resolution: "framer-motion@npm:11.2.12"
+"framer-motion@npm:^11.2.13":
+  version: 11.2.13
+  resolution: "framer-motion@npm:11.2.13"
   dependencies:
     tslib: "npm:^2.4.0"
   peerDependencies:
@@ -9263,7 +9303,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10c0/a0f4460d2f135742389cf616968314fabee75ad9740fcb62a1c414deee8ade12ac19f4df3e399b819ce2337b9e76fe5a5363787decc60375477f5d23304f73f4
+  checksum: 10c0/f3f232e7208727145443b59b909841b37649409910c2e49cdaebae760215bbca57820530ecbae015791b11dd5d7b944ee8f1a6982d511e2e9a187f76ef30a7fd
   languageName: node
   linkType: hard
 
@@ -11257,19 +11297,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-safe-action@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "next-safe-action@npm:6.2.0"
+"next-safe-action@npm:^7.1.3":
+  version: 7.1.3
+  resolution: "next-safe-action@npm:7.1.3"
   dependencies:
-    "@decs/typeschema": "npm:^0.12.2"
-    zod: "npm:^3.22.4"
+    "@typeschema/main": "npm:^0.13.10"
+    "@typeschema/zod": "npm:^0.13.3"
   peerDependencies:
     next: ">= 14.0.0"
     react: ">= 18.2.0"
-  dependenciesMeta:
+    react-dom: ">= 18.2.0"
+    zod: ">= 3.0.0"
+  peerDependenciesMeta:
     zod:
       optional: true
-  checksum: 10c0/d6d10e398acea886f4399801f3eaae8095f0378f9af6cc05cb4cb033863afb82811a32db2700a8b3e260e412d420f5635b18e3ee5b2512db01b9c7c74e9e8be7
+  checksum: 10c0/5cb58b8beb56ee3dfd8a6cb219301f942d92ba3e48d3f54e332647b010d72bbc4465484d69a0611e575f0a49ef70e0fd57b8be72e853dd21527fdc68aaac6d78
   languageName: node
   linkType: hard
 
@@ -14752,13 +14794,6 @@ __metadata:
   peerDependencies:
     zod: ^3.18.0
   checksum: 10c0/b05d74900fa840e35abb66e0b0f90bd0175bcf8bf0bf9cea7de1383c9a35b75f870951a529cfc2045f2629f00b9ce1b30745b0e4689fd198743d6da91b321a58
-  languageName: node
-  linkType: hard
-
-"zod@npm:^3.22.4":
-  version: 3.22.4
-  resolution: "zod@npm:3.22.4"
-  checksum: 10c0/7578ab283dac0eee66a0ad0fc4a7f28c43e6745aadb3a529f59a4b851aa10872b3890398b3160f257f4b6817b4ce643debdda4fb21a2c040adda7862cab0a587
   languageName: node
   linkType: hard
 
