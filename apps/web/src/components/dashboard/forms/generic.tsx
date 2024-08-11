@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 export function InputForm<
-  Schema extends z.ZodObject<any, any> = z.ZodObject<any, any>,
+  Schema extends z.AnyZodObject,
   ActionType extends (input: z.infer<Schema>) => Promise<{
     data?: ({ success: boolean } & { [key: string]: unknown }) | null;
     serverError?: string;
@@ -53,7 +53,8 @@ export function InputForm<
       closeButton: false,
     });
 
-    const { data, serverError } = (await action(values)) ?? {};
+    // TODO: fix typing here
+    const { data, serverError } = (await action(values as any)) ?? {};
 
     toast.dismiss(loadingToast);
     setSubmitting(false);
@@ -74,6 +75,7 @@ export function InputForm<
       return;
     }
 
+    // TODO: improve typing here of data
     if (data?.success) {
       toast.success(`${resource} created`);
       setError(undefined);
