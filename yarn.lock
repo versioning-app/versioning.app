@@ -6337,7 +6337,7 @@ __metadata:
     postgres: "npm:^3.4.4"
     prettier: "npm:^3.3.3"
     react: "npm:^18.3.1"
-    react-day-picker: "npm:^9.0.8"
+    react-day-picker: "npm:^8.10.1"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.52.2"
     react-resizable-panels: "npm:^2.0.23"
@@ -12383,14 +12383,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:^9.0.8":
-  version: 9.0.8
-  resolution: "react-day-picker@npm:9.0.8"
-  dependencies:
-    date-fns: "npm:^3.6.0"
+"react-day-picker@npm:^8.10.1":
+  version: 8.10.1
+  resolution: "react-day-picker@npm:8.10.1"
   peerDependencies:
-    react: ">=16.8.0"
-  checksum: 10c0/b6f83ab496678ad1aeea52fa94ec413310de8c5512a88d6b4b3bad00260090550d3437b389576ed021033cc99898708d35a30583278b7ea12617ea47cfeebf84
+    date-fns: ^2.28.0 || ^3.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/a0ff28c4b61b3882e6a825b19e5679e2fdf3256cf1be8eb0a0c028949815c1ae5a6561474c2c19d231c010c8e0e0b654d3a322610881e0655abca05a2e03d9df
   languageName: node
   linkType: hard
 
