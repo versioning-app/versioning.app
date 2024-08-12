@@ -1,6 +1,8 @@
 export const Navigation = {
   HOME: '/home',
   PRICING: '/pricing',
+  PRIVACY: '/privacy',
+  COOKIES: '/cookies',
   // Requires authentication, if not will redirect to HOME
   DASHBOARD_ROOT: '/',
   DASHBOARD_COMPONENTS: '/components',
