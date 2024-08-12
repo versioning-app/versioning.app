@@ -25,6 +25,7 @@
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
+    "@hcaptcha/react-hcaptcha": "^1.10.3",
     "@hookform/resolvers": "^3.9.0",
     "@neondatabase/serverless": "^0.9.4",
     "@nextui-org/react": "^2.4.6",
@@ -66,6 +67,7 @@
     "drizzle-zod": "^0.5.1",
     "elkjs": "^0.9.3",
     "framer-motion": "^11.3.24",
+    "hcaptcha": "^0.2.0",
     "http-status-codes": "^2.3.0",
     "lucide-react": "^0.427.0",
     "nanoid": "^5.0.7",
@@ -92,6 +94,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@hcaptcha/types": "^1.0.4",
     "@iconify/react": "^5.0.2",
     "@types/dagre": "^0.7.52",
     "@types/node": "^20.14.15",
