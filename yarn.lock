@@ -67,6 +67,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.17.9":
+  version: 7.25.0
+  resolution: "@babel/runtime@npm:7.25.0"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/bd3faf246170826cef2071a94d7b47b49d532351360ecd17722d03f6713fd93a3eb3dbd9518faa778d5e8ccad7392a7a604e56bd37aaad3f3aa68d619ccd983d
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.20.1, @babel/runtime@npm:^7.5.5":
   version: 7.24.7
   resolution: "@babel/runtime@npm:7.24.7"
@@ -1114,6 +1123,33 @@ __metadata:
     react: ^16.7.0 || ^17 || ^18 || ^19
     react-dom: ^16.7.0 || ^17 || ^18 || ^19
   checksum: 10c0/8185159c2fa02b31012b84c19f340b835383858d04079bcfb5ccbd1967116d862dbdb863762d99c374433a5364873727fc6f9d7356b2b1d1866ae5d50819ff6e
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/loader@npm:^1.2.1":
+  version: 1.2.4
+  resolution: "@hcaptcha/loader@npm:1.2.4"
+  checksum: 10c0/1c9d26dc159f0c5b518c74082439122d3ff97ca304dfeb9a6443f6ca88496827c28080e58e0420ee1e9800af8e798bd0f94a8e373c89643aba6aede1f97b88b3
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/react-hcaptcha@npm:^1.10.3":
+  version: 1.10.3
+  resolution: "@hcaptcha/react-hcaptcha@npm:1.10.3"
+  dependencies:
+    "@babel/runtime": "npm:^7.17.9"
+    "@hcaptcha/loader": "npm:^1.2.1"
+  peerDependencies:
+    react: ">= 16.3.0"
+    react-dom: ">= 16.3.0"
+  checksum: 10c0/58401bdbeb22a14834494fdb64db0d0d6743820777589fc79c85d03246ac74e7caa2284c469b3da7637f4a4852edd35904e165c09cc060b5323bb8fc7c7439d0
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/types@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@hcaptcha/types@npm:1.0.4"
+  checksum: 10c0/b28f990e5c46a7e9c2e14728820135b3877bddb898fa17e0c2bf1b272c202926a76afec9d1adcf9351f7ae684d34c53b987d53a7a3af6b1fc2b8ea891a99e418
   languageName: node
   linkType: hard
 
@@ -6273,6 +6309,8 @@ __metadata:
     "@fullcalendar/daygrid": "npm:^6.1.15"
     "@fullcalendar/interaction": "npm:^6.1.15"
     "@fullcalendar/react": "npm:^6.1.15"
+    "@hcaptcha/react-hcaptcha": "npm:^1.10.3"
+    "@hcaptcha/types": "npm:^1.0.4"
     "@hookform/resolvers": "npm:^3.9.0"
     "@iconify/react": "npm:^5.0.2"
     "@neondatabase/serverless": "npm:^0.9.4"
@@ -6325,6 +6363,7 @@ __metadata:
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:^14.2.5"
     framer-motion: "npm:^11.3.24"
+    hcaptcha: "npm:^0.2.0"
     http-status-codes: "npm:^2.3.0"
     lucide-react: "npm:^0.427.0"
     nanoid: "npm:^5.0.7"
@@ -9669,6 +9708,13 @@ __metadata:
   dependencies:
     function-bind: "npm:^1.1.2"
   checksum: 10c0/3769d434703b8ac66b209a4cca0737519925bbdb61dd887f93a16372b14694c63ff4e797686d87c90f08168e81082248b9b028bad60d4da9e0d1148766f56eb9
+  languageName: node
+  linkType: hard
+
+"hcaptcha@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "hcaptcha@npm:0.2.0"
+  checksum: 10c0/3927ce723322424c577da5932eb35f4fcd32be4f708840c8b436a49e4ce4f7269dd9f32852b51943d6f8afeac235a06fe69e9cb307a857ea7655418c1b013da7
   languageName: node
   linkType: hard
 

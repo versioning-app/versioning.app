@@ -117,6 +117,16 @@ const TIME_COLUMNS = {
   modifiedAt: timestamp('modified_at').defaultNow().notNull(),
 };
 
+export const leads = pgTable('leads', {
+  id: identifierColumn(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  optedOut: boolean('opted_out').notNull().default(false),
+  ...TIME_COLUMNS,
+});
+
+export type Lead = typeof leads.$inferSelect;
+export type NewLead = typeof leads.$inferInsert;
+
 // -- Tables
 export const workspaces = pgTable('workspaces', {
   id: identifierColumn(),
