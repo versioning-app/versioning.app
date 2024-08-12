@@ -360,11 +360,15 @@ export function Footer() {
               reserved.
             </p>
             <ul className="flex gap-4 mt-4">
-              <li className="hover:underline">
-                <Link href={Navigation.PRIVACY}>Privacy Policy</Link>
+              <li>
+                <UnderlinedLink href={Navigation.PRIVACY}>
+                  Privacy Policy
+                </UnderlinedLink>
               </li>
-              <li className="hover:underline">
-                <Link href={Navigation.COOKIES}>Cookie Policy</Link>
+              <li>
+                <UnderlinedLink href={Navigation.COOKIES}>
+                  Cookie Policy
+                </UnderlinedLink>
               </li>
             </ul>
           </div>
