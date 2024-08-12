@@ -1,3 +1,4 @@
+import { UnderlinedLink } from '@/components/common/underlined-link';
 import React from 'react';
 
 export default function PrivacyPolicy() {
@@ -165,12 +166,9 @@ export default function PrivacyPolicy() {
         </ul>
         <p>
           To exercise these rights, please contact us at{' '}
-          <a
-            href="mailto:privacy@versioning.app"
-            className="text-blue-600 hover:underline"
-          >
+          <UnderlinedLink href="mailto:privacy@versioning.app">
             privacy@versioning.app
-          </a>
+          </UnderlinedLink>
           .
         </p>
       </section>
@@ -184,12 +182,9 @@ export default function PrivacyPolicy() {
           marketing communications. You can opt out of these emails at any time
           by clicking the unsubscribe link in the email or by contacting us
           directly at{' '}
-          <a
-            href="mailto:privacy@versioning.app"
-            className="text-blue-600 hover:underline"
-          >
+          <UnderlinedLink href="mailto:privacy@versioning.app">
             privacy@versioning.app
-          </a>
+          </UnderlinedLink>
           .
         </p>
       </section>
@@ -226,12 +221,9 @@ export default function PrivacyPolicy() {
           versioning.app
           <br />
           Email:{' '}
-          <a
-            href="mailto:privacy@versioning.app"
-            className="text-blue-600 hover:underline"
-          >
+          <UnderlinedLink href="mailto:privacy@versioning.app">
             privacy@versioning.app
-          </a>
+          </UnderlinedLink>
         </address>
       </section>
     </div>
