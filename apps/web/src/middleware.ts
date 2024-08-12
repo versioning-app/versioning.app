@@ -11,6 +11,8 @@ const isPublicRoute = createRouteMatcher([
   '/home',
   '/pricing',
   '/about',
+  '/privacy',
+  '/cookies',
   '/api/billing/webhooks/stripe',
 ]);
 

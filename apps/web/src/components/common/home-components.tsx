@@ -354,6 +354,24 @@ export function Footer() {
               </UnderlinedLink>
             </div>
           </div>
+          <div className="flex flex-col items-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              © {new Date().getFullYear()} {appConfig.name}. All rights
+              reserved.
+            </p>
+            <ul className="flex gap-4 mt-4">
+              <li>
+                <UnderlinedLink href={Navigation.PRIVACY}>
+                  Privacy Policy
+                </UnderlinedLink>
+              </li>
+              <li>
+                <UnderlinedLink href={Navigation.COOKIES}>
+                  Cookie Policy
+                </UnderlinedLink>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </footer>
