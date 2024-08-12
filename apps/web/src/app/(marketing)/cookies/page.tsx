@@ -1,3 +1,4 @@
+import { UnderlinedLink } from '@/components/common/underlined-link';
 import React from 'react';
 
 export default function CookiePolicy() {
@@ -126,12 +127,9 @@ export default function CookiePolicy() {
           versioning.app
           <br />
           Email:{' '}
-          <a
-            href="mailto:privacy@versioning.app"
-            className="text-blue-600 hover:underline"
-          >
-            privacy@versioning.app
-          </a>
+          <UnderlinedLink href="mailto:cookies@versioning.app">
+            cookies@versioning.app
+          </UnderlinedLink>
         </address>
       </section>
     </div>
