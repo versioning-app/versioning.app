@@ -25,6 +25,7 @@ export const ErrorCodeTypes = {
   API_KEY_INVALID: 'API_KEY_INVALID',
   WEBHOOK_UNSUPPORTED_TYPE: 'WEBHOOK_UNSUPPORTED_TYPE',
   UNHANDLED_ERROR: 'UNHANDLED_ERROR',
+  INVALID_CAPTCHA: 'INVALID_CAPTCHA',
 } as const;
 
 export type ErrorCode = {
@@ -133,5 +134,9 @@ export const ErrorCodes: Record<keyof typeof ErrorCodeTypes, ErrorCode> = {
   UNHANDLED_ERROR: {
     type: 'UNHANDLED_ERROR',
     statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+  },
+  INVALID_CAPTCHA: {
+    type: 'INVALID_CAPTCHA',
+    statusCode: StatusCodes.BAD_REQUEST,
   },
 } as const;
