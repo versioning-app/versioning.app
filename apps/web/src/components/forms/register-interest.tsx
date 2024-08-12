@@ -95,6 +95,9 @@ export const RegisterInterestForm = ({
 
   return (
     <div className="flex flex-col w-96 text-left">
+      <p className="text-lg mb-4">
+        Register your interest to be the first to know when we launch!
+      </p>
       <AutoForm
         formSchema={registerInterestSchema.pick({ email: true })}
         values={values}
