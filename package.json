@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "yarn turbo build",
+    "db:migrate": "yarn turbo db:migrate",
     "build:packages": "turbo build --filter='./packages/*'",
     "dev": "yarn turbo dev",
     "lint": "yarn turbo lint",
