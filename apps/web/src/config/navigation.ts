@@ -9,6 +9,7 @@ export const Navigation = {
   DASHBOARD_COMPONENTS_NEW: '/components/new',
   DASHBOARD_INTEGRATIONS: '/integrations',
   DASHBOARD_SETTINGS: '/settings',
+  DASHBOARD_PERMISSIONS: '/permissions',
   DASHBOARD_API_KEYS: '/api-keys',
   DASHBOARD_API_KEYS_NEW: '/api-keys/new',
   DASHBOARD_BILLING: '/billing',
