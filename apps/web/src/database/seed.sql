@@ -12,7 +12,31 @@ VALUES
 ('tester_1', 'user_test', 'workspace_1'),
 ('uat_1', 'user_uat', 'workspace_1'),
 ('staging_1', 'user_staging', 'workspace_1'),
-('production_1', 'user_production', 'workspace_1');
+('production_1', 'user_production', 'workspace_1'),
+('test_user', 'user_2bVVLwjXgARWYOoboDHTQZx0830', 'workspace_1');
+
+INSERT INTO roles (id, name, description, workspace_id)
+VALUES
+('admin_role', 'Admin', 'Admin Role', 'workspace_1'),
+('member_role', 'Member', 'Member Role', 'workspace_1');
+
+INSERT into permissions (id, name, description, type, resource, workspace_id)
+VALUES
+('env_perm', 'Environments', 'Environments', 'db', 'environments', 'workspace_1'),
+('release_perm', 'Releases', 'Releases', 'db', 'releases', 'workspace_1'),
+('deployment_perm', 'Deployment', 'Deployment', 'db', 'deployment', 'workspace_1');
+
+INSERT INTO role_permissions (role_id, permission_id)
+VALUES
+('admin_role', 'env_perm');
+
+INSERT INTO member_permissions (member_id, permission_id)
+VALUES
+('test_user', 'release_perm');
+
+INSERT INTO member_roles (member_id, role_id)
+VALUES
+('test_user', 'admin_role');
 
 INSERT INTO approval_groups (id, name, description, workspace_id)
 VALUES
