@@ -58,6 +58,19 @@ export abstract class WorkspaceScopedRepository<
     );
   }
 
+  public async findOneBy(
+    criteria: SQLWrapper,
+    clause?: SQLWrapper,
+  ): Promise<InferSelectModel<M>> {
+    const workspaceId = await this.currentWorkspaceId;
+
+    return super.findOneBy(
+      // @ts-expect-error - Workspace ID is defined
+      and(eq(this.schema.workspaceId, workspaceId), criteria),
+      clause,
+    );
+  }
+
   public async findOne(
     id: M['$inferSelect'][ID],
     clause?: SQLWrapper,

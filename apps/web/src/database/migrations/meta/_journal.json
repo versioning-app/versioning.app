@@ -176,6 +176,20 @@
       "when": 1723446116968,
       "tag": "0024_romantic_speed",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1723644281597,
+      "tag": "0025_daily_loa",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1723646812272,
+      "tag": "0026_medical_shiver_man",
+      "breakpoints": true
     }
   ]
 }
