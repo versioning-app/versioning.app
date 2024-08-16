@@ -1,6 +1,7 @@
 import {
   member_permissions,
   Permission,
+  PermissionAction,
   Permissions,
   permissions,
   role_permissions,
@@ -9,6 +10,9 @@ import { MembersService } from '@/services/members.service';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { inArray, and, eq } from 'drizzle-orm';
 import 'server-only';
+import multimatch from 'multimatch';
+import { AppError } from '@/lib/error/app.error';
+import { ErrorCodes } from '@/lib/error/error-codes';
 
 export class PermissionsService extends WorkspaceScopedRepository<
   typeof permissions
@@ -94,32 +98,112 @@ export class PermissionsService extends WorkspaceScopedRepository<
     return currentPermissions.flat();
   }
 
-  public async hasDbPermission(...resources: string[]) {
-    return this.hasPermission(resources, 'db');
+  public async hasDbPermission(
+    action: PermissionAction,
+    ...resources: string[]
+  ) {
+    return this.hasPermission(resources, action, 'db');
   }
 
-  public async hasApiPermission(...resources: string[]) {
-    return this.hasPermission(resources, 'api');
+  public async hasApiPermission(
+    action: PermissionAction,
+    ...resources: string[]
+  ) {
+    return this.hasPermission(resources, action, 'api');
   }
 
-  public async hasPermission(resources: string[], type: Permissions = 'db') {
+  public parseResourceGlob(resource: string): string[] {
+    if (!resource.startsWith('[') || !resource.endsWith(']')) {
+      return [resource];
+    }
+
+    this.logger.debug({ resource }, 'Parsing resource glob');
+
+    try {
+      const parsed = JSON.parse(resource);
+
+      if (
+        parsed &&
+        Array.isArray(parsed) &&
+        parsed.every((r) => typeof r === 'string')
+      ) {
+        this.logger.debug({ parsed }, 'Parsed resource glob');
+        return parsed;
+      }
+
+      throw new AppError('Invalid resource glob', ErrorCodes.INVALID_REQUEST);
+    } catch (error) {
+      this.logger.error(
+        { error },
+        'Error parsing resource glob, returning empty resource',
+      );
+
+      return [];
+    }
+  }
+
+  public checkPermission(
+    permission: Permission,
+    resource: string,
+    action: PermissionAction,
+    type: Permissions,
+    workspaceId: string,
+  ) {
+    if (
+      permission.workspaceId !== workspaceId ||
+      permission.type !== type
+      // || (permission.action !== action && permission.action !== 'manage')
+    ) {
+      return false;
+    }
+
+    if (!permission.isPattern) {
+      this.logger.debug(
+        { resource },
+        'Determined permission based on resource',
+      );
+      return permission.resource === resource;
+    }
+
+    const parsedGlob = this.parseResourceGlob(permission.resource);
+
+    const matches = multimatch(resource, parsedGlob);
+
+    this.logger.debug(
+      { resource, parsedGlob, matches },
+      'Determined permission based on glob',
+    );
+
+    return matches.length > 0;
+  }
+
+  /**
+   * Check if the user has permission for all resources
+   *
+   * @param resources Resources to check for permissions
+   * @param type type of permission to check
+   * @returns true if the user has permission for all resources
+   */
+  public async hasPermission(
+    resources: string[],
+    action: PermissionAction,
+    type: Permissions = 'db',
+    cachedPermissions?: Permission[],
+  ) {
     let has = false;
 
     // we need to get the member here and also check the roles?
     const workspaceId = await this.currentWorkspaceId;
 
     try {
-      const permissions = await this.getCurrentPermissions();
+      const permissions =
+        cachedPermissions ?? (await this.getCurrentPermissions());
 
-      // check that every resource has permission
-      has = resources.every((resource) => {
-        return permissions.some(
-          (permission) =>
-            permission.workspaceId === workspaceId &&
-            permission.resource === resource &&
-            permission.type === type,
-        );
-      });
+      has = resources.every((resource) =>
+        permissions.some((permission) =>
+          this.checkPermission(permission, resource, action, type, workspaceId),
+        ),
+      );
     } catch (error) {
       this.logger.error({ error }, 'Error trying to determine permissions');
       // Let's force this to have no permission if we fail to calculate as a fail-safe

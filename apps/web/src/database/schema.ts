@@ -30,7 +30,7 @@ export type Permissions = (typeof PermissionType)[number];
 
 export const permission_type = pgEnum('permission_type', PermissionType);
 
-export const PermissionAction = [
+export const PermissionActions = [
   'read',
   'create',
   'update',
@@ -38,9 +38,11 @@ export const PermissionAction = [
   'manage', // All actions
 ] as const;
 
+export type PermissionAction = (typeof PermissionActions)[number];
+
 export const permission_actions = pgEnum(
   'permission_actions',
-  PermissionAction,
+  PermissionActions,
 );
 
 export const ReleaseStepActions = [
@@ -171,6 +173,7 @@ export const permissions = pgTable('permissions', {
   id: identifierColumn(),
   action: permission_actions('action').notNull(),
   resource: varchar('resource', { length: 255 }).notNull(),
+  isPattern: boolean('is_pattern').notNull().default(false),
   type: permission_type('type').notNull().default('db'),
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
