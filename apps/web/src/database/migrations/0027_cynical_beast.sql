@@ -1,0 +1,1 @@
+ALTER TABLE "permissions" ADD COLUMN "is_pattern" boolean DEFAULT false NOT NULL;

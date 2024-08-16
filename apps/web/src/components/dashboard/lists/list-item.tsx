@@ -18,7 +18,7 @@ import {
 } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { TrashIcon } from 'lucide-react';
-import { SafeActionFn, SafeActionResult } from 'next-safe-action';
+import { SafeActionFn } from 'next-safe-action';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
