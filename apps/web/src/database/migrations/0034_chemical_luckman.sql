@@ -1,0 +1,1 @@
+ALTER TABLE "permissions" RENAME COLUMN "modifiable" TO "system";
