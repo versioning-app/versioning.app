@@ -8,7 +8,12 @@ import { camelToHumanReadable } from '@/lib/utils';
 
 export const DataList = ({ data }: { data: any }) => {
   if (!data || data.length === 0) {
-    return <div>No data</div>;
+    return (
+      <div className="bg-accent p-3 rounded-xl">
+        <p className="text-xl">No results found</p>
+        <p>We could not find any results</p>
+      </div>
+    );
   }
 
   return (

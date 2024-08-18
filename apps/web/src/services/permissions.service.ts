@@ -4,25 +4,41 @@ import {
   PermissionAction,
   Permissions,
   permissions,
+  Role,
   role_permissions,
+  Workspace,
 } from '@/database/schema';
-import { MembersService } from '@/services/members.service';
-import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
-import { inArray, and, eq } from 'drizzle-orm';
-import 'server-only';
-import multimatch from 'multimatch';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
+import { CURRENT_PERMISSIONS_VERSION } from '@/permissions/config';
+import { SystemRoles } from '@/permissions/defaults';
+import { MembersService } from '@/services/members.service';
+import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { RolesService } from '@/services/roles.service';
+import { and, eq, inArray } from 'drizzle-orm';
+import multimatch from 'multimatch';
+import 'server-only';
 
 export class PermissionsService extends WorkspaceScopedRepository<
   typeof permissions
 > {
+  private _rolesService: RolesService;
   private readonly membersService: MembersService;
 
   public constructor() {
     super(permissions);
 
     this.membersService = new MembersService();
+  }
+
+  /**
+   * Gets a role service instance (via getter)
+   */
+  private get rolesService() {
+    if (!this._rolesService) {
+      this._rolesService = new RolesService();
+    }
+    return this._rolesService;
   }
 
   public async getPermissionsForRoles(
@@ -195,17 +211,29 @@ export class PermissionsService extends WorkspaceScopedRepository<
       );
     }
 
-    if (
-      permission.workspaceId !== workspaceId ||
-      permission.type !== type ||
-      (permission.action !== action && permission.action !== 'manage')
-    ) {
+    if (permission.workspaceId !== workspaceId) {
       this.logger.warn(
-        { permission, workspaceId, type, action },
-        'Permission does not match criteria',
+        { permission, workspaceId },
+        'Permission does not match current workspace',
       );
       return false;
     }
+
+    if (permission.type !== type) {
+      this.logger.warn(
+        { permission, workspaceId, type },
+        'Permission does not match type',
+      );
+      return false;
+    }
+
+    // if (permission.action !== 'manage' && permission.action !== action) {
+    //   this.logger.warn(
+    //     { permission, workspaceId, type, action },
+    //     'Permission does not match action',
+    //   );
+    //   return false;
+    // }
 
     if (!permission.isPattern) {
       const hasPermission = permission.resource === resource;
@@ -294,5 +322,142 @@ export class PermissionsService extends WorkspaceScopedRepository<
 
       return has;
     }
+  }
+
+  public async findSystemPermissions() {
+    try {
+      return this.findAll(eq(permissions.system, true));
+    } catch (error) {
+      this.logger.warn({ error }, 'No system permissions could be found');
+      return [];
+    }
+  }
+
+  public async create(
+    newPermission: Pick<
+      Permission,
+      'action' | 'resource' | 'scope' | 'isPattern' | 'type'
+    >,
+  ): Promise<Permission> {
+    return super.create(newPermission);
+  }
+
+  public async createSystemPermissions(workspace: Workspace) {
+    // fetch all of the current permissions
+    const systemPermissions = await this.findSystemPermissions();
+
+    const { permissionsVersion } = workspace;
+    const currentPermissionVersion = CURRENT_PERMISSIONS_VERSION;
+
+    if (permissionsVersion === currentPermissionVersion) {
+      this.logger.info(
+        { permissionsVersion, currentPermissionVersion },
+        'Permissions are up to date',
+      );
+      return;
+    }
+
+    // First, let's create the roles
+    const systemRoles = await this.rolesService.createSystemRoles(workspace);
+
+    for (const systemRole of systemRoles) {
+      // Now, for each role that is not deprecated, let's create the permissions
+      const roleConfig = SystemRoles.find(
+        (r) =>
+          r.name === systemRole.name &&
+          (!r.meta.deprecatedIn ||
+            r.meta.deprecatedIn > currentPermissionVersion),
+      );
+
+      if (!roleConfig) {
+        this.logger.warn(
+          { systemRole },
+          'No role config found for system role as it does not exist or is deprecated',
+        );
+        continue;
+      }
+
+      const newRolePermissions = roleConfig.permissions.filter(
+        (permission) =>
+          permission.meta.createdIn > permissionsVersion &&
+          (!permission.meta.deprecatedIn ||
+            permission.meta.deprecatedIn <= permissionsVersion),
+      );
+
+      const createdPermissions: Permission[] = [];
+
+      // create the permission entry
+      for (const permission of newRolePermissions) {
+        this.logger.debug(
+          { permission, role: systemRole },
+          'Creating system permission',
+        );
+
+        createdPermissions.push(
+          await this.create({
+            action: permission.action,
+            resource: permission.isPattern
+              ? JSON.stringify(permission.resource)
+              : permission.resource[0],
+            isPattern: permission.isPattern,
+            scope: permission.scope,
+            type: permission.type,
+          }),
+        );
+
+        this.logger.info(
+          { permission, role: systemRole },
+          'System permission created',
+        );
+      }
+
+      this.logger.info({ createdPermissions }, 'System permissions created');
+
+      // link the permissions to the role
+
+      for (const permission of createdPermissions) {
+        await this.createPermissionForSystemRole(systemRole, permission);
+      }
+
+      this.logger.info(
+        { role: systemRole, createdPermissions },
+        'System permissions linked to role',
+      );
+    }
+  }
+
+  public async createPermissionForSystemRole(
+    role: Role,
+    permission: Permission,
+  ) {
+    const existing = await this.db
+      .select()
+      .from(role_permissions)
+      .where(
+        and(
+          eq(role_permissions.roleId, role.id),
+          eq(role_permissions.permissionId, permission.id),
+        ),
+      )
+      .execute();
+
+    if (existing.length > 0) {
+      this.logger.info(
+        { role, permission },
+        'System permission already exists for role',
+      );
+      return true;
+    }
+
+    await this.db
+      .insert(role_permissions)
+      .values({
+        roleId: role.id,
+        permissionId: permission.id,
+      })
+      .execute();
+
+    this.logger.info({ role, permission }, 'System permission linked to role');
+    return true;
   }
 }
