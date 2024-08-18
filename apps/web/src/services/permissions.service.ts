@@ -95,7 +95,12 @@ export class PermissionsService extends WorkspaceScopedRepository<
     ];
 
     const currentPermissions = await Promise.all(permissionPromises);
-    return currentPermissions.flat();
+
+    const permissions = currentPermissions.flat();
+
+    this.logger.debug({ permissions }, 'Current permissions for user');
+
+    return permissions;
   }
 
   public async hasDbPermission(
@@ -142,6 +147,18 @@ export class PermissionsService extends WorkspaceScopedRepository<
     }
   }
 
+  public getPermissionActionsByType(type: Permissions): PermissionAction[] {
+    if (type === 'db') {
+      return ['read', 'create', 'update', 'delete', 'manage'];
+    }
+
+    if (type === 'api' || type === 'action') {
+      return ['execute'];
+    }
+
+    throw new AppError('Invalid permission type', ErrorCodes.INVALID_REQUEST);
+  }
+
   public checkPermission(
     permission: Permission,
     resource: string,
@@ -149,32 +166,69 @@ export class PermissionsService extends WorkspaceScopedRepository<
     type: Permissions,
     workspaceId: string,
   ) {
+    const allowedActions = this.getPermissionActionsByType(type);
+
+    if (!allowedActions.includes(action)) {
+      this.logger.warn(
+        { action, allowedActions, permissions, permission, type, workspaceId },
+        'Invalid action for permission check',
+      );
+      return false;
+    }
+
+    if (
+      permission.scope === 'workspace' &&
+      workspaceId !== permission.workspaceId
+    ) {
+      this.logger.warn(
+        { permission, workspaceId },
+        'Workspace scoped permission does equal current workspace',
+      );
+      return false;
+    }
+
+    // TODO: add in self scope
+    if (permission.scope !== 'workspace') {
+      throw new AppError(
+        'Self scope not implemented',
+        ErrorCodes.INTERNAL_MISCONFIGURATION,
+      );
+    }
+
     if (
       permission.workspaceId !== workspaceId ||
       permission.type !== type ||
       (permission.action !== action && permission.action !== 'manage')
     ) {
+      this.logger.warn(
+        { permission, workspaceId, type, action },
+        'Permission does not match criteria',
+      );
       return false;
     }
 
     if (!permission.isPattern) {
+      const hasPermission = permission.resource === resource;
       this.logger.debug(
-        { resource },
+        { resource, hasPermission },
         'Determined permission based on resource',
       );
-      return permission.resource === resource;
+
+      return hasPermission;
     }
 
     const parsedGlob = this.parseResourceGlob(permission.resource);
 
-    const matches = multimatch(resource, parsedGlob);
+    const numberOfMatches = multimatch(resource, parsedGlob);
+
+    const hasPermission = numberOfMatches.length > 0;
 
     this.logger.debug(
-      { resource, parsedGlob, matches },
+      { resource, parsedGlob, hasPermission, numberOfMatches },
       'Determined permission based on glob',
     );
 
-    return matches.length > 0;
+    return hasPermission;
   }
 
   /**
@@ -185,32 +239,56 @@ export class PermissionsService extends WorkspaceScopedRepository<
    * @returns true if the user has permission for all resources
    */
   public async hasPermission(
-    resources: string[],
+    resources: string | string[],
     action: PermissionAction,
     type: Permissions = 'db',
     cachedPermissions?: Permission[],
+    scope: 'workspace' | 'self' = 'workspace',
   ) {
+    // TODO: add 'self' scope
+    if (scope !== 'workspace') {
+      throw new AppError(
+        'Self scope not implemented',
+        ErrorCodes.INTERNAL_MISCONFIGURATION,
+      );
+    }
+
     let has = false;
 
     // we need to get the member here and also check the roles?
     const workspaceId = await this.currentWorkspaceId;
 
+    const allResources = Array.isArray(resources) ? resources : [resources];
+
     try {
       const permissions =
         cachedPermissions ?? (await this.getCurrentPermissions());
 
-      has = resources.every((resource) =>
+      if (
+        !permissions ||
+        permissions.length === 0 ||
+        !Array.isArray(permissions)
+      ) {
+        this.logger.warn(
+          { resources, type, permissions, action },
+          'No permissions found for user',
+        );
+        return false;
+      }
+
+      has = allResources.every((resource) =>
         permissions.some((permission) =>
           this.checkPermission(permission, resource, action, type, workspaceId),
         ),
       );
     } catch (error) {
+      console.error(error);
       this.logger.error({ error }, 'Error trying to determine permissions');
       // Let's force this to have no permission if we fail to calculate as a fail-safe
       has = false;
     } finally {
       this.logger.info(
-        { resources, type, has },
+        { resources, type, has, allResources, action },
         'Evaluated permissions for resources',
       );
 
