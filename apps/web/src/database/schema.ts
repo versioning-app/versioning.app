@@ -45,6 +45,12 @@ export const permission_actions = pgEnum(
   PermissionActions,
 );
 
+export const PermissionScopes = ['workspace', 'self'] as const;
+
+export type PermissionScope = (typeof PermissionScopes)[number];
+
+export const permission_scopes = pgEnum('permission_scopes', PermissionScopes);
+
 export const ReleaseStepActions = [
   'prepare',
   'deployment',
@@ -175,6 +181,7 @@ export const permissions = pgTable('permissions', {
   resource: varchar('resource', { length: 255 }).notNull(),
   isPattern: boolean('is_pattern').notNull().default(false),
   type: permission_type('type').notNull().default('db'),
+  scope: permission_scopes('scope').notNull().default('workspace'),
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
