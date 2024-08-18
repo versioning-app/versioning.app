@@ -24,7 +24,7 @@ export const WorkspaceType = ['user', 'organization'] as const;
 
 export const workspace_type = pgEnum('workspace_type', WorkspaceType);
 
-export const PermissionType = ['db', 'api'] as const;
+export const PermissionType = ['db', 'api', 'action'] as const;
 
 export type Permissions = (typeof PermissionType)[number];
 
