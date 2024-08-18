@@ -22,7 +22,7 @@ import 'server-only';
 export class PermissionsService extends WorkspaceScopedRepository<
   typeof permissions
 > {
-  private _rolesService: RolesService;
+  private _rolesService: RolesService | undefined;
   private readonly membersService: MembersService;
 
   public constructor() {
