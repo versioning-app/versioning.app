@@ -151,8 +151,8 @@ export class PermissionsService extends WorkspaceScopedRepository<
   ) {
     if (
       permission.workspaceId !== workspaceId ||
-      permission.type !== type
-      // || (permission.action !== action && permission.action !== 'manage')
+      permission.type !== type ||
+      (permission.action !== action && permission.action !== 'manage')
     ) {
       return false;
     }
