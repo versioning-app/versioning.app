@@ -12,6 +12,12 @@ export const Admin = {
       type: 'db',
       scope: 'workspace',
     },
+    {
+      resource: ['*'],
+      isPattern: true,
+      action: 'manage',
+      type: 'action',
+    },
   ],
   version: 1,
 };

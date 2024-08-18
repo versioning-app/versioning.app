@@ -32,26 +32,31 @@ export default async function Permissions() {
   const buildCheck = async ({
     resource,
     action,
+    scope = 'workspace',
   }: {
     resource: string;
     action: PermissionAction;
+    scope?: 'workspace' | 'self';
   }) => {
     const hasPermission = await permissionsService.hasPermission(
       [resource],
       action,
       'db',
-      currentPermissions,
+      allPermissions,
+      scope,
     );
 
     return {
       resource,
       action,
+      scope,
       hasPermission,
     };
   };
 
   const permsToCheck = [
     buildCheck({ resource: 'leads', action: 'manage' }),
+    buildCheck({ resource: 'workspaces', action: 'manage' }),
     buildCheck({ resource: 'releases', action: 'read' }),
     buildCheck({ resource: 'releases', action: 'create' }),
     buildCheck({ resource: 'releases', action: 'update' }),

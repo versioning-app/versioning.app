@@ -35,7 +35,8 @@ export const PermissionActions = [
   'create',
   'update',
   'delete',
-  'manage', // All actions
+  'manage', // Allow read, create, update & delete
+  'execute', // Only applicable for API and action permissions
 ] as const;
 
 export type PermissionAction = (typeof PermissionActions)[number];
