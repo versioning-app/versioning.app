@@ -6362,6 +6362,7 @@ __metadata:
     elkjs: "npm:^0.9.3"
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:^14.2.5"
+    fast-safe-stringify: "npm:^2.1.1"
     framer-motion: "npm:^11.3.24"
     hcaptcha: "npm:^0.2.0"
     http-status-codes: "npm:^2.3.0"

@@ -1,10 +1,14 @@
 -- Reset data
 TRUNCATE workspaces CASCADE;
 
-INSERT INTO workspaces (id, type, slug, clerk_id) 
-VALUES ('workspace_1', 'organization', 'testing-workspace', 'org_2bVbNW03wQLl3yjNIOZgV1JIovU');
+INSERT INTO workspaces (id, type, slug, clerk_id, permissions_version) 
+VALUES ('workspace_1', 'organization', 'testing-workspace', 'org_2bVbNW03wQLl3yjNIOZgV1JIovU', 0);
 
 -- sync from clerk, when there is a new member for a workspace we should add them here - remove when needed aswell?
+
+INSERT INTO members (id, clerk_id, workspace_id, created_at)
+VALUES 
+('test_user', 'user_2bVVLwjXgARWYOoboDHTQZx0830', 'workspace_1', now() - '1 day'::interval);
 
 INSERT INTO members (id, clerk_id, workspace_id)
 VALUES 
@@ -12,34 +16,34 @@ VALUES
 ('tester_1', 'user_test', 'workspace_1'),
 ('uat_1', 'user_uat', 'workspace_1'),
 ('staging_1', 'user_staging', 'workspace_1'),
-('production_1', 'user_production', 'workspace_1'),
-('test_user', 'user_2bVVLwjXgARWYOoboDHTQZx0830', 'workspace_1');
+('production_1', 'user_production', 'workspace_1');
 
-INSERT INTO roles (id, name, description, workspace_id)
-VALUES
-('admin_role', 'Admin', 'Admin Role', 'workspace_1'),
-('member_role', 'Member', 'Member Role', 'workspace_1');
 
-INSERT into permissions (id, action, type, resource, is_pattern, workspace_id)
-VALUES
-('env_perm', 'manage', 'db', 'environments', false, 'workspace_1'),
-('release_perm', 'manage', 'db', 'releases', false, 'workspace_1'),
-('deployment_perm', 'manage', 'db', 'deployment', false, 'workspace_1'),
-('super_admin', 'manage', 'db', '["*", "!leads"]', true, 'workspace_1'),
-('release_admin_perm', 'manage', 'db', 'release*', true, 'workspace_1'),
-('setup_admin', 'manage', 'db', '{components,deployments,environments,releases}', true, 'workspace_1');
+-- INSERT INTO roles (id, name, description, workspace_id)
+-- VALUES
+-- ('admin_role', 'Admin', 'Admin Role', 'workspace_1'),
+-- ('member_role', 'Member', 'Member Role', 'workspace_1');
 
-INSERT INTO role_permissions (role_id, permission_id)
-VALUES
-('admin_role', 'super_admin');
+-- INSERT into permissions (id, action, type, resource, is_pattern, scope, workspace_id)
+-- VALUES
+-- ('env_perm', 'manage', 'db', 'environments', false, 'workspace', 'workspace_1'),
+-- ('release_perm', 'manage', 'db', 'releases', false, 'workspace', 'workspace_1'),
+-- ('deployment_perm', 'manage', 'db', 'deployment', false, 'workspace', 'workspace_1'),
+-- ('super_admin', 'manage', 'db', '["*", "!leads"]', true, 'workspace', 'workspace_1'),
+-- ('release_admin_perm', 'manage', 'db', 'release*', true, 'workspace', 'workspace_1'),
+-- ('setup_admin', 'manage', 'db', '{components,deployments,environments,releases}', true, 'workspace', 'workspace_1');
 
-INSERT INTO member_permissions (member_id, permission_id)
-VALUES
-('test_user', 'release_perm');
+-- INSERT INTO role_permissions (role_id, permission_id)
+-- VALUES
+-- ('admin_role', 'super_admin');
 
-INSERT INTO member_roles (member_id, role_id)
-VALUES
-('test_user', 'admin_role');
+-- INSERT INTO member_permissions (member_id, permission_id)
+-- VALUES
+-- ('test_user', 'release_perm');
+
+-- INSERT INTO member_roles (member_id, role_id)
+-- VALUES
+-- ('test_user', 'admin_role');
 
 INSERT INTO approval_groups (id, name, description, workspace_id)
 VALUES

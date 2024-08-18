@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -162,6 +163,8 @@ export const workspaces = pgTable('workspaces', {
   slug: varchar('slug', { length: 42 }).notNull().unique(),
   clerkId: varchar('clerk_id', { length: 255 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 255 }),
+  // Default this to 0 - so that we always force it to the latest version on link
+  permissionsVersion: integer('permissions_version').notNull().default(0),
   ...TIME_COLUMNS,
 });
 
@@ -183,6 +186,7 @@ export const permissions = pgTable('permissions', {
   isPattern: boolean('is_pattern').notNull().default(false),
   type: permission_type('type').notNull().default('db'),
   scope: permission_scopes('scope').notNull().default('workspace'),
+  system: boolean('system').notNull().default(false),
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
@@ -194,6 +198,7 @@ export const roles = pgTable('roles', {
   id: identifierColumn(),
   name: varchar('name', { length: 42 }).notNull(),
   description: varchar('description', { length: 255 }),
+  system: boolean('system').notNull().default(false),
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
