@@ -1,0 +1,1 @@
+ALTER TABLE "permissions" ADD COLUMN "scope" "permission_scopes" DEFAULT 'workspace' NOT NULL;

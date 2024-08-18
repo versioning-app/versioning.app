@@ -21,11 +21,12 @@ export const Node = ({ data }: NodeProps) => {
               uppercase: true,
               'text-xxs': true,
               'ml-2': true,
-              'bg-green-700': data?.release_step_status === 'complete',
+              'text-secondary': true,
+              'bg-green-600': data?.release_step_status === 'complete',
               'bg-orange-600':
                 data?.release_step_status === 'pending' ||
                 data?.release_step_status === 'in_progress',
-              'bg-red-700': data?.release_step_status === 'failed',
+              'bg-red-600': data?.release_step_status === 'failed',
               'bg-slate-500': !data?.release_step_status,
             })}
           >
