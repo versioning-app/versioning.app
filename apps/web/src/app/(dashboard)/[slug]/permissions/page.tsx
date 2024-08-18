@@ -52,6 +52,11 @@ export default async function Permissions() {
 
   const permsToCheck = [
     buildCheck({ resource: 'leads', action: 'manage' }),
+    buildCheck({ resource: 'releases', action: 'read' }),
+    buildCheck({ resource: 'releases', action: 'create' }),
+    buildCheck({ resource: 'releases', action: 'update' }),
+    buildCheck({ resource: 'releases', action: 'delete' }),
+    buildCheck({ resource: 'releases', action: 'manage' }),
     buildCheck({ resource: 'members', action: 'manage' }),
     buildCheck({ resource: 'admin', action: 'manage' }),
     buildCheck({ resource: 'releases', action: 'manage' }),

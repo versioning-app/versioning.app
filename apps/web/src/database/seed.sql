@@ -20,15 +20,18 @@ VALUES
 ('admin_role', 'Admin', 'Admin Role', 'workspace_1'),
 ('member_role', 'Member', 'Member Role', 'workspace_1');
 
-INSERT into permissions (id, action, type, resource, workspace_id)
+INSERT into permissions (id, action, type, resource, is_pattern, workspace_id)
 VALUES
-('env_perm', 'manage', 'db', 'environments', 'workspace_1'),
-('release_perm', 'manage', 'db', 'releases', 'workspace_1'),
-('deployment_perm', 'manage', 'db', 'deployment', 'workspace_1');
+('env_perm', 'manage', 'db', 'environments', false, 'workspace_1'),
+('release_perm', 'manage', 'db', 'releases', false, 'workspace_1'),
+('deployment_perm', 'manage', 'db', 'deployment', false, 'workspace_1'),
+('super_admin', 'manage', 'db', '["*", "!leads"]', true, 'workspace_1'),
+('release_admin_perm', 'manage', 'db', 'release*', true, 'workspace_1'),
+('setup_admin', 'manage', 'db', '{components,deployments,environments,releases}', true, 'workspace_1');
 
 INSERT INTO role_permissions (role_id, permission_id)
 VALUES
-('admin_role', 'env_perm');
+('admin_role', 'super_admin');
 
 INSERT INTO member_permissions (member_id, permission_id)
 VALUES
