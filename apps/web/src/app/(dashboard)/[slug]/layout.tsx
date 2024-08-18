@@ -36,6 +36,8 @@ export default async function DashboardLayout({
     return redirect(Navigation.HOME);
   }
 
+  await workspaceService.linkPermissionsToWorkspace(workspace);
+
   if (!slug || slug !== workspace.slug) {
     return redirect(dashboardRoute(workspace.slug));
   }

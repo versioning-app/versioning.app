@@ -6,7 +6,10 @@ import { Workspace, members, workspaces } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
+import { CURRENT_PERMISSIONS_VERSION } from '@/permissions/config';
 import { BaseService } from '@/services/base.service';
+import { PermissionsService } from '@/services/permissions.service';
+import { get } from '@/services/service-factory';
 import { AuthObject } from '@clerk/backend';
 import { SignedInAuthObject } from '@clerk/backend/internal';
 import { auth, clerkClient } from '@clerk/nextjs/server';
@@ -652,6 +655,7 @@ export class WorkspaceService extends BaseService {
   }) {
     const workspace = await this.getWorkspaceById(workspaceId);
 
+    // Do parallel linking
     await Promise.all([
       this.linkWorkspaceMembership({
         workspaceId,
@@ -666,6 +670,26 @@ export class WorkspaceService extends BaseService {
     ]);
 
     return workspace;
+  }
+
+  public async linkPermissionsToWorkspace(workspace: Workspace) {
+    const permissionsService = get(PermissionsService);
+
+    const { permissionsVersion } = workspace;
+
+    if (permissionsVersion === CURRENT_PERMISSIONS_VERSION) {
+      this.logger.debug('Permissions already in sync with workspace');
+      return;
+    }
+
+    this.logger.debug('Linking permissions to workspace');
+
+    await permissionsService.createSystemPermissions(workspace);
+
+    await db
+      .update(workspaces)
+      .set({ permissionsVersion: CURRENT_PERMISSIONS_VERSION })
+      .where(eq(workspaces.id, workspace.id));
   }
 
   public async linkWorkspaceMembership({
