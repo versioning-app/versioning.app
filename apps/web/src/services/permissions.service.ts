@@ -339,7 +339,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
   public async create(
     newPermission: Pick<
       Permission,
-      'action' | 'resource' | 'scope' | 'isPattern' | 'type'
+      'action' | 'resource' | 'scope' | 'isPattern' | 'type' | 'system'
     >,
   ): Promise<Permission> {
     return super.create(newPermission);
@@ -402,6 +402,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
             isPattern: permission.isPattern,
             scope: permission.scope,
             type: permission.type,
+            system: true,
           }),
         );
 

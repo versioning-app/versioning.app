@@ -1,14 +1,18 @@
 import { Logo } from '@/components/common/logo';
 import { MainLayout } from '@/components/dashboard/dashboard';
 import { Sidebar } from '@/components/dashboard/sidebar';
-import { Navigation, dashboardRoute } from '@/config/navigation';
+import {
+  Navigation,
+  dashboardRoute,
+  isNavigationItem,
+} from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
 import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 export const revalidate = 0;
@@ -16,15 +20,18 @@ export const revalidate = 0;
 export default async function DashboardLayout({
   children,
   params: { slug },
+  searchParams,
 }: Readonly<{
   children: React.ReactNode;
   params: { slug: string };
+  searchParams?: URLSearchParams;
 }>) {
   const { userId, orgId } = auth();
 
   if (!userId) {
     return redirect(Navigation.HOME);
   }
+
   const workspaceService = get(WorkspaceService);
 
   const workspace = await workspaceService.currentWorkspace({
@@ -36,10 +43,25 @@ export default async function DashboardLayout({
     return redirect(Navigation.HOME);
   }
 
-  const updated = await workspaceService.linkPermissionsToWorkspace(workspace);
-
-  if (!slug || slug !== workspace.slug || updated) {
+  if (!slug || slug !== workspace.slug) {
     return redirect(dashboardRoute(workspace.slug));
+  }
+
+  const permissionsUpdated =
+    await workspaceService.linkPermissionsToWorkspace(workspace);
+
+  // const returnPath = searchParams?.get('returnPath');
+  // if (returnPath) {
+  //   return redirect(
+  //     dashboardRoute(
+  //       workspace.slug,
+  //       isNavigationItem(returnPath) ? returnPath : Navigation.DASHBOARD_ROOT,
+  //     ),
+  //   );
+  // }
+
+  if (permissionsUpdated) {
+    return redirect('?permissionsUpdated=true', RedirectType.replace);
   }
 
   const layout = cookies().get(`${StorageKeys.COOKIE_STORAGE_PREFIX}:layout`);
