@@ -62,13 +62,22 @@ export class PermissionsService extends WorkspaceScopedRepository<
       )
       .execute();
 
-    return permissions
-      .filter((permission) => {
-        return rolePermissions.some(
-          (rolePermission) => rolePermission.permissionId === permission.id,
+    return rolePermissions
+      .map((rolePermission) => {
+        const permission = permissions.find(
+          (p) => p.id === rolePermission.permissionId,
         );
+
+        if (!permission) {
+          return undefined;
+        }
+
+        return {
+          ...permission,
+          via: 'role',
+        };
       })
-      .map((permission) => ({ ...permission, via: 'role' }));
+      .filter((p) => p !== undefined);
   }
 
   public async getPermissionsForMembers(
@@ -89,13 +98,22 @@ export class PermissionsService extends WorkspaceScopedRepository<
       )
       .execute();
 
-    return permissions
-      .filter((permission) => {
-        return memberPermissions.some(
-          (memberPermission) => memberPermission.permissionId === permission.id,
+    return memberPermissions
+      .map((memberPermission) => {
+        const permission = permissions.find(
+          (p) => p.id === memberPermission.permissionId,
         );
+
+        if (!permission) {
+          return undefined;
+        }
+
+        return {
+          ...permission,
+          via: 'member',
+        };
       })
-      .map((permission) => ({ ...permission, via: 'member' }));
+      .filter((p) => p !== undefined);
   }
 
   public async getCurrentPermissions() {
@@ -230,13 +248,13 @@ export class PermissionsService extends WorkspaceScopedRepository<
       return false;
     }
 
-    // if (permission.action !== 'manage' && permission.action !== action) {
-    //   this.logger.warn(
-    //     { permission, workspaceId, type, action },
-    //     'Permission does not match action',
-    //   );
-    //   return false;
-    // }
+    if (permission.action !== 'manage' && permission.action !== action) {
+      this.logger.warn(
+        { permission, workspaceId, type, action },
+        'Permission does not match action',
+      );
+      return false;
+    }
 
     if (!permission.isPattern) {
       const hasPermission = permission.resource === resource;

@@ -1,11 +1,7 @@
 import { Logo } from '@/components/common/logo';
 import { MainLayout } from '@/components/dashboard/dashboard';
 import { Sidebar } from '@/components/dashboard/sidebar';
-import {
-  Navigation,
-  dashboardRoute,
-  isNavigationItem,
-} from '@/config/navigation';
+import { dashboardRoute, Navigation } from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
 import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
@@ -20,7 +16,6 @@ export const revalidate = 0;
 export default async function DashboardLayout({
   children,
   params: { slug },
-  searchParams,
 }: Readonly<{
   children: React.ReactNode;
   params: { slug: string };
