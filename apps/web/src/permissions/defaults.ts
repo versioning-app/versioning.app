@@ -29,9 +29,11 @@ export type RolePermission = {
 export const Admin: Role = {
   name: '[SYSTEM] Super Admin Role',
   defaults: {
+    // Automatically add this role to the creator of the workspace
     creator: true,
   },
   meta: {
+    // App version that role was added in
     createdIn: 1,
   },
   permissions: [
@@ -52,6 +54,7 @@ export const Admin: Role = {
       type: 'action',
       scope: 'workspace',
       meta: {
+        // App version that permission was added in
         createdIn: 1,
       },
     },
