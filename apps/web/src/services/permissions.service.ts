@@ -1,3 +1,5 @@
+import { revalidate } from '@/app/page';
+import { dashboardRoute, Navigation } from '@/config/navigation';
 import {
   member_permissions,
   Permission,
@@ -17,6 +19,7 @@ import { WorkspaceScopedRepository } from '@/services/repository/workspace-scope
 import { RolesService } from '@/services/roles.service';
 import { and, eq, inArray } from 'drizzle-orm';
 import multimatch from 'multimatch';
+import { revalidatePath } from 'next/cache';
 import 'server-only';
 
 export class PermissionsService extends WorkspaceScopedRepository<
@@ -343,9 +346,6 @@ export class PermissionsService extends WorkspaceScopedRepository<
   }
 
   public async createSystemPermissions(workspace: Workspace) {
-    // fetch all of the current permissions
-    const systemPermissions = await this.findSystemPermissions();
-
     const { permissionsVersion } = workspace;
     const currentPermissionVersion = CURRENT_PERMISSIONS_VERSION;
 
@@ -424,6 +424,11 @@ export class PermissionsService extends WorkspaceScopedRepository<
         'System permissions linked to role',
       );
     }
+
+    revalidatePath(
+      dashboardRoute(workspace.slug, Navigation.DASHBOARD_ROOT),
+      'layout',
+    );
   }
 
   public async createPermissionForSystemRole(
