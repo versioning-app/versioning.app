@@ -115,13 +115,13 @@ export default async function Permissions() {
     </div>,
   );
   return (
-    <div className="p-2">
+    <>
       {components.map((c, index) => (
-        <div key={index} className="fle">
+        <div key={index} className="w-full">
           {c}
           <div className="h-1 bg-accent rounded-xl" />
         </div>
       ))}
-    </div>
+    </>
   );
 }
