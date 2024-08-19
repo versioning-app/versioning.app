@@ -36,9 +36,9 @@ export default async function DashboardLayout({
     return redirect(Navigation.HOME);
   }
 
-  await workspaceService.linkPermissionsToWorkspace(workspace);
+  const updated = await workspaceService.linkPermissionsToWorkspace(workspace);
 
-  if (!slug || slug !== workspace.slug) {
+  if (!slug || slug !== workspace.slug || updated) {
     return redirect(dashboardRoute(workspace.slug));
   }
 

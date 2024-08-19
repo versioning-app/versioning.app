@@ -679,7 +679,7 @@ export class WorkspaceService extends BaseService {
 
     if (permissionsVersion === CURRENT_PERMISSIONS_VERSION) {
       this.logger.debug('Permissions already in sync with workspace');
-      return;
+      return false;
     }
 
     this.logger.debug('Linking permissions to workspace');
@@ -690,6 +690,8 @@ export class WorkspaceService extends BaseService {
       .update(workspaces)
       .set({ permissionsVersion: CURRENT_PERMISSIONS_VERSION })
       .where(eq(workspaces.id, workspace.id));
+
+    return true;
   }
 
   public async linkWorkspaceMembership({
