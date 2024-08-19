@@ -42,7 +42,7 @@ export default async function Permissions() {
       [resource],
       action,
       'db',
-      allPermissions,
+      currentPermissions,
       scope,
     );
 
