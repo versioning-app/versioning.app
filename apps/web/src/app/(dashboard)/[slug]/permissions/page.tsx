@@ -99,12 +99,14 @@ export default async function Permissions() {
     </div>,
   );
 
-  components.push(
-    <div>
-      <h1 className="text-2xl">Member permissions</h1>
-      <DataList data={memberPermissions} />
-    </div>,
-  );
+  if (memberPermissions?.length) {
+    components.push(
+      <div>
+        <h1 className="text-2xl">Member permissions</h1>
+        <DataList data={memberPermissions} />
+      </div>,
+    );
+  }
 
   components.push(
     <div>
