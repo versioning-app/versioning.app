@@ -1,5 +1,5 @@
-import { revalidate } from '@/app/page';
 import { dashboardRoute, Navigation } from '@/config/navigation';
+import { db } from '@/database/db';
 import {
   member_permissions,
   Permission,
@@ -9,6 +9,7 @@ import {
   Role,
   role_permissions,
   Workspace,
+  workspaces,
 } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
@@ -42,6 +43,26 @@ export class PermissionsService extends WorkspaceScopedRepository<
       this._rolesService = new RolesService();
     }
     return this._rolesService;
+  }
+
+  public async linkPermissionsToWorkspace(workspace: Workspace) {
+    const { permissionsVersion } = workspace;
+
+    if (permissionsVersion === CURRENT_PERMISSIONS_VERSION) {
+      this.logger.debug('Permissions already in sync with workspace');
+      return false;
+    }
+
+    this.logger.debug('Linking permissions to workspace');
+
+    await this.createSystemPermissions(workspace);
+
+    await db
+      .update(workspaces)
+      .set({ permissionsVersion: CURRENT_PERMISSIONS_VERSION })
+      .where(eq(workspaces.id, workspace.id));
+
+    return true;
   }
 
   public async getPermissionsForRoles(
