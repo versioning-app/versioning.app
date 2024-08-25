@@ -6,7 +6,7 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "yarn dev",
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}/apps/web"
     },
     {
       "name": "Next.js: debug client-side",

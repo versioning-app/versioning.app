@@ -1,0 +1,5 @@
+export const CURRENT_PERMISSIONS_VERSION = 1 as const;
+
+export const ALL_PERMISSION_VERSIONS = [CURRENT_PERMISSIONS_VERSION] as const;
+
+export type PERMISSION_VERSIONS = (typeof ALL_PERMISSION_VERSIONS)[number];
