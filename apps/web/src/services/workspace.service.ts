@@ -672,28 +672,6 @@ export class WorkspaceService extends BaseService {
     return workspace;
   }
 
-  public async linkPermissionsToWorkspace(workspace: Workspace) {
-    const permissionsService = get(PermissionsService);
-
-    const { permissionsVersion } = workspace;
-
-    if (permissionsVersion === CURRENT_PERMISSIONS_VERSION) {
-      this.logger.debug('Permissions already in sync with workspace');
-      return false;
-    }
-
-    this.logger.debug('Linking permissions to workspace');
-
-    await permissionsService.createSystemPermissions(workspace);
-
-    await db
-      .update(workspaces)
-      .set({ permissionsVersion: CURRENT_PERMISSIONS_VERSION })
-      .where(eq(workspaces.id, workspace.id));
-
-    return true;
-  }
-
   public async linkWorkspaceMembership({
     workspaceId,
     clerkId,
