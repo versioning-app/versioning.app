@@ -6,7 +6,10 @@ import { Workspace, members, workspaces } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
+import { CURRENT_PERMISSIONS_VERSION } from '@/permissions/config';
 import { BaseService } from '@/services/base.service';
+import { PermissionsService } from '@/services/permissions.service';
+import { get } from '@/services/service-factory';
 import { AuthObject } from '@clerk/backend';
 import { SignedInAuthObject } from '@clerk/backend/internal';
 import { auth, clerkClient } from '@clerk/nextjs/server';
@@ -91,7 +94,7 @@ export class WorkspaceService extends BaseService {
       (
         await clerkClient.organizations.getOrganizationMembershipList({
           organizationId: orgId,
-          limit: 10,
+          limit: 1,
         })
       ).data ?? [];
 
@@ -652,6 +655,7 @@ export class WorkspaceService extends BaseService {
   }) {
     const workspace = await this.getWorkspaceById(workspaceId);
 
+    // Do parallel linking
     await Promise.all([
       this.linkWorkspaceMembership({
         workspaceId,

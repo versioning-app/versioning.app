@@ -17,6 +17,7 @@ import {
   GitPullRequest,
   HomeIcon,
   KeySquareIcon,
+  LockKeyholeOpen,
   NotepadText,
   RocketIcon,
   Settings,
@@ -120,6 +121,11 @@ export const SettingsNavLinks: BasicNavLink[] = [
     icon: KeySquareIcon,
     title: 'Api Keys',
     href: Navigation.DASHBOARD_API_KEYS,
+  },
+  {
+    icon: LockKeyholeOpen,
+    title: 'Permissions',
+    href: Navigation.DASHBOARD_PERMISSIONS,
   },
   {
     icon: Settings,

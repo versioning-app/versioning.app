@@ -1,0 +1,1 @@
+ALTER TYPE "permission_type" ADD VALUE 'action';

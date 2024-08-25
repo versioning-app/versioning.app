@@ -1,0 +1,1 @@
+ALTER TABLE "permissions" ALTER COLUMN "modifiable" SET DEFAULT false;

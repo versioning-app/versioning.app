@@ -2,6 +2,7 @@ import { db } from '@/database/db';
 import { Lead, leads, NewLead } from '@/database/schema';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
 import { eq } from 'drizzle-orm';
+import 'server-only';
 
 export class LeadService extends CrudRepository<typeof leads> {
   public constructor() {

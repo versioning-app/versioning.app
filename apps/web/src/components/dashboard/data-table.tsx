@@ -241,7 +241,7 @@ export function DataTable({
     enableRowSelection: true,
     initialState: {
       pagination: {
-        pageSize: 20,
+        pageSize: 15,
       },
     },
     state: {
@@ -254,7 +254,7 @@ export function DataTable({
 
   return (
     <div className="w-full">
-      <div className="rounded-md border flex overflow-auto max-h-[calc(75vh)]">
+      <div className="rounded-md border flex overflow-auto">
         <TableComponent>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -375,7 +375,7 @@ export function DataTablePagination<TData>({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[15, 30, 50, 75, 100, 250].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>
