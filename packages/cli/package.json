@@ -17,7 +17,7 @@
 		"dist"
 	],
 	"dependencies": {
-		"axios": "^1.7.3",
+		"axios": "^1.7.4",
 		"epipebomb": "^1.0.0",
 		"ink": "^4.4.1",
 		"ink-big-text": "^2.0.0",
