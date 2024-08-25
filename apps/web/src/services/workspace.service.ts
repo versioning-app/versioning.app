@@ -94,7 +94,7 @@ export class WorkspaceService extends BaseService {
       (
         await clerkClient.organizations.getOrganizationMembershipList({
           organizationId: orgId,
-          limit: 10,
+          limit: 1,
         })
       ).data ?? [];
 

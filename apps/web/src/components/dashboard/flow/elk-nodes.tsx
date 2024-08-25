@@ -22,6 +22,7 @@ export const Node = ({ data }: NodeProps) => {
               'text-xxs': true,
               'ml-2': true,
               'text-secondary': true,
+              'dark:text-foreground': true,
               'bg-green-600': data?.release_step_status === 'complete',
               'bg-orange-600':
                 data?.release_step_status === 'pending' ||
