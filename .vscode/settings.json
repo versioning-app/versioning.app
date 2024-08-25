@@ -13,6 +13,7 @@
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
   "cSpell.words": [
+    "multimatch",
     "neondatabase"
   ],
   "[ignore]": {

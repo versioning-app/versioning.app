@@ -176,6 +176,83 @@
       "when": 1723446116968,
       "tag": "0024_romantic_speed",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1723644281597,
+      "tag": "0025_daily_loa",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1723646812272,
+      "tag": "0026_medical_shiver_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1723794793398,
+      "tag": "0027_cynical_beast",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1723977971483,
+      "tag": "0028_flippant_chamber",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1723978003577,
+      "tag": "0029_chubby_cerebro",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1723978145851,
+      "tag": "0030_blushing_preak",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1723982426608,
+      "tag": "0031_unique_psynapse",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1724003077505,
+      "tag": "0032_volatile_smasher",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1724003126512,
+      "tag": "0033_special_sally_floyd",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1724003139905,
+      "tag": "0034_chemical_luckman",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1724003735120,
+      "tag": "0035_fast_johnny_storm",
+      "breakpoints": true
     }
   ]
 }

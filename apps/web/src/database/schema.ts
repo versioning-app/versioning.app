@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -23,6 +24,34 @@ const identifierColumn = () =>
 export const WorkspaceType = ['user', 'organization'] as const;
 
 export const workspace_type = pgEnum('workspace_type', WorkspaceType);
+
+export const PermissionType = ['db', 'api', 'action'] as const;
+
+export type Permissions = (typeof PermissionType)[number];
+
+export const permission_type = pgEnum('permission_type', PermissionType);
+
+export const PermissionActions = [
+  'read',
+  'create',
+  'update',
+  'delete',
+  'manage', // Allow read, create, update & delete
+  'execute', // Only applicable for API and action permissions
+] as const;
+
+export type PermissionAction = (typeof PermissionActions)[number];
+
+export const permission_actions = pgEnum(
+  'permission_actions',
+  PermissionActions,
+);
+
+export const PermissionScopes = ['workspace', 'self'] as const;
+
+export type PermissionScope = (typeof PermissionScopes)[number];
+
+export const permission_scopes = pgEnum('permission_scopes', PermissionScopes);
 
 export const ReleaseStepActions = [
   'prepare',
@@ -117,6 +146,7 @@ const TIME_COLUMNS = {
   modifiedAt: timestamp('modified_at').defaultNow().notNull(),
 };
 
+// -- Tables
 export const leads = pgTable('leads', {
   id: identifierColumn(),
   email: varchar('email', { length: 255 }).notNull().unique(),
@@ -127,13 +157,14 @@ export const leads = pgTable('leads', {
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;
 
-// -- Tables
 export const workspaces = pgTable('workspaces', {
   id: identifierColumn(),
   type: workspace_type('type'),
   slug: varchar('slug', { length: 42 }).notNull().unique(),
   clerkId: varchar('clerk_id', { length: 255 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 255 }),
+  // Default this to 0 - so that we always force it to the latest version on link
+  permissionsVersion: integer('permissions_version').notNull().default(0),
   ...TIME_COLUMNS,
 });
 
@@ -147,6 +178,34 @@ export const WORKSPACE_COLUMNS = {
     })
     .notNull(),
 };
+
+export const permissions = pgTable('permissions', {
+  id: identifierColumn(),
+  action: permission_actions('action').notNull(),
+  resource: varchar('resource', { length: 255 }).notNull(),
+  isPattern: boolean('is_pattern').notNull().default(false),
+  type: permission_type('type').notNull().default('db'),
+  scope: permission_scopes('scope').notNull().default('workspace'),
+  system: boolean('system').notNull().default(false),
+  ...WORKSPACE_COLUMNS,
+  ...TIME_COLUMNS,
+});
+
+export type Permission = typeof permissions.$inferSelect;
+export type NewPermission = typeof permissions.$inferInsert;
+
+export const roles = pgTable('roles', {
+  id: identifierColumn(),
+  name: varchar('name', { length: 42 }).notNull(),
+  description: varchar('description', { length: 255 }),
+  system: boolean('system').notNull().default(false),
+  ...WORKSPACE_COLUMNS,
+  ...TIME_COLUMNS,
+});
+
+export type Role = typeof roles.$inferSelect;
+export type NewRole = typeof roles.$inferInsert;
+
 export const members = pgTable(
   'members',
   {
@@ -162,6 +221,48 @@ export const members = pgTable(
 
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
+
+export const member_roles = pgTable('member_roles', {
+  memberId: varchar('member_id')
+    .references(() => members.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  roleId: varchar('role_id')
+    .references(() => roles.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  ...TIME_COLUMNS,
+});
+
+export const role_permissions = pgTable('role_permissions', {
+  roleId: varchar('role_id')
+    .references(() => roles.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  permissionId: varchar('permission_id')
+    .references(() => permissions.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  ...TIME_COLUMNS,
+});
+
+export const member_permissions = pgTable('member_permissions', {
+  memberId: varchar('member_id')
+    .references(() => members.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  permissionId: varchar('permission_id')
+    .references(() => permissions.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  ...TIME_COLUMNS,
+});
 
 export const approval_groups = pgTable('approval_groups', {
   id: identifierColumn(),
@@ -384,6 +485,27 @@ export const api_keys = pgTable('api_keys', {
   ...WORKSPACE_COLUMNS,
   ...TIME_COLUMNS,
 });
+
+export const role_permissionsRelations = relations(
+  role_permissions,
+  ({ many }) => ({
+    role: many(roles),
+    permission: many(permissions),
+  }),
+);
+
+export const member_permissionsRelations = relations(
+  member_permissions,
+  ({ many }) => ({
+    member: many(members),
+    permission: many(permissions),
+  }),
+);
+
+export const member_rolesRelations = relations(member_roles, ({ many }) => ({
+  role: many(roles),
+  member: many(members),
+}));
 
 export const approvals_relations = relations(approvals, ({ one }) => ({
   release_step: one(release_steps, {
