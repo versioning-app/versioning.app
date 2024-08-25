@@ -55,7 +55,7 @@ export function MainLayout({
           <ClerkUser />
         </header>
         <Separator />
-        {<div className="w-[calc(100vw)] h-full">{children}</div>}
+        {<div className="w-full h-full">{children}</div>}
       </div>
     </div>
   );
