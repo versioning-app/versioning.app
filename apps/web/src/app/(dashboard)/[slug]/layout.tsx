@@ -3,10 +3,12 @@ import { MainLayout } from '@/components/dashboard/dashboard';
 import { Sidebar } from '@/components/dashboard/sidebar';
 import { dashboardRoute, Navigation } from '@/config/navigation';
 import { StorageKeys } from '@/config/storage';
+import { PermissionsService } from '@/services/permissions.service';
 import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect, RedirectType } from 'next/navigation';
 
@@ -42,8 +44,10 @@ export default async function DashboardLayout({
     return redirect(dashboardRoute(workspace.slug));
   }
 
+  const permissionsService = get(PermissionsService);
+
   const permissionsUpdated =
-    await workspaceService.linkPermissionsToWorkspace(workspace);
+    await permissionsService.linkPermissionsToWorkspace(workspace);
 
   // const returnPath = searchParams?.get('returnPath');
   // if (returnPath) {
@@ -56,6 +60,7 @@ export default async function DashboardLayout({
   // }
 
   if (permissionsUpdated) {
+    revalidatePath(dashboardRoute(workspace.slug), 'layout');
     return redirect('?permissionsUpdated=true', RedirectType.replace);
   }
 
