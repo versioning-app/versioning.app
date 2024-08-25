@@ -67,10 +67,12 @@ export function Sidebar({
           <DashboardLinks isCollapsed={isCollapsed} />
         </ResizablePanel>
         <ResizableHandle withHandle className="hidden md:flex" />
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          <main className="flex flex-1 flex-col gap-4 m-4 h-full">
-            {children}
-          </main>
+        <ResizablePanel
+          defaultSize={defaultLayout[1]}
+          minSize={30}
+          className="flex flex-1 flex-col gap-4 m-4 h-full pb-4"
+        >
+          {children}
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>

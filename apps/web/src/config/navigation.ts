@@ -9,6 +9,7 @@ export const Navigation = {
   DASHBOARD_COMPONENTS_NEW: '/components/new',
   DASHBOARD_INTEGRATIONS: '/integrations',
   DASHBOARD_SETTINGS: '/settings',
+  DASHBOARD_PERMISSIONS: '/permissions',
   DASHBOARD_API_KEYS: '/api-keys',
   DASHBOARD_API_KEYS_NEW: '/api-keys/new',
   DASHBOARD_BILLING: '/billing',
@@ -42,6 +43,11 @@ export const RouterPaths = {
 };
 
 export type NavigationItem = (typeof Navigation)[keyof typeof Navigation];
+
+export const isNavigationItem = (
+  path?: string | null,
+): path is NavigationItem =>
+  !!path && Object.values(Navigation).includes(path as NavigationItem);
 
 export const dashboardRoute = (
   slug: string | string[],

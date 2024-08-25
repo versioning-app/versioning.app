@@ -1,6 +1,7 @@
 import { StorageKeys } from '@/config/storage';
 import { generateRequestId } from '@/lib/utils';
 import pinoLogger from 'pino';
+import safeStringify from 'fast-safe-stringify';
 
 // let logger: Logger;
 
@@ -14,7 +15,7 @@ export const getLogger = (context?: LoggerContext) => {
   let logger = pinoLogger({
     level: logLevel,
     browser: {
-      write: (o) => console.log(JSON.stringify(o)),
+      write: (o) => console.log(safeStringify(o)),
     },
   });
 
