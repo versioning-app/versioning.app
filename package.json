@@ -19,6 +19,6 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.7",
     "syncpack": "^12.4.0",
-    "turbo": "^2.0.12"
+    "turbo": "^2.1.0"
   }
 }
