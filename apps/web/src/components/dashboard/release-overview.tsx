@@ -79,7 +79,7 @@ function convertToNodesAndEdges(releaseSteps: any[]): {
   return { nodes, edges };
 }
 
-export function Overview({ data }: { data: any }) {
+export function ReleaseOverview({ data }: { data: any }) {
   const { nodes: initNodes, edges: initEdges } = convertToNodesAndEdges(data);
 
   const [nodes, , onNodesChange] = useNodesState(initNodes);
