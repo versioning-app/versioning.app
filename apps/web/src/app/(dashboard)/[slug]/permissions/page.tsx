@@ -1,22 +1,22 @@
 import { DataList } from '@/components/dashboard/lists/data-list';
-import { members, PermissionAction } from '@/database/schema';
+import { PermissionAction } from '@/database/schema';
 import { MembersService } from '@/services/members.service';
 import { PermissionsService } from '@/services/permissions.service';
 import { get } from '@/services/service-factory';
+import { AdHocPermissionEvaluator } from './ad-hoc-permission-evaluator';
+import {
+  evaluatePermission,
+  fetchRoles,
+  fetchAvailableResources,
+} from './actions';
 
 export default async function Permissions() {
   const memberService = get(MembersService);
-
-  const components = [];
-
-  const member = await memberService.currentMember;
-
-  const roles = await memberService.getCurrentRoles();
-
   const permissionsService = get(PermissionsService);
 
+  const member = await memberService.currentMember;
+  const roles = await memberService.getCurrentRoles();
   const allPermissions = await permissionsService.findAll();
-
   const currentPermissions = await permissionsService.getCurrentPermissions();
 
   const memberPermissions = await permissionsService.getPermissionsForMembers(
@@ -76,52 +76,51 @@ export default async function Permissions() {
     buildCheck({ resource: 'component_versions', action: 'manage' }),
   ];
 
-  const results = (await Promise.all(permsToCheck)).flat();
+  const results = await Promise.all(permsToCheck);
 
-  components.push(
-    <div>
-      <h1 className="text-2xl">Permissions check</h1>
-      <DataList data={results} />
-    </div>,
-  );
-
-  components.push(
-    <div>
-      <h1 className="text-2xl">Current permissions</h1>
-      <DataList data={currentPermissions} />
-    </div>,
-  );
-
-  components.push(
-    <div>
-      <h1 className="text-2xl">Current roles</h1>
-      <DataList data={roles} />
-    </div>,
-  );
-
-  if (memberPermissions?.length) {
-    components.push(
-      <div>
-        <h1 className="text-2xl">Member permissions</h1>
-        <DataList data={memberPermissions} />
-      </div>,
-    );
-  }
-
-  components.push(
-    <div>
-      <h1 className="text-2xl">Role permissions</h1>
-      <DataList data={rolePermissions} />
-    </div>,
-  );
   return (
     <>
-      {components.map((c, index) => (
-        <div key={index} className="w-full">
-          {c}
+      <div className="w-full">
+        <h1 className="text-2xl">Ad-hoc Permission Evaluation</h1>
+        <AdHocPermissionEvaluator
+          evaluatePermission={evaluatePermission}
+          fetchRoles={fetchRoles}
+          fetchAvailableResources={fetchAvailableResources}
+        />
+        <div className="h-1 bg-accent rounded-xl" />
+      </div>
+
+      <div className="w-full">
+        <h1 className="text-2xl">Permissions check</h1>
+        <DataList data={results} />
+        <div className="h-1 bg-accent rounded-xl" />
+      </div>
+
+      <div className="w-full">
+        <h1 className="text-2xl">Current permissions</h1>
+        <DataList data={currentPermissions} />
+        <div className="h-1 bg-accent rounded-xl" />
+      </div>
+
+      <div className="w-full">
+        <h1 className="text-2xl">Current roles</h1>
+        <DataList data={roles} />
+        <div className="h-1 bg-accent rounded-xl" />
+      </div>
+
+      {memberPermissions?.length > 0 && (
+        <div className="w-full">
+          <h1 className="text-2xl">Member permissions</h1>
+          <DataList data={memberPermissions} />
           <div className="h-1 bg-accent rounded-xl" />
         </div>
-      ))}
+      )}
+
+      <div className="w-full">
+        <h1 className="text-2xl">Role permissions</h1>
+        <DataList data={rolePermissions} />
+        <div className="h-1 bg-accent rounded-xl" />
+      </div>
     </>
   );
 }
