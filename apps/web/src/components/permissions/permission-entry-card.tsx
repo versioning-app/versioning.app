@@ -21,7 +21,10 @@ type PermissionEntryCardProps = {
   entry: PermissionEntry;
   index: number;
   onRemove: () => void;
-  onUpdate: (updates: Partial<PermissionEntry>) => void;
+  onUpdate: (
+    updates: Partial<PermissionEntry>,
+    triggerEvaluation: boolean,
+  ) => void;
   resources: string[];
   showRemoveButton: boolean;
   evaluationResult: 'allowed' | 'denied' | 'unevaluated';
@@ -59,7 +62,7 @@ export function PermissionEntryCard({
   }, [isResourceSelected]);
 
   const toggleCollapse = () => {
-    onUpdate({ isCollapsed: !entry.isCollapsed });
+    onUpdate({ isCollapsed: !entry.isCollapsed }, false);
   };
 
   const getResourceName = () => {
@@ -154,7 +157,7 @@ export function PermissionEntryCard({
           <ResourceSelect
             entry={entry}
             onUpdate={(updates) => {
-              onUpdate(updates);
+              onUpdate(updates, true);
               setIsResourceSelected(!!updates.resource);
             }}
             resources={resources}
@@ -167,7 +170,10 @@ export function PermissionEntryCard({
                 : 'max-h-0 opacity-0 overflow-hidden',
             )}
           >
-            <ActionSelect entry={entry} onUpdate={onUpdate} />
+            <ActionSelect
+              entry={entry}
+              onUpdate={(updates) => onUpdate(updates, true)}
+            />
           </div>
           <div
             className={cn(
@@ -177,7 +183,10 @@ export function PermissionEntryCard({
                 : 'max-h-0 opacity-0 overflow-hidden',
             )}
           >
-            <TypeSelect entry={entry} onUpdate={onUpdate} />
+            <TypeSelect
+              entry={entry}
+              onUpdate={(updates) => onUpdate(updates, true)}
+            />
           </div>
         </CardContent>
       )}
