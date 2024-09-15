@@ -27,20 +27,21 @@ export const action = createSafeActionClient({
   // You can provide a custom log Promise, otherwise the lib will use `console.error`
   // as the default logging system. If you want to disable server errors logging,
   // just pass an empty Promise.
-  handleServerErrorLog: (e) => {
+  handleServerError: (e) => {
     getLogger().error(e);
+    return handleReturnedServerError(e);
   },
-  handleReturnedServerError,
 });
 
 export const actionClient = createSafeActionClient({
-  handleServerErrorLog: (e) => {
+  handleServerError: (e) => {
     const logger = serverLogger({ name: 'workspaceAction' });
     const { message, ...errorMeta } =
       e instanceof AppError ? e.toJSON() : { message: e.message };
     logger.error(errorMeta, message);
+
+    return handleReturnedServerError(e);
   },
-  handleReturnedServerError,
 });
 
 export const workspaceAction = actionClient.use(async ({ next, ctx }) => {
