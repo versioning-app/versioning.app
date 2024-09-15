@@ -11,7 +11,7 @@ import { AppProviders } from '@/providers/providers';
 import Script from 'next/script';
 import '../styles/globals.css';
 import 'reactflow/dist/style.css';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from 'sonner';
 
 const fontSans = FontSans({
   subsets: ['latin'],

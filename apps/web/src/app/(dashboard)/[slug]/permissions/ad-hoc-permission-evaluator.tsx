@@ -22,7 +22,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import {
   EvaluatePermissionFunction,
@@ -31,8 +30,16 @@ import {
   PermissionEntry,
   TYPE_MAP,
 } from '@/types/permissions';
-import { ChevronDown, ChevronUp, HelpCircle, Plus, Shield } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  HelpCircle,
+  Plus,
+  Shield,
+  Loader2,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export function AdHocPermissionEvaluator({
   evaluatePermission,
@@ -66,12 +73,17 @@ export function AdHocPermissionEvaluator({
   });
   const [useCurrentRoles, setUseCurrentRoles] = useState(true);
   const [allCollapsed, setAllCollapsed] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     fetchRoles().then(setRoles);
     fetchAvailableResources().then(setResources);
   }, [fetchRoles, fetchAvailableResources]);
+
+  useEffect(() => {
+    if (isReadyToEvaluate()) {
+      handleEvaluatePermissions();
+    }
+  }, [permissionEntries, selectedRoles, useCurrentRoles]);
 
   const handleAddPermissionEntry = () => {
     setPermissionEntries((prev) => [
@@ -120,113 +132,52 @@ export function AdHocPermissionEvaluator({
     }
   };
 
-  const checkMissingInputs = () => {
-    const missingInputs = {
-      resources: 0,
-      actions: 0,
-      types: 0,
-      roles: false,
-    };
-
-    permissionEntries.forEach((entry) => {
-      if (!entry.resource && !entry.customResource) missingInputs.resources++;
-      if (entry.actions.length === 0) missingInputs.actions++;
-      if (entry.type === null) missingInputs.types++;
-    });
-
-    if (!useCurrentRoles && selectedRoles.length === 0) {
-      missingInputs.roles = true;
-    }
-
-    return missingInputs;
+  const isReadyToEvaluate = () => {
+    return (
+      permissionEntries.every(
+        (entry) =>
+          (entry.resource || entry.customResource) &&
+          entry.actions.length > 0 &&
+          entry.type !== null,
+      ) &&
+      (useCurrentRoles || selectedRoles.length > 0)
+    );
   };
 
   const handleEvaluatePermissions = async () => {
-    const missingInputs = checkMissingInputs();
-    const hasMissingInputs = Object.values(missingInputs).some((value) =>
-      typeof value === 'number' ? value > 0 : value,
-    );
-
-    if (hasMissingInputs) {
-      const missingItems = permissionEntries
-        .map((entry, index) => {
-          const errors = [];
-          if (!entry.resource && !entry.customResource) errors.push('Resource');
-          if (entry.actions.length === 0) errors.push('Actions');
-          if (entry.type === null) errors.push('Type');
-
-          if (errors.length > 0) {
-            const entryName =
-              entry.resource || entry.customResource || `Entry ${index + 1}`;
-            return `${entryName}: ${errors.join(', ')}`;
-          }
-          return null;
-        })
-        .filter(Boolean);
-
-      if (!useCurrentRoles && selectedRoles.length === 0) {
-        missingItems.push('Roles: At least one role must be selected');
-      }
-
-      toast({
-        title: 'Incomplete Permission Entries',
-        description: (
-          <div>
-            <p>Please complete the following:</p>
-            <ul className="mt-2 list-disc list-inside">
-              {missingItems.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ),
-        variant: 'destructive',
-      });
+    if (!isReadyToEvaluate()) {
       return;
     }
 
     setIsEvaluating(true);
     try {
       const results = await Promise.all(
-        permissionEntries.map(async (entry, index) => {
+        permissionEntries.map(async (entry) => {
           const resourceToEvaluate =
             entry.resource === 'custom' ? entry.customResource : entry.resource;
-          if (
-            !resourceToEvaluate ||
-            entry.actions.length === 0 ||
-            entry.type === null
-          ) {
-            return 'unevaluated';
-          }
           try {
             const result = await evaluatePermission(
-              resourceToEvaluate,
+              resourceToEvaluate!,
               entry.actions,
-              [entry.type],
+              [entry.type!],
               useCurrentRoles ? [] : selectedRoles,
             );
             return result ? 'allowed' : 'denied';
           } catch (error) {
-            console.error(
-              `Error evaluating permission for entry ${index}:`,
-              error,
-            );
+            console.error(`Error evaluating permission for entry:`, error);
             return 'unevaluated';
           }
         }),
       );
       setEvaluationResults(results);
-      toast({
-        title: 'Evaluation Complete',
+      toast.success('Evaluation Complete', {
         description: 'Permissions have been evaluated successfully.',
       });
     } catch (error) {
       console.error('Error during evaluation:', error);
-      toast({
-        title: 'Evaluation Error',
+      toast.error('Evaluation Error', {
         description:
           'An error occurred while evaluating permissions. Please try again.',
-        variant: 'destructive',
       });
     } finally {
       setIsEvaluating(false);
@@ -256,9 +207,6 @@ export function AdHocPermissionEvaluator({
                 <ChevronUp className="w-4 h-4 mr-2" />
               )}
               {allCollapsed ? 'Expand All' : 'Collapse All'}
-            </Button>
-            <Button onClick={handleEvaluatePermissions}>
-              {isEvaluating ? 'Evaluating...' : 'Evaluate Permissions'}
             </Button>
           </div>
         </CardHeader>
@@ -401,19 +349,16 @@ export function AdHocPermissionEvaluator({
         </CardContent>
       </Card>
 
-      <Button
-        onClick={handleEvaluatePermissions}
-        className="w-full py-6 text-lg font-semibold"
-      >
-        {isEvaluating ? 'Evaluating...' : 'Evaluate Permissions'}
-      </Button>
-
-      {evaluationResults.some((result) => result !== 'unevaluated') && (
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-xl font-semibold">Results</CardTitle>
-          </CardHeader>
-          <CardContent>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">Results</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isEvaluating ? (
+            <div className="flex justify-center items-center h-40">
+              <Loader2 className="w-8 h-8 animate-spin" />
+            </div>
+          ) : evaluationResults.some((result) => result !== 'unevaluated') ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -426,31 +371,22 @@ export function AdHocPermissionEvaluator({
               <TableBody>
                 {permissionEntries.map((entry, index) => {
                   const result = evaluationResults[index];
+                  if (result === 'unevaluated') return null;
                   return (
                     <TableRow key={entry.id}>
                       <TableCell>
                         <Badge
                           variant={
-                            result === 'unevaluated'
-                              ? 'outline'
-                              : result === 'allowed'
-                                ? 'default'
-                                : 'destructive'
+                            result === 'allowed' ? 'default' : 'destructive'
                           }
                           className={cn(
                             'w-28 justify-center',
-                            result === 'unevaluated'
-                              ? 'bg-gray-100 text-gray-800'
-                              : result === 'allowed'
-                                ? 'bg-green-500 hover:bg-green-600 text-white'
-                                : 'bg-red-500 hover:bg-red-600 text-white',
+                            result === 'allowed'
+                              ? 'bg-green-500 hover:bg-green-600 text-white'
+                              : 'bg-red-500 hover:bg-red-600 text-white',
                           )}
                         >
-                          {result === 'unevaluated'
-                            ? 'Unevaluated'
-                            : result === 'allowed'
-                              ? 'Allowed'
-                              : 'Denied'}
+                          {result === 'allowed' ? 'Allowed' : 'Denied'}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -483,9 +419,16 @@ export function AdHocPermissionEvaluator({
                 })}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
-      )}
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">
+                No evaluation results yet. Click "Evaluate Permissions" to see
+                results.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
