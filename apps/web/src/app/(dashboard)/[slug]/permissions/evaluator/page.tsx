@@ -1,9 +1,9 @@
-import { AdHocPermissionEvaluator } from './ad-hoc-permission-evaluator';
+import { AdHocPermissionEvaluator } from '../ad-hoc-permission-evaluator';
 import {
   evaluatePermission,
   fetchRoles,
   fetchAvailableResources,
-} from './actions';
+} from '../actions';
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export default function PermissionsPage() {
+export default async function PermissionsEvaluator() {
   return (
     <Card className="bg-background border-none shadow-none">
       <CardHeader>
