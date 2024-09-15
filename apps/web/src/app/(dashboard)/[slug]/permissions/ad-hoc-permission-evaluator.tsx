@@ -38,7 +38,7 @@ import {
   Shield,
   Loader2,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
 export function AdHocPermissionEvaluator({
@@ -66,24 +66,87 @@ export function AdHocPermissionEvaluator({
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [evaluationResults, setEvaluationResults] = useState<
     ('allowed' | 'denied' | 'unevaluated')[]
-  >(['unevaluated']); // Initialize with 'unevaluated' for the first entry
+  >(['unevaluated']);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [resources, setResources] = useState<{ tables: string[] }>({
     tables: [],
   });
   const [useCurrentRoles, setUseCurrentRoles] = useState(true);
   const [allCollapsed, setAllCollapsed] = useState(false);
+  const [shouldEvaluate, setShouldEvaluate] = useState(false);
 
   useEffect(() => {
     fetchRoles().then(setRoles);
     fetchAvailableResources().then(setResources);
   }, [fetchRoles, fetchAvailableResources]);
 
+  const isReadyToEvaluate = useCallback(() => {
+    return (
+      permissionEntries.every(
+        (entry) =>
+          (entry.resource || entry.customResource) &&
+          entry.actions.length > 0 &&
+          entry.type !== null,
+      ) &&
+      (useCurrentRoles || selectedRoles.length > 0)
+    );
+  }, [permissionEntries, useCurrentRoles, selectedRoles]);
+
+  const handleEvaluatePermissions = useCallback(async () => {
+    if (!isReadyToEvaluate()) {
+      return;
+    }
+
+    setIsEvaluating(true);
+    try {
+      const results = await Promise.all(
+        permissionEntries.map(async (entry) => {
+          const resourceToEvaluate =
+            entry.resource === 'custom' ? entry.customResource : entry.resource;
+          try {
+            const result = await evaluatePermission(
+              resourceToEvaluate!,
+              entry.actions,
+              [entry.type!],
+              useCurrentRoles ? [] : selectedRoles,
+            );
+            return result ? 'allowed' : 'denied';
+          } catch (error) {
+            return 'unevaluated';
+          }
+        }),
+      );
+      setEvaluationResults(results);
+      toast.success('Evaluation Complete', {
+        description: 'Permissions have been evaluated successfully.',
+      });
+    } catch (error) {
+      toast.error('Evaluation Error', {
+        description:
+          'An error occurred while evaluating permissions. Please try again.',
+      });
+    } finally {
+      setIsEvaluating(false);
+    }
+  }, [
+    evaluatePermission,
+    isReadyToEvaluate,
+    permissionEntries,
+    useCurrentRoles,
+    selectedRoles,
+  ]);
+
   useEffect(() => {
     if (isReadyToEvaluate()) {
       handleEvaluatePermissions();
     }
-  }, [permissionEntries, selectedRoles, useCurrentRoles]);
+  }, [
+    isReadyToEvaluate,
+    handleEvaluatePermissions,
+    permissionEntries,
+    selectedRoles,
+    useCurrentRoles,
+  ]);
 
   const handleAddPermissionEntry = () => {
     setPermissionEntries((prev) => [
@@ -117,70 +180,13 @@ export function AdHocPermissionEvaluator({
   const updatePermissionEntry = (
     id: string,
     updates: Partial<PermissionEntry>,
+    triggerEvaluation: boolean = false,
   ) => {
     setPermissionEntries((prev) =>
       prev.map((entry) => (entry.id === id ? { ...entry, ...updates } : entry)),
     );
-    // Reset the evaluation result for the updated entry
-    const index = permissionEntries.findIndex((entry) => entry.id === id);
-    if (index !== -1) {
-      setEvaluationResults((prev) => {
-        const newResults = [...prev];
-        newResults[index] = 'unevaluated';
-        return newResults;
-      });
-    }
-  };
-
-  const isReadyToEvaluate = () => {
-    return (
-      permissionEntries.every(
-        (entry) =>
-          (entry.resource || entry.customResource) &&
-          entry.actions.length > 0 &&
-          entry.type !== null,
-      ) &&
-      (useCurrentRoles || selectedRoles.length > 0)
-    );
-  };
-
-  const handleEvaluatePermissions = async () => {
-    if (!isReadyToEvaluate()) {
-      return;
-    }
-
-    setIsEvaluating(true);
-    try {
-      const results = await Promise.all(
-        permissionEntries.map(async (entry) => {
-          const resourceToEvaluate =
-            entry.resource === 'custom' ? entry.customResource : entry.resource;
-          try {
-            const result = await evaluatePermission(
-              resourceToEvaluate!,
-              entry.actions,
-              [entry.type!],
-              useCurrentRoles ? [] : selectedRoles,
-            );
-            return result ? 'allowed' : 'denied';
-          } catch (error) {
-            console.error(`Error evaluating permission for entry:`, error);
-            return 'unevaluated';
-          }
-        }),
-      );
-      setEvaluationResults(results);
-      toast.success('Evaluation Complete', {
-        description: 'Permissions have been evaluated successfully.',
-      });
-    } catch (error) {
-      console.error('Error during evaluation:', error);
-      toast.error('Evaluation Error', {
-        description:
-          'An error occurred while evaluating permissions. Please try again.',
-      });
-    } finally {
-      setIsEvaluating(false);
+    if (triggerEvaluation && isReadyToEvaluate()) {
+      handleEvaluatePermissions();
     }
   };
 
@@ -217,9 +223,10 @@ export function AdHocPermissionEvaluator({
               entry={entry}
               index={index}
               onRemove={() => handleRemovePermissionEntry(entry.id)}
-              onUpdate={(updates: Partial<PermissionEntry>) =>
-                updatePermissionEntry(entry.id, updates)
-              }
+              onUpdate={(
+                updates: Partial<PermissionEntry>,
+                triggerEvaluation: boolean = false,
+              ) => updatePermissionEntry(entry.id, updates, triggerEvaluation)}
               resources={resources.tables}
               showRemoveButton={permissionEntries.length > 1}
               evaluationResult={evaluationResults[index]}
@@ -263,6 +270,9 @@ export function AdHocPermissionEvaluator({
                   if (checked) {
                     setSelectedRoles([]);
                   }
+                  if (isReadyToEvaluate()) {
+                    handleEvaluatePermissions();
+                  }
                 }}
               />
               <Label htmlFor="use-current-roles" className="text-sm">
@@ -297,6 +307,9 @@ export function AdHocPermissionEvaluator({
                             ? prev.filter((r) => r !== role.id)
                             : [...prev, role.id],
                         );
+                        if (isReadyToEvaluate()) {
+                          handleEvaluatePermissions();
+                        }
                       }
                     }}
                   >
@@ -310,10 +323,13 @@ export function AdHocPermissionEvaluator({
                               ? [...prev, role.id]
                               : prev.filter((r) => r !== role.id),
                           );
+                          if (isReadyToEvaluate()) {
+                            handleEvaluatePermissions();
+                          }
                         }
                       }}
                       disabled={useCurrentRoles}
-                      onClick={(e) => e.stopPropagation()} // Prevent triggering the parent div's onClick
+                      onClick={(e) => e.stopPropagation()}
                     />
                     <Label
                       htmlFor={`role-${role.id}`}
@@ -422,8 +438,7 @@ export function AdHocPermissionEvaluator({
           ) : (
             <div className="text-center py-8">
               <p className="text-muted-foreground">
-                No evaluation results yet. Click "Evaluate Permissions" to see
-                results.
+                No evaluation results yet.
               </p>
             </div>
           )}
