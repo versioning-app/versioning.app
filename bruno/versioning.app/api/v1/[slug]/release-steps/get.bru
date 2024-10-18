@@ -1,0 +1,20 @@
+meta {
+  name: Get Release Steps
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{API_HOST}}/{{SLUG}}/release-steps
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-Api-Key: {{API_KEY}}
+}
+
+assert {
+  res.status: 200
+}
