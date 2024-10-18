@@ -1,4 +1,5 @@
 import { Header } from '@/components/header';
+import { Table } from '@/components/table';
 import { getApi } from '@/utils/api';
 import { auth } from '@/utils/config';
 import { Text } from 'ink';
@@ -6,24 +7,20 @@ import Spinner from 'ink-spinner';
 import React, { useEffect, useState } from 'react';
 import zod from 'zod';
 
-export const options = zod.object({
-	type: zod.enum(['ping']),
-});
+export const options = zod.object({});
 
 type Props = {
 	options: zod.infer<typeof options>;
 };
 
-export default function Webhooks({ options }: Props) {
+export default function EnvironmentTypes({ options }: Props) {
 	const [response, setResponseData] = useState<any>();
 	const api = getApi();
 	const authJson = auth();
 
 	useEffect(() => {
 		api
-			.post(`/${authJson.slug}/webhooks`, {
-				type: options.type,
-			})
+			.get(`/${authJson.slug}/environment-types`)
 			.then((res) => {
 				setResponseData(res.data);
 			})
@@ -32,11 +29,28 @@ export default function Webhooks({ options }: Props) {
 			});
 	}, []);
 
+	if (!response) {
+		return <Spinner type="dots6" />;
+	}
+
+	if (!response.data) {
+		throw new Error(response.error);
+	}
+
 	return (
 		<>
-			<Header />
-			{!response ? <Spinner type="dots6" /> : null}
-			{response ? <Text>{JSON.stringify(response, null, 2)}</Text> : null}
+			<Table
+				columns={[
+					'id',
+					'label',
+					'description',
+					'style',
+					'workspaceId',
+					'createdAt',
+					'modifiedAt',
+				]}
+				data={response.data}
+			/>
 		</>
 	);
 }
