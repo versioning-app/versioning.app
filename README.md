@@ -2,4 +2,4 @@
 
 Software versioning, made simple.
 
-© 2023 - 2024 versioning.app - All Rights Reserved. 
+© 2024 versioning.app - All Rights Reserved. 
