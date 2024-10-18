@@ -18,6 +18,7 @@ export const apiRoute = async (
       { status: successStatusCode },
     );
   } catch (error) {
+    console.log(error);
     let serverError: AppError = error as AppError;
 
     if (!(serverError instanceof AppError)) {

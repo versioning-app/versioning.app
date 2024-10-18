@@ -1,4 +1,5 @@
 import { apiRoute } from '@/app/(api)/api/v1/_api/api-route';
+import { json } from '@/app/(api)/api/v1/_api/utils';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { ReleaseService } from '@/services/release.service';
@@ -9,7 +10,7 @@ export const dynamic = 'force-dynamic';
 
 export const POST = (request: NextRequest) =>
   apiRoute(request, async (request) => {
-    const body = await request.json();
+    const body = await json(request);
 
     const type = body?.type;
 
