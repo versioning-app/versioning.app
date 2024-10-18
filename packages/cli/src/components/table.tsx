@@ -9,7 +9,7 @@ export function Table({
 	data: Record<string, string>[];
 }) {
 	return (
-		<Box flexDirection="column" width={100}>
+		<Box flexDirection="column" columnGap={1}>
 			<Box>
 				{columns.map((column) => (
 					<Box key={column} width={`${100 / columns.length}%`}>
