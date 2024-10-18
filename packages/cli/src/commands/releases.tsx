@@ -11,14 +11,14 @@ type Props = {
 	options: zod.infer<typeof options>;
 };
 
-export default function EnvironmentTypes({ options }: Props) {
+export default function Releases({ options }: Props) {
 	const [response, setResponseData] = useState<any>();
 	const api = getApi();
 	const authJson = auth();
 
 	useEffect(() => {
 		api
-			.get(`/${authJson.slug}/environment-types`)
+			.get(`/${authJson.slug}/releases`)
 			.then((res) => {
 				setResponseData(res.data);
 			})
@@ -40,9 +40,11 @@ export default function EnvironmentTypes({ options }: Props) {
 			<Table
 				columns={[
 					'id',
-					'label',
+					'date',
+					'status',
+					'version',
 					'description',
-					'style',
+					'releaseStrategyId',
 					'workspaceId',
 					'createdAt',
 					'modifiedAt',
