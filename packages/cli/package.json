@@ -45,5 +45,12 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"oclif": {
+		"commands": "./dist/commands",
+		"bin": "versioning",
+		"plugins": [
+			"@oclif/plugin-help"
+		]
 	}
 }
