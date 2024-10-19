@@ -11,6 +11,7 @@
     "serve": "PORT=3050 docusaurus serve",
     "surge": "surge",
     "deploy": "yarn build && surge build/ docs.versioning.app",
+    "docs:deploy": "yarn deploy",
     "write-translations": "PORT=3050 docusaurus write-translations",
     "write-heading-ids": "PORT=3050 docusaurus write-heading-ids",
     "typecheck": "PORT=3050 tsc"

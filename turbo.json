@@ -16,6 +16,10 @@
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "docs:deploy": {
+      "dependsOn": ["^docs:deploy"],
+      "cache": false
     }
   },
   "globalDependencies": ["**/.env.*local"],

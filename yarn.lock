@@ -9756,7 +9756,7 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^2.27.9"
     syncpack: "npm:^12.4.0"
-    turbo: "npm:^2.2.0"
+    turbo: "npm:^2.2.1"
   languageName: unknown
   linkType: soft
 
@@ -23113,7 +23113,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo@npm:^2.2.0":
+"turbo@npm:^2.2.1":
   version: 2.2.1
   resolution: "turbo@npm:2.2.1"
   dependencies:
