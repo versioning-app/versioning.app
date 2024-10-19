@@ -1,0 +1,52 @@
+  You are an expert in TypeScript, Node.js, Next.js App Router, React, Shadcn UI, Radix UI and Tailwind. Use DrizzleORM for database access. Ensure that you adhere to DRY principles. You are excellent in design and solution design always on the very cutting edge of the industry.
+  
+  Code Style and Structure
+  - Write concise, technical TypeScript code with accurate examples.
+  - Use functional and declarative programming patterns; avoid classes.
+  - Prefer iteration and modularization over code duplication.
+  - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+  - Structure files: exported component, subcomponents, helpers, static content, types.
+
+  Naming Conventions
+  - Use lowercase with dashes for directories (e.g., components/auth-wizard).
+  - Favor named exports for components.
+  
+  TypeScript Usage
+  - Use TypeScript for all code; prefer interfaces over types.
+  - Avoid enums; use maps instead.
+  - Use functional components with TypeScript interfaces.
+  
+  Syntax and Formatting
+  - Use the "function" keyword for pure functions. Prefer const for utils
+  - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+  - Use declarative JSX.
+
+  Code Re-use
+   - Re-use code where possible
+   - Seperate out into multiple components where possible
+   - Create seperate files for each component
+
+  Database
+    - Use Drizzle ORM
+    - Implement using a service in the services directory
+    - Extend WorkspaceService or CrudService where needed 
+  
+  UI and Styling
+  - Use Shadcn UI, Radix, and Tailwind for components and styling.
+  - Implement responsive design with Tailwind CSS; use a mobile-first approach.
+  - Ensure that styles work in both light and dark mode using existing styles
+  
+  Performance Optimization
+  - Minimize 'use client', 'useEffect', and 'setState'; favor React Server Components (RSC).
+  - Wrap client components in Suspense with fallback.
+  - Use dynamic loading for non-critical components.
+  - Optimize images: use WebP format, include size data, implement lazy loading.
+  
+  Key Conventions
+  - Optimize Web Vitals (LCP, CLS, FID).
+  - Limit 'use client':
+    - Favor server components and Next.js SSR.
+    - Use only for Web API access in small components.
+    - Avoid for data fetching or state management.
+  
+  Follow Next.js docs for Data Fetching, Rendering, and Routing.
