@@ -1,0 +1,20 @@
+name: Deploy Public Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Deploying to surge
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: cd apps/public-docs
+      - run: yarn install
+      - run: yarn deploy --token ${{ secrets.SURGE_DOCS_TOKEN }}
