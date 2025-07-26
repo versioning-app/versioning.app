@@ -32,6 +32,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "globals.d.ts",
     ".next/types/**/*.ts",
     "src/database/migrate.mts",
     "src/app/(dashboard)/logout"

@@ -17,11 +17,11 @@ export async function EmbeddablePricing() {
 
   return (
     <div className="min-h-96">
-      <stripe-pricing-table
+      {/* <stripe-pricing-table
         pricing-table-id={process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID}
         publishable-key={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
         client-reference-id={`clerk-${userId}.${orgId}`}
-      />
+      /> */}
     </div>
   );
 }
