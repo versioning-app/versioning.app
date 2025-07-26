@@ -12,7 +12,7 @@ import { verify } from 'hcaptcha';
 export const registerInterestAction = action
   .schema(registerInterestSchema)
   .action(async ({ parsedInput }) => {
-    const logger = serverLogger({ name: 'registerInterestAction' });
+    const logger = await serverLogger({ name: 'registerInterestAction' });
 
     logger.debug({ parsedInput }, 'Registering interest');
 

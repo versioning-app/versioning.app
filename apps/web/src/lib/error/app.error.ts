@@ -1,7 +1,5 @@
 import { StorageKeys } from '@/config/storage';
 import { ErrorCode } from '@/lib/error/error-codes';
-import { getRequestId } from '@/lib/logger';
-import { headers } from 'next/headers';
 
 export interface AppErrorContext extends Record<string, unknown> {
   requestId: string;
@@ -28,7 +26,10 @@ export class AppError extends Error {
     return {
       message: this.message,
       code: this.errorCode.type,
-      context: { ...this.context, requestId: getRequestId(headers()) },
+      context: {
+        ...this.context,
+        requestId: 'TODO: add request due to headers() being async',
+      },
     };
   }
 
