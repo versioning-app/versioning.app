@@ -9,7 +9,7 @@ import { createCheckoutSessionSchema } from '@/validation/billing';
 import { redirect } from 'next/navigation';
 
 export const createBillingPortalSession = async () => {
-  const logger = serverLogger({ name: 'createBillingPortalSession' });
+  const logger = await serverLogger({ name: 'createBillingPortalSession' });
 
   logger.debug('Creating billing portal session');
 
@@ -23,7 +23,7 @@ export const createBillingPortalSession = async () => {
 export const createCheckoutSession = workspaceAction
   .schema(createCheckoutSessionSchema)
   .action(async ({ parsedInput: { priceId } }) => {
-    const logger = serverLogger({ name: 'createCheckoutSession' });
+    const logger = await serverLogger({ name: 'createCheckoutSession' });
 
     logger.debug({ priceId }, 'Creating checkout session');
 

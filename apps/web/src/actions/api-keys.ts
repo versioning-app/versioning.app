@@ -10,7 +10,7 @@ import { revalidatePath } from 'next/cache';
 export const createApiKeyAction = workspaceAction
   .schema(createApiKeySchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createApiKeyAction' });
+    const logger = await serverLogger({ name: 'createApiKeyAction' });
 
     logger.debug({ parsedInput }, 'Creating API Key');
 
@@ -25,7 +25,7 @@ export const createApiKeyAction = workspaceAction
 export const deleteApiKeyAction = workspaceAction
   .schema(deleteApiKeySchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteApiKeyAction' });
+    const logger = await serverLogger({ name: 'deleteApiKeyAction' });
 
     logger.debug({ parsedInput }, 'Deleting API Key');
 

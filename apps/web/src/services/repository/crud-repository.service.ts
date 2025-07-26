@@ -2,6 +2,7 @@ import { db as AppDb } from '@/database/db';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { BaseService } from '@/services/base.service';
+import { AppHeaders } from '@/types/headers';
 import {
   InferInsertModel,
   InferSelectModel,
@@ -24,11 +25,12 @@ export abstract class CrudRepository<
   implements BaseRepository<M, ID>
 {
   protected constructor(
+    headers: AppHeaders,
     protected db: typeof AppDb,
     public readonly schema: M,
     protected readonly primaryKey: ID,
   ) {
-    super();
+    super(headers);
   }
 
   public async hasDependents(

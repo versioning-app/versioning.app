@@ -8,7 +8,7 @@ import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const apiMiddleware = async (req: NextRequest) => {
-  const logger = serverLogger({ source: 'apiMiddleware' });
+  const logger = await serverLogger({ source: 'apiMiddleware' });
 
   const now = new Date();
   logger.debug({ now }, 'API middleware started');
@@ -22,7 +22,10 @@ export const apiMiddleware = async (req: NextRequest) => {
 
     next.headers.set('Cache-Control', 'no-store');
     next.headers.set('x-workspace-id', workspaceId);
-    next.headers.set('x-request-id', headers().get('x-request-id') || '');
+    next.headers.set(
+      'x-request-id',
+      (await headers()).get('x-request-id') || '',
+    );
     next.headers.set('x-api-version', '1');
 
     return next;

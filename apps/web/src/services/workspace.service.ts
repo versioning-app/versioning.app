@@ -30,7 +30,7 @@ export class WorkspaceService extends BaseService {
   }
 
   public async currentWorkspaceId(): Promise<string> {
-    const providedApiKey = headers().get(API_KEY_HEADER);
+    const providedApiKey = (await headers()).get(API_KEY_HEADER);
 
     if (providedApiKey) {
       this.logger.debug('Getting workspace ID from API key');
