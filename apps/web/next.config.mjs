@@ -2,8 +2,8 @@
 const nextConfig = {
   experimental: {
     serverMinification: false,
-    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
   },
+  serverExternalPackages: ['pino', 'pino-pretty'],
 };
 
 export default nextConfig;

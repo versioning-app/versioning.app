@@ -13,7 +13,7 @@ export function DashboardLink({
   children: React.ReactNode;
   className?: string;
 }) {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   return (
     <Link href={dashboardRoute(slug)} className={className}>
       {children}
@@ -49,7 +49,7 @@ export const DashboardButton = ({
             ? dashboardRoute(slug)
             : clerk.buildSignInUrl({
                 redirectUrl: Navigation.DASHBOARD_ROOT,
-              })
+              }),
         );
       }}
     >

@@ -5,11 +5,12 @@ import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { get } from '@/services/service-factory';
 
 export default async function NewEnvironment({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const environmentTypesService = get(EnvironmentTypesService);
+  const { slug } = await params;
+  const environmentTypesService = await get(EnvironmentTypesService);
   const environmentTypes = await environmentTypesService.findAll();
 
   if (!environmentTypes?.length) {

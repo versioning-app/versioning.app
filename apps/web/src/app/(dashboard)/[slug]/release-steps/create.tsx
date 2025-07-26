@@ -6,11 +6,13 @@ import { ReleaseService } from '@/services/release.service';
 import { get } from '@/services/service-factory';
 
 export default async function NewReleaseStrategyStep({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const releases = await get(ReleaseService).findAll();
+  const { slug } = await params;
+  const releasesService = await get(ReleaseService);
+  const releases = await releasesService.findAll();
 
   if (!releases?.length) {
     return (
@@ -23,7 +25,8 @@ export default async function NewReleaseStrategyStep({
     );
   }
 
-  const releaseStrategySteps = await get(ReleaseStrategyStepService).findAll();
+  const releaseStrategyStepsService = await get(ReleaseStrategyStepService);
+  const releaseStrategySteps = await releaseStrategyStepsService.findAll();
 
   if (!releaseStrategySteps?.length) {
     return (

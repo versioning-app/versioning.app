@@ -19,7 +19,8 @@ export const createEnvironmentTypeAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating environment type');
 
-    const resource = await get(EnvironmentTypesService).create(parsedInput);
+    const environmentTypesService = await get(EnvironmentTypesService);
+    const resource = await environmentTypesService.create(parsedInput);
 
     const { slug } = ctx.workspace;
 
@@ -37,7 +38,8 @@ export const deleteEnvironmentTypeAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting environment type');
 
-    await get(EnvironmentTypesService).delete(parsedInput.id);
+    const environmentTypesService = await get(EnvironmentTypesService);
+    await environmentTypesService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
 
@@ -55,7 +57,8 @@ export const createEnvironmentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating environment');
 
-    const resource = await get(EnvironmentsService).create(parsedInput);
+    const environmentsService = await get(EnvironmentsService);
+    const resource = await environmentsService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
@@ -70,7 +73,8 @@ export const deleteEnvironmentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting environment');
 
-    await get(EnvironmentsService).delete(parsedInput.id);
+    const environmentsService = await get(EnvironmentsService);
+    await environmentsService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));

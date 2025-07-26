@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export const GET = (request: NextRequest) =>
   apiRoute(request, async () => {
-    const members = await get(MembersService).findAll();
+    const membersService = await get(MembersService);
+    const members = await membersService.findAll();
     return members;
   });

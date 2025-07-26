@@ -5,11 +5,13 @@ import { get } from '@/services/service-factory';
 import { EventInput } from '@fullcalendar/core/index.js';
 
 export default async function Releases({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const releases = await get(ReleaseService).findAll();
+  const { slug } = await params;
+  const releasesService = await get(ReleaseService);
+  const releases = await releasesService.findAll();
 
   const events = releases.map(
     (release): EventInput => ({

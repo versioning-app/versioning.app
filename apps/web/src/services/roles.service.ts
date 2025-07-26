@@ -9,12 +9,13 @@ import {
 import { CURRENT_PERMISSIONS_VERSION } from '@/permissions/config';
 import { SystemRoles } from '@/permissions/defaults';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { and, eq, inArray, InferSelectModel, asc } from 'drizzle-orm';
 import 'server-only';
 
 export class RolesService extends WorkspaceScopedRepository<typeof roles> {
-  public constructor() {
-    super(roles);
+  public constructor(headers: AppHeaders) {
+    super(headers, roles);
   }
 
   public async findByMemberId(memberId: string) {

@@ -14,7 +14,8 @@ export const apiMiddleware = async (req: NextRequest) => {
   logger.debug({ now }, 'API middleware started');
 
   try {
-    const workspaceId = await get(WorkspaceService).currentWorkspaceId();
+    const workspaceService = await get(WorkspaceService);
+    const workspaceId = await workspaceService.currentWorkspaceId();
 
     logger.debug({ workspaceId }, 'Current workspace ID');
 

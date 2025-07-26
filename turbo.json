@@ -30,6 +30,7 @@
     "APP_*",
     "AUTH_*",
     "DATABASE_*",
-    "NODE_TLS_REJECT_UNAUTHORIZED"
+    "NODE_TLS_REJECT_UNAUTHORIZED",
+    "RESEND_API_KEY"
   ]
 }

@@ -49,7 +49,8 @@ export const registerInterestAction = action
 
     logger.debug('Captcha verification successful');
 
-    const lead = await get(LeadService).create({ email: parsedInput.email });
+    const leadService = await get(LeadService);
+    const lead = await leadService.create({ email: parsedInput.email });
 
     if (!lead) {
       throw new AppError(

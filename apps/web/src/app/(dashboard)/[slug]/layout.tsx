@@ -17,19 +17,21 @@ export const revalidate = 0;
 
 export default async function DashboardLayout({
   children,
-  params: { slug },
+  params,
+  searchParams,
 }: Readonly<{
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
   searchParams?: URLSearchParams;
 }>) {
+  const { slug } = await params;
   const { userId, orgId } = auth();
 
   if (!userId) {
     return redirect(Navigation.HOME);
   }
 
-  const workspaceService = get(WorkspaceService);
+  const workspaceService = await get(WorkspaceService);
 
   const workspace = await workspaceService.currentWorkspace({
     userId,
@@ -44,7 +46,7 @@ export default async function DashboardLayout({
     return redirect(dashboardRoute(workspace.slug));
   }
 
-  const permissionsService = get(PermissionsService);
+  const permissionsService = await get(PermissionsService);
 
   const permissionsUpdated =
     await permissionsService.linkPermissionsToWorkspace(workspace);
