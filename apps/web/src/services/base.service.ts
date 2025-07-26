@@ -18,6 +18,6 @@ export abstract class BaseService {
   }
 
   public initialise() {
-    this.logger.debug('Service initialized');
+    this.logger.trace('Service initialized');
   }
 }

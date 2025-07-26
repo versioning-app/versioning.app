@@ -13,7 +13,7 @@ export default async function RootPage() {
 
   const workspaceService = await get(WorkspaceService);
 
-  const { userId, orgId, sessionClaims } = auth();
+  const { userId, orgId, sessionClaims } = await auth();
 
   let path: string = Navigation.HOME;
 

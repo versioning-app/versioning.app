@@ -34,7 +34,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
   public constructor(headers: AppHeaders) {
     super(headers, permissions);
 
-    this.membersService = new MembersService(headers);
+    this.membersService = getSync(MembersService, headers);
   }
 
   /**
@@ -142,7 +142,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
   public async getCurrentPermissions() {
     const allPermissions = await this.findAll();
 
-    const member = await this.membersService.currentMember;
+    const member = await this.membersService.currentMember();
 
     const permissionPromises = [
       this.getPermissionsForMembers([member.id], allPermissions),
