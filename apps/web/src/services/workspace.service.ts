@@ -55,6 +55,13 @@ export class WorkspaceService extends BaseService {
 
     const { userId, orgId, sessionClaims } = await auth();
 
+    if (!userId) {
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND,
+      );
+    }
+
     return this.getWorkspaceIdFromAuth({
       userId,
       orgId,
@@ -77,7 +84,9 @@ export class WorkspaceService extends BaseService {
       );
     }
 
-    const organization = await clerkClient.organizations.getOrganization({
+    const client = await clerkClient();
+
+    const organization = await client.organizations.getOrganization({
       organizationId: orgId,
     });
 
@@ -90,7 +99,7 @@ export class WorkspaceService extends BaseService {
 
     const creators =
       (
-        await clerkClient.organizations.getOrganizationMembershipList({
+        await client.organizations.getOrganizationMembershipList({
           organizationId: orgId,
           limit: 1,
         })
@@ -109,7 +118,7 @@ export class WorkspaceService extends BaseService {
       );
     }
 
-    const creator = await clerkClient.users.getUser(publicUserData.userId);
+    const creator = await client.users.getUser(publicUserData.userId);
 
     const primaryEmail = creator?.emailAddresses?.find(
       (email) => email.id === creator.primaryEmailAddressId,
@@ -145,7 +154,9 @@ export class WorkspaceService extends BaseService {
       );
     }
 
-    const user = await clerkClient.users.getUser(userId);
+    const client = await clerkClient();
+
+    const user = await client.users.getUser(userId);
 
     if (!user) {
       throw new AppError('User not found', ErrorCodes.RESOURCE_NOT_FOUND);
@@ -193,7 +204,7 @@ export class WorkspaceService extends BaseService {
   }
 
   public async getWorkspaceIdFromAuth(
-    auth: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>,
+    auth: Pick<SignedInAuthObject, 'userId' | 'orgId' | 'sessionClaims'>,
   ): Promise<string> {
     noStore();
     const { userId, orgId, sessionClaims } = auth;
@@ -216,6 +227,8 @@ export class WorkspaceService extends BaseService {
       );
     }
 
+    const client = await clerkClient();
+
     // If we have an org ID, we're looking for an organization workspace
     if (orgId) {
       let orgWorkspaceId = sessionClaims?.org_workspaceId;
@@ -226,10 +239,9 @@ export class WorkspaceService extends BaseService {
       if (!orgWorkspaceId) {
         ('No organization workspaceId found, fetching public metadata from API');
 
-        const { publicMetadata } =
-          await clerkClient.organizations.getOrganization({
-            organizationId: orgId,
-          });
+        const { publicMetadata } = await client.organizations.getOrganization({
+          organizationId: orgId,
+        });
 
         if (!publicMetadata?.workspaceId) {
           this.logger.warn(
@@ -268,7 +280,7 @@ export class WorkspaceService extends BaseService {
         'No user workspaceId found, fetching public metadata from API',
       );
 
-      const { publicMetadata } = await clerkClient.users.getUser(userId);
+      const { publicMetadata } = await client.users.getUser(userId);
 
       if (!publicMetadata?.workspaceId) {
         this.logger.warn(
@@ -299,7 +311,7 @@ export class WorkspaceService extends BaseService {
   public async currentWorkspace(
     authObject?: Pick<SignedInAuthObject, 'userId' | 'orgId'>,
   ): Promise<Workspace> {
-    const { userId, orgId } = authObject ?? auth();
+    const { userId, orgId } = authObject ?? (await auth());
 
     if (!userId) {
       this.logger.error('No user, cannot get workspace');
@@ -381,8 +393,10 @@ export class WorkspaceService extends BaseService {
       );
     }
 
+    const client = await clerkClient();
+
     if (orgId) {
-      const organization = await clerkClient.organizations.getOrganization({
+      const organization = await client.organizations.getOrganization({
         organizationId: orgId,
       });
 
@@ -398,7 +412,7 @@ export class WorkspaceService extends BaseService {
       ).toLowerCase();
     }
 
-    const user = await clerkClient.users.getUser(userId);
+    const user = await client.users.getUser(userId);
 
     if (!user) {
       throw new AppError('User not found', ErrorCodes.USER_NOT_FOUND);
@@ -472,6 +486,14 @@ export class WorkspaceService extends BaseService {
     }
 
     const { orgId, userId } = await auth();
+
+    if (!userId) {
+      this.logger.error('No user, cannot link workspace');
+      throw new AppError(
+        'User does not exist in session',
+        ErrorCodes.USER_NOT_FOUND,
+      );
+    }
 
     await this.linkWorkspaceToClerk({
       workspaceId: workspace.id,
@@ -560,7 +582,7 @@ export class WorkspaceService extends BaseService {
     orgId,
     userId,
     sessionClaims,
-  }: Pick<AuthObject, 'userId' | 'orgId' | 'sessionClaims'>): Promise<{
+  }: Pick<SignedInAuthObject, 'userId' | 'orgId' | 'sessionClaims'>): Promise<{
     status: 'ready' | 'linked';
     workspace: Workspace;
   }> {
@@ -649,7 +671,7 @@ export class WorkspaceService extends BaseService {
     slug,
     userId,
     orgId,
-  }: Pick<AuthObject, 'userId' | 'orgId'> & {
+  }: Pick<SignedInAuthObject, 'userId' | 'orgId'> & {
     workspaceId: string;
     slug: string;
   }) {
@@ -722,7 +744,7 @@ export class WorkspaceService extends BaseService {
     slug,
     userId,
     orgId,
-  }: Pick<AuthObject, 'userId' | 'orgId'> & {
+  }: Pick<SignedInAuthObject, 'userId' | 'orgId'> & {
     workspaceId: string;
     slug: string;
   }) {
@@ -731,10 +753,12 @@ export class WorkspaceService extends BaseService {
       return;
     }
 
+    const client = await clerkClient();
+
     if (orgId) {
       this.logger.debug({ workspaceId }, 'Linking workspace to organization');
 
-      await clerkClient.organizations.updateOrganization(orgId, {
+      await client.organizations.updateOrganization(orgId, {
         publicMetadata: {
           workspaceId,
           slug,
@@ -748,7 +772,7 @@ export class WorkspaceService extends BaseService {
 
     this.logger.debug({ workspaceId }, 'Linking workspace to user');
 
-    await clerkClient.users.updateUserMetadata(userId, {
+    await client.users.updateUser(userId, {
       publicMetadata: {
         workspaceId,
         slug,

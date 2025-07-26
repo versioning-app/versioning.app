@@ -11,7 +11,7 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createApprovalGroupAction = workspaceAction
-  .schema(createApprovalGroupSchema)
+  .inputSchema(createApprovalGroupSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createApprovalGroup' });
 
@@ -27,7 +27,7 @@ export const createApprovalGroupAction = workspaceAction
   });
 
 export const deleteApprovalGroupAction = workspaceAction
-  .schema(deleteApprovalGroupSchema)
+  .inputSchema(deleteApprovalGroupSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteApprovalGroupSchema' });
 

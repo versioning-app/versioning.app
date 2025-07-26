@@ -5,37 +5,22 @@ import { FieldConfig } from '@/components/ui/auto-form/types';
 import { NavigationItem, dashboardRoute } from '@/config/navigation';
 import { parseServerError } from '@/lib/actions/parse-server-error';
 import { AppErrorJson } from '@/lib/error/app.error';
+import { ActionTypeFn } from '@/types/action';
 import { Loader2 } from 'lucide-react';
-import { SafeActionFn } from 'next-safe-action';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-export function InputForm<
-  Schema extends z.AnyZodObject,
-  ActionType extends (input: z.infer<Schema>) => Promise<{
-    data?: ({ success: boolean } & { [key: string]: unknown }) | null;
-    serverError?: string;
-    validationErrors?: Partial<
-      Record<keyof z.infer<Schema> | '_root', string[]>
-    >;
-  }> = (input: z.infer<Schema>) => Promise<{
-    data?: ({ success: boolean } & { [key: string]: unknown }) | null;
-    serverError?: string;
-    validationErrors?: Partial<
-      Record<keyof z.infer<Schema> | '_root', string[]>
-    >;
-  }>,
->({
+export function InputForm<Schema extends z.AnyZodObject>({
   schema,
   action,
   resource = 'Resource',
   postSubmitLink,
   fieldConfig,
 }: {
-  schema: Schema;
-  action: SafeActionFn<any, Schema, any, any, any, any>;
+  schema: Schema & any;
+  action: ActionTypeFn<Schema>;
   resource?: string;
   postSubmitLink: NavigationItem;
   fieldConfig?: FieldConfig<z.infer<Schema>>;
@@ -44,9 +29,9 @@ export function InputForm<
   const { slug } = useParams<{ slug: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<AppErrorJson>();
-  const [values, setValues] = useState<Partial<z.infer<typeof schema>>>({});
+  const [values, setValues] = useState<Partial<z.infer<Schema>>>({});
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
+  const onSubmit = async (values: z.infer<Schema>) => {
     setSubmitting(true);
 
     const loadingToast = toast.loading(`Creating ${resource}`, {
@@ -54,7 +39,7 @@ export function InputForm<
     });
 
     // TODO: fix typing here
-    const { data, serverError } = (await action(values as any)) ?? {};
+    const { data, serverError } = (await action(values)) ?? {};
 
     toast.dismiss(loadingToast);
     setSubmitting(false);
@@ -76,7 +61,7 @@ export function InputForm<
     }
 
     // TODO: improve typing here of data
-    if (data?.success) {
+    if (data) {
       toast.success(`${resource} created`);
       setError(undefined);
       setValues({});
