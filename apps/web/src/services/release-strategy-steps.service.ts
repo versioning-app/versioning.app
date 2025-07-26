@@ -9,19 +9,28 @@ import { ErrorCodes } from '@/lib/error/error-codes';
 import { ReleaseStrategiesService } from '@/services/release-strategies.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, eq, inArray } from 'drizzle-orm';
 import 'server-only';
 
 export class ReleaseStrategyStepService extends CrudRepository<
   typeof release_strategy_steps
 > {
-  private releaseStrategiesService: ReleaseStrategiesService;
+  private _releaseStrategiesService: ReleaseStrategiesService | undefined;
 
-  public constructor() {
-    super(db, release_strategy_steps, 'id');
+  public constructor(headers: AppHeaders) {
+    super(headers, db, release_strategy_steps, 'id');
+  }
 
-    this.releaseStrategiesService = get(ReleaseStrategiesService);
+  private get releaseStrategiesService(): ReleaseStrategiesService {
+    if (!this._releaseStrategiesService) {
+      this._releaseStrategiesService = getSync(
+        ReleaseStrategiesService,
+        this.headers,
+      );
+    }
+    return this._releaseStrategiesService;
   }
 
   public async findAll() {
@@ -41,9 +50,10 @@ export class ReleaseStrategyStepService extends CrudRepository<
     strategyId: string,
     limits?: QueryLimits,
   ): Promise<InferSelectModel<typeof release_strategy_steps>[]> {
-    const component = await this.releaseStrategiesService.findOne(strategyId);
+    const releaseStrategy =
+      await this.releaseStrategiesService.findOne(strategyId);
 
-    if (!component) {
+    if (!releaseStrategy) {
       throw new AppError('Resource not found', ErrorCodes.RESOURCE_NOT_FOUND);
     }
 

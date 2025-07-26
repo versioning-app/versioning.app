@@ -5,11 +5,13 @@ import { ApprovalGroupService } from '@/services/approval-group.service';
 import { get } from '@/services/service-factory';
 
 export default async function ApprovalGroups({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const approvalGroups = await get(ApprovalGroupService).findAll();
+  const { slug } = await params;
+  const approvalGroupsService = await get(ApprovalGroupService);
+  const approvalGroups = await approvalGroupsService.findAll();
 
   return (
     <List

@@ -17,7 +17,8 @@ export const createDeploymentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating deployment');
 
-    const resource = await get(DeploymentsService).create(parsedInput);
+    const deploymentsService = await get(DeploymentsService);
+    const resource = await deploymentsService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
@@ -32,7 +33,8 @@ export const deleteDeploymentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting deployment');
 
-    await get(DeploymentsService).delete(parsedInput.id);
+    const deploymentsService = await get(DeploymentsService);
+    await deploymentsService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_DEPLOYMENTS));

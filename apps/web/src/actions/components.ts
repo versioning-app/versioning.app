@@ -22,7 +22,8 @@ export const createComponentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating component');
 
-    const resource = await get(ComponentsService).create(parsedInput);
+    const componentsService = await get(ComponentsService);
+    const resource = await componentsService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
@@ -37,7 +38,8 @@ export const deleteComponentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting component');
 
-    await get(ComponentsService).delete(parsedInput.id);
+    const componentsService = await get(ComponentsService);
+    await componentsService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
@@ -52,7 +54,8 @@ export const createComponentVersionAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating component version');
 
-    const resource = await get(ComponentVersionService).create(parsedInput);
+    const componentVersionService = await get(ComponentVersionService);
+    const resource = await componentVersionService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -69,7 +72,8 @@ export const deleteComponentVersionAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting component version');
 
-    await get(ComponentVersionService).delete(parsedInput.id);
+    const componentVersionService = await get(ComponentVersionService);
+    await componentVersionService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -86,7 +90,8 @@ export const createReleaseComponentAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating component version');
 
-    const resource = await get(ReleaseComponentService).create(parsedInput);
+    const releaseComponentService = await get(ReleaseComponentService);
+    const resource = await releaseComponentService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(

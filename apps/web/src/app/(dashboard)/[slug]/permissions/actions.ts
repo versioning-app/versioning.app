@@ -14,9 +14,9 @@ export async function evaluatePermission(
   types: Permissions[],
   roleIds: string[],
 ) {
-  const permissionsService = get(PermissionsService);
-  const rolesService = get(RolesService);
-  const membersService = get(MembersService);
+  const permissionsService = await get(PermissionsService);
+  const rolesService = await get(RolesService);
+  const membersService = await get(MembersService);
 
   let permissions;
 
@@ -47,13 +47,13 @@ export async function evaluatePermission(
 }
 
 export async function fetchRoles() {
-  const rolesService = get(RolesService);
+  const rolesService = await get(RolesService);
   const roles = await rolesService.findAll();
   return roles.map((role) => ({ id: role.id, name: role.name }));
 }
 
 export async function fetchAvailableResources() {
-  const databaseService = get(DatabaseService);
+  const databaseService = await get(DatabaseService);
 
   const tables = databaseService
     .getTables()

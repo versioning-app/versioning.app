@@ -5,7 +5,7 @@ import { get } from '@/services/service-factory';
 import { StripeService } from '@/services/stripe.service';
 
 export async function POST(request: Request) {
-  const stripeService = get(StripeService);
+  const stripeService = await get(StripeService);
 
   const body = await request.text();
   const signature = request.headers.get('stripe-signature') as string;
@@ -18,10 +18,8 @@ export async function POST(request: Request) {
       return err.toResponse();
     }
 
-    serverLogger({ name: 'api/billing/webhooks/stripe' }).error(
-      { err },
-      'Error handling webhook event',
-    );
+    const logger = await serverLogger({ name: 'api/billing/webhooks/stripe' });
+    logger.error({ err }, 'Error handling webhook event');
 
     const unknownError = new AppError(
       'Unknown error occurred while handling webhook event',

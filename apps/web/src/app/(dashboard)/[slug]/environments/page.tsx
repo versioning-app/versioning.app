@@ -4,12 +4,14 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { EnvironmentsService } from '@/services/environments.service';
 import { get } from '@/services/service-factory';
 
-export default async function EnvironmentsPage({
-  params: { slug },
+export default async function Environments({
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const environments = await get(EnvironmentsService).findAll();
+  const { slug } = await params;
+  const environmentsService = await get(EnvironmentsService);
+  const environments = await environmentsService.findAll();
 
   return (
     <List

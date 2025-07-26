@@ -4,14 +4,15 @@ import {
   release_strategies,
 } from '@/database/schema';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { eq } from 'drizzle-orm';
 import 'server-only';
 
 export class ReleaseStrategiesService extends WorkspaceScopedRepository<
   typeof release_strategies
 > {
-  public constructor() {
-    super(release_strategies);
+  public constructor(headers: AppHeaders) {
+    super(headers, release_strategies);
   }
 
   public async create(

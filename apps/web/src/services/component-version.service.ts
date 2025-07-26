@@ -5,7 +5,8 @@ import { ErrorCodes } from '@/lib/error/error-codes';
 import { ComponentsService } from '@/services/components.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, eq, inArray } from 'drizzle-orm';
 import 'server-only';
 
@@ -13,12 +14,17 @@ export class ComponentVersionService extends CrudRepository<
   typeof component_versions,
   'id'
 > {
-  private componentService: ComponentsService;
+  private _componentService: ComponentsService | undefined;
 
-  public constructor() {
-    super(db, component_versions, 'id');
+  public constructor(headers: AppHeaders) {
+    super(headers, db, component_versions, 'id');
+  }
 
-    this.componentService = get(ComponentsService);
+  private get componentService(): ComponentsService {
+    if (!this._componentService) {
+      this._componentService = getSync(ComponentsService, this.headers);
+    }
+    return this._componentService;
   }
 
   public async findAll() {

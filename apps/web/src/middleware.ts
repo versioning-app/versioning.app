@@ -31,7 +31,8 @@ const clerk = clerkMiddleware(async (auth, req, event) => {
     return auth().redirectToSignIn({ returnBackUrl: req.url });
   }
 
-  await get(WorkspaceService).ensureWorkspace({
+  const workspaceService = await get(WorkspaceService);
+  await workspaceService.ensureWorkspace({
     userId,
     orgId,
     sessionClaims,

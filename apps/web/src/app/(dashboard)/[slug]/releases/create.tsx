@@ -5,11 +5,13 @@ import { ReleaseStrategiesService } from '@/services/release-strategies.service'
 import { get } from '@/services/service-factory';
 
 export default async function NewRelease({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const releaseStrategies = await get(ReleaseStrategiesService).findAll();
+  const { slug } = await params;
+  const releaseStrategiesService = await get(ReleaseStrategiesService);
+  const releaseStrategies = await releaseStrategiesService.findAll();
 
   if (!releaseStrategies?.length) {
     return (

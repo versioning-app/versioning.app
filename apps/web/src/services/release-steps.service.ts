@@ -6,20 +6,36 @@ import { ReleaseStrategyStepService } from '@/services/release-strategy-steps.se
 import { ReleaseService } from '@/services/release.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, and, eq, inArray } from 'drizzle-orm';
 import 'server-only';
 
 export class ReleaseStepService extends CrudRepository<typeof release_steps> {
-  private releaseService: ReleaseService;
-  private releaseStrategyStepService: ReleaseStrategyStepService;
-
-  public constructor() {
-    super(db, release_steps, 'id');
-
-    this.releaseService = get(ReleaseService);
-    this.releaseStrategyStepService = get(ReleaseStrategyStepService);
+  public constructor(headers: AppHeaders) {
+    super(headers, db, release_steps, 'id');
   }
+
+  private get releaseService(): ReleaseService {
+    if (!this._releaseService) {
+      this._releaseService = getSync(ReleaseService, this.headers);
+    }
+    return this._releaseService;
+  }
+
+  private _releaseService: ReleaseService | undefined;
+
+  private get releaseStrategyStepService(): ReleaseStrategyStepService {
+    if (!this._releaseStrategyStepService) {
+      this._releaseStrategyStepService = getSync(
+        ReleaseStrategyStepService,
+        this.headers,
+      );
+    }
+    return this._releaseStrategyStepService;
+  }
+
+  private _releaseStrategyStepService: ReleaseStrategyStepService | undefined;
 
   public async findAll() {
     this.logger.debug('Finding all release steps');
@@ -38,9 +54,9 @@ export class ReleaseStepService extends CrudRepository<typeof release_steps> {
     releaseId: string,
     limits?: QueryLimits,
   ): Promise<InferSelectModel<typeof release_steps>[]> {
-    const component = await this.releaseService.findOne(releaseId);
+    const release = await this.releaseService.findOne(releaseId);
 
-    if (!component) {
+    if (!release) {
       throw new AppError('Resource not found', ErrorCodes.RESOURCE_NOT_FOUND);
     }
 
@@ -51,11 +67,11 @@ export class ReleaseStepService extends CrudRepository<typeof release_steps> {
     releaseStrategyStepId: string,
     limits?: QueryLimits,
   ): Promise<InferSelectModel<typeof release_steps>[]> {
-    const component = await this.releaseStrategyStepService.findOne(
+    const releaseStrategyStep = await this.releaseStrategyStepService.findOne(
       releaseStrategyStepId,
     );
 
-    if (!component) {
+    if (!releaseStrategyStep) {
       throw new AppError('Resource not found', ErrorCodes.RESOURCE_NOT_FOUND);
     }
 

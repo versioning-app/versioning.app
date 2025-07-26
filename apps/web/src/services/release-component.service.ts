@@ -1,29 +1,42 @@
 import { db } from '@/database/db';
-import {
-  NewReleaseComponentVersion,
-  release_components,
-} from '@/database/schema';
+import { release_components } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { ComponentVersionService } from '@/services/component-version.service';
 import { ReleaseService } from '@/services/release.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, eq, inArray } from 'drizzle-orm';
 import 'server-only';
 
 export class ReleaseComponentService extends CrudRepository<
   typeof release_components
 > {
-  private releaseService: ReleaseService;
-  private componentVersionService: ComponentVersionService;
+  public constructor(headers: AppHeaders) {
+    super(headers, db, release_components, 'id');
+  }
 
-  public constructor() {
-    super(db, release_components, 'id');
+  private _releaseService: ReleaseService | undefined;
 
-    this.releaseService = get(ReleaseService);
-    this.componentVersionService = get(ComponentVersionService);
+  private get releaseService(): ReleaseService {
+    if (!this._releaseService) {
+      this._releaseService = getSync(ReleaseService, this.headers);
+    }
+    return this._releaseService;
+  }
+
+  private _componentVersionService: ComponentVersionService | undefined;
+
+  private get componentVersionService(): ComponentVersionService {
+    if (!this._componentVersionService) {
+      this._componentVersionService = getSync(
+        ComponentVersionService,
+        this.headers,
+      );
+    }
+    return this._componentVersionService;
   }
 
   public async findAll() {

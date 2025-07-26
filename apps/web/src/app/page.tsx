@@ -9,9 +9,9 @@ export const dynamic = 'force-dynamic'; // defaults to auto
 export const revalidate = 0;
 
 export default async function RootPage() {
-  const logger = serverLogger({ name: 'index' });
+  const logger = await serverLogger({ name: 'index' });
 
-  const workspaceService = get(WorkspaceService);
+  const workspaceService = await get(WorkspaceService);
 
   const { userId, orgId, sessionClaims } = auth();
 
@@ -19,9 +19,10 @@ export default async function RootPage() {
 
   if (userId || orgId) {
     try {
-      const { workspace } = await workspaceService.ensureWorkspace({
+      const workspace = await workspaceService.currentWorkspace({
         userId,
         orgId,
+        // @ts-ignore
         sessionClaims,
       });
 
@@ -29,7 +30,7 @@ export default async function RootPage() {
         path = `${Navigation.DASHBOARD_ROOT}${workspace.slug}`;
       }
     } catch (error) {
-      logger.debug(
+      logger.error(
         { error },
         'Error getting current workspace, user is likely not logged in',
       );

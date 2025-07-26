@@ -1,20 +1,17 @@
 import { db as AppDb } from '@/database/db';
-import { AppError } from '@/lib/error/app.error';
-import { ErrorCodes } from '@/lib/error/error-codes';
 import { QueryLimits } from '@/services/repository/base-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
+import { AppHeaders } from '@/types/headers';
 import {
   InferInsertModel,
   InferSelectModel,
-  Many,
   SQLWrapper,
   and,
   eq,
 } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { CrudRepository } from './crud-repository.service';
-import { AppHeaders } from '@/types/headers';
 
 export abstract class WorkspaceScopedRepository<
   M extends PgTable,
@@ -29,7 +26,7 @@ export abstract class WorkspaceScopedRepository<
     primaryKey?: ID,
   ) {
     super(headers, db ?? AppDb, schema, primaryKey ?? ('id' as ID));
-    this.workspaceService = get(WorkspaceService);
+    this.workspaceService = getSync(WorkspaceService, headers);
   }
 
   public get currentWorkspaceId(): Promise<string> {

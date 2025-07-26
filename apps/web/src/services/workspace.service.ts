@@ -10,6 +10,7 @@ import { CURRENT_PERMISSIONS_VERSION } from '@/permissions/config';
 import { BaseService } from '@/services/base.service';
 import { PermissionsService } from '@/services/permissions.service';
 import { get } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { AuthObject } from '@clerk/backend';
 import { SignedInAuthObject } from '@clerk/backend/internal';
 import { auth, clerkClient } from '@clerk/nextjs/server';
@@ -21,8 +22,8 @@ import 'server-only';
 import slugify from 'slugify';
 
 export class WorkspaceService extends BaseService {
-  public constructor() {
-    super();
+  public constructor(headers: AppHeaders) {
+    super(headers);
   }
 
   public get shouldCache(): boolean {
