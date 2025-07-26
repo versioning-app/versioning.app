@@ -5,13 +5,15 @@ import { ComponentVersionService } from '@/services/component-version.service';
 import { get } from '@/services/service-factory';
 
 export default async function ComponentVersion({
-  params: { slug, id },
+  params,
 }: {
-  params: { slug: string; id: string };
+  params: Promise<{ slug: string; id: string }>;
 }) {
-  const componentVersions = await get(
-    ComponentVersionService,
-  ).findAllByComponentId(id);
+  const { slug, id } = await params;
+
+  const componentVersionsService = await get(ComponentVersionService);
+  const componentVersions =
+    await componentVersionsService.findAllByComponentId(id);
 
   return (
     <List

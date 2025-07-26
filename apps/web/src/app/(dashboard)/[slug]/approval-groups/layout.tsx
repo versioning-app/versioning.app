@@ -1,15 +1,17 @@
 import DashboardPageLayout from '@/components/dashboard/layouts/page-layout';
 import { Navigation } from '@/config/navigation';
 
-export default function ApprovalGroupsLayout({
+export default async function ApprovalGroupsLayout({
   children,
   modal,
-  params: { slug },
+  params,
 }: {
   children: React.ReactNode;
   modal: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   return (
     <DashboardPageLayout
       slug={slug}

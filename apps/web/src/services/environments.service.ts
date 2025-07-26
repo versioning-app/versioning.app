@@ -3,6 +3,7 @@ import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { eq } from 'drizzle-orm';
 import 'server-only';
 import { NewEnvironment } from '../database/schema';
@@ -10,17 +11,24 @@ import { NewEnvironment } from '../database/schema';
 export class EnvironmentsService extends WorkspaceScopedRepository<
   typeof environments
 > {
-  private readonly environmentTypesService;
-  public constructor() {
-    super(environments);
+  private environmentTypesService: EnvironmentTypesService | undefined;
+  
+  public constructor(headers: AppHeaders) {
+    super(headers, environments);
+  }
 
-    this.environmentTypesService = new EnvironmentTypesService();
+  private async getEnvironmentTypesService(): Promise<EnvironmentTypesService> {
+    if (!this.environmentTypesService) {
+      this.environmentTypesService = new EnvironmentTypesService(this.headers);
+    }
+    return this.environmentTypesService;
   }
 
   public async create(
     newEnvironment: Pick<NewEnvironment, 'name' | 'typeId' | 'description'>,
   ): Promise<Environment> {
-    if (!(await this.environmentTypesService.findOne(newEnvironment.typeId))) {
+    const environmentTypesService = await this.getEnvironmentTypesService();
+    if (!(await environmentTypesService.findOne(newEnvironment.typeId))) {
       throw new AppError(
         'Environment type not found',
         ErrorCodes.RESOURCE_NOT_FOUND,

@@ -3,7 +3,8 @@ import { MembersService } from '@/services/members.service';
 import { get } from '@/services/service-factory';
 
 export default async function Members() {
-  const members = await get(MembersService).findAll();
+  const membersService = await get(MembersService);
+  const members = await membersService.findAll();
 
   if (!members?.length) {
     return (

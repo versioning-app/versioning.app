@@ -12,7 +12,7 @@ export const changeSlugAction = workspaceAction
 
     logger.debug({ changeSlugAction }, 'Attempting to change slug');
 
-    const workspaceService = get(WorkspaceService);
+    const workspaceService = await get(WorkspaceService);
 
     const updated = await workspaceService.changeSlug({ slug });
     logger.debug({ updated }, 'Slug changed successfully');

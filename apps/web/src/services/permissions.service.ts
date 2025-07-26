@@ -18,6 +18,7 @@ import { SystemRoles } from '@/permissions/defaults';
 import { MembersService } from '@/services/members.service';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { RolesService } from '@/services/roles.service';
+import { getSync } from '@/services/service-factory';
 import { AppHeaders } from '@/types/headers';
 import { and, eq, inArray } from 'drizzle-orm';
 import multimatch from 'multimatch';
@@ -33,7 +34,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
   public constructor(headers: AppHeaders) {
     super(headers, permissions);
 
-    this.membersService = new MembersService();
+    this.membersService = new MembersService(headers);
   }
 
   /**
@@ -41,7 +42,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
    */
   private get rolesService() {
     if (!this._rolesService) {
-      this._rolesService = new RolesService();
+      this._rolesService = getSync(RolesService, this.headers);
     }
     return this._rolesService;
   }

@@ -1,16 +1,18 @@
 import { deleteApiKeyAction } from '@/actions/api-keys';
-import { deleteComponentAction } from '@/actions/components';
 import { List } from '@/components/dashboard/lists/list-item';
 import { Navigation, dashboardRoute } from '@/config/navigation';
 import { ApiKeysService } from '@/services/api-keys.service';
 import { get } from '@/services/service-factory';
 
 export default async function ApiKeys({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const apiKeys = (await get(ApiKeysService).findAll()).map((apiKey) => ({
+  const { slug } = await params;
+
+  const apiKeysService = await get(ApiKeysService);
+  const apiKeys = (await apiKeysService.findAll()).map((apiKey) => ({
     ...apiKey,
     // TODO: Re-enable this in the future when we have a way to have post-create actions
     // key: apiKey.key.slice(0, 4) + '•'.repeat(16),
