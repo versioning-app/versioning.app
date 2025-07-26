@@ -20,7 +20,7 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createReleaseAction = workspaceAction
-  .schema(createReleaseSchema)
+  .inputSchema(createReleaseSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createReleaseAction' });
 
@@ -36,7 +36,7 @@ export const createReleaseAction = workspaceAction
   });
 
 export const deleteReleaseAction = workspaceAction
-  .schema(deleteReleaseSchema)
+  .inputSchema(deleteReleaseSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteReleaseAction' });
 
@@ -52,7 +52,7 @@ export const deleteReleaseAction = workspaceAction
   });
 
 export const createReleaseStrategyAction = workspaceAction
-  .schema(createReleaseStrategySchema)
+  .inputSchema(createReleaseStrategySchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createReleaseStrategyAction' });
 
@@ -70,7 +70,7 @@ export const createReleaseStrategyAction = workspaceAction
   });
 
 export const deleteReleaseStrategyAction = workspaceAction
-  .schema(deleteReleaseStrategySchema)
+  .inputSchema(deleteReleaseStrategySchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteReleaseStrategyAction' });
 
@@ -88,7 +88,7 @@ export const deleteReleaseStrategyAction = workspaceAction
   });
 
 export const createReleaseStrategyStepAction = workspaceAction
-  .schema(createReleaseStrategyStepSchema)
+  .inputSchema(createReleaseStrategyStepSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({
       name: 'createReleaseStrategyStepAction',
@@ -108,7 +108,7 @@ export const createReleaseStrategyStepAction = workspaceAction
   });
 
 export const deleteReleaseStrategyStepAction = workspaceAction
-  .schema(deleteReleaseStrategyStepSchema)
+  .inputSchema(deleteReleaseStrategyStepSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({
       name: 'deleteReleaseStrategyStepAction',
@@ -129,7 +129,7 @@ export const deleteReleaseStrategyStepAction = workspaceAction
   });
 
 export const createReleaseStepAction = workspaceAction
-  .schema(createReleaseStepSchema)
+  .inputSchema(createReleaseStepSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createReleaseStepAction' });
 
@@ -145,7 +145,7 @@ export const createReleaseStepAction = workspaceAction
   });
 
 export const deleteReleaseStepAction = workspaceAction
-  .schema(deleteReleaseStepSchema)
+  .inputSchema(deleteReleaseStepSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteReleaseStepAction' });
 

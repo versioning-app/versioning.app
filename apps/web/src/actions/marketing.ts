@@ -10,7 +10,7 @@ import { registerInterestSchema } from '@/validation/marketing';
 import { verify } from 'hcaptcha';
 
 export const registerInterestAction = action
-  .schema(registerInterestSchema)
+  .inputSchema(registerInterestSchema)
   .action(async ({ parsedInput }) => {
     const logger = await serverLogger({ name: 'registerInterestAction' });
 

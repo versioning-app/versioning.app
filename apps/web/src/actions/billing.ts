@@ -21,7 +21,7 @@ export const createBillingPortalSession = async () => {
 };
 
 export const createCheckoutSession = workspaceAction
-  .schema(createCheckoutSessionSchema)
+  .inputSchema(createCheckoutSessionSchema)
   .action(async ({ parsedInput: { priceId } }) => {
     const logger = await serverLogger({ name: 'createCheckoutSession' });
 

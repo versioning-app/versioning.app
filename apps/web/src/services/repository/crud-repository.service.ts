@@ -113,7 +113,7 @@ export abstract class CrudRepository<
 
     const records = await this.db
       .select()
-      .from(this.schema)
+      .from(this.schema as any)
       .where(and(clause))
       .orderBy(desc(sql`created_at`));
 
@@ -130,7 +130,7 @@ export abstract class CrudRepository<
 
     const results = await this.db
       .select()
-      .from(this.schema)
+      .from(this.schema as any)
       // @ts-expect-error - Primary key is derived from schema
       .where(and(eq(this.schema[this.primaryKey], id), clause))
       .orderBy(desc(sql`created_at`));
@@ -154,7 +154,7 @@ export abstract class CrudRepository<
 
     const result = await this.db
       .select()
-      .from(this.schema)
+      .from(this.schema as any)
       .where(and(criteria, clause))
       .orderBy(desc(sql`created_at`))
       .limit(1);
@@ -167,7 +167,7 @@ export abstract class CrudRepository<
 
     this.logger.debug({ resource }, 'Record found');
 
-    return resource;
+    return resource as InferSelectModel<M>;
   }
 
   public async findAllBy(
@@ -179,7 +179,7 @@ export abstract class CrudRepository<
 
     const query = this.db
       .select()
-      .from(this.schema)
+      .from(this.schema as any)
       .where(and(criteria, clause))
       .orderBy(desc(sql`created_at`));
 
@@ -236,7 +236,7 @@ export abstract class CrudRepository<
     this.logger.debug({ id, updateSet, clause }, 'Updating entity');
 
     const [updated] = await this.db
-      .update(this.schema)
+      .update(this.schema as any)
       .set(updateSet)
       // @ts-expect-error - Primary key is derived from schema
       .where(and(eq(this.schema[this.primaryKey], id), clause))
