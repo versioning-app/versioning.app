@@ -1,40 +1,111 @@
-'use server';
-import { Navigation, dashboardRoute } from '@/config/navigation';
-import { serverLogger } from '@/lib/logger/server';
-import { workspaceAction } from '@/lib/safe-action';
-import { ApiKeysService } from '@/services/api-keys.service';
-import { get } from '@/services/service-factory';
-import { createApiKeySchema, deleteApiKeySchema } from '@/validation/api-keys';
-import { revalidatePath } from 'next/cache';
+import 'server-only';
 
-export const createApiKeyAction = workspaceAction
-  .schema(createApiKeySchema)
-  .action(async ({ parsedInput, ctx }) => {
-    const logger = await serverLogger({ name: 'createApiKeyAction' });
+import { BaseService } from '@/services/base.service';
+import { type AppHeaders } from '@/types/headers';
+import { headers } from 'next/headers';
+import { serverLoggerWithHeaders } from '@/lib/serverLogger'; // adjust path
 
-    logger.debug({ parsedInput }, 'Creating API Key');
+type ServiceConstructor<T extends BaseService> = new (headers: AppHeaders) => T;
 
-    const apiKeysService = await get(ApiKeysService);
-    const resource = await apiKeysService.create(parsedInput);
+const requestCache = new WeakMap<AppHeaders, Map<string, BaseService>>();
 
-    const { slug } = ctx.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_API_KEYS));
+export class ServiceFactory {
+  private static getUserKey(headers: AppHeaders): string | null {
+    const token = headers.get('x-clerk-auth-token');
+    if (!token || token.trim() === '') {
+      return null;
+    }
+    return token;
+  }
 
-    return { resource, success: true };
-  });
+  private static getServiceCacheForRequest(
+    headers: AppHeaders,
+  ): Map<string, BaseService> {
+    let cache = requestCache.get(headers);
+    if (!cache) {
+      cache = new Map();
+      requestCache.set(headers, cache);
+    }
+    return cache;
+  }
 
-export const deleteApiKeyAction = workspaceAction
-  .schema(deleteApiKeySchema)
-  .action(async ({ parsedInput, ctx }) => {
-    const logger = await serverLogger({ name: 'deleteApiKeyAction' });
+  private static async getCachedService<T extends BaseService>(
+    service: ServiceConstructor<T>,
+    headers: AppHeaders | Promise<AppHeaders>,
+  ): Promise<T> {
+    const resolvedHeaders =
+      headers instanceof Promise ? await headers : headers;
+    const userKey = this.getUserKey(resolvedHeaders);
 
-    logger.debug({ parsedInput }, 'Deleting API Key');
+    const logger = serverLoggerWithHeaders(resolvedHeaders);
 
-    const apiKeysService = await get(ApiKeysService);
-    await apiKeysService.delete(parsedInput.id);
+    if (!userKey) {
+      // No user token — skip caching
+      logger.debug({ service: service.name }, 'No user token, skipping cache');
+      return new service(resolvedHeaders);
+    }
 
-    const { slug } = ctx.workspace;
-    revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_API_KEYS));
+    const cache = this.getServiceCacheForRequest(resolvedHeaders);
+    const cacheKey = `${service.name}:${userKey}`;
 
-    return { success: true };
-  });
+    if (cache.has(cacheKey)) {
+      logger.debug(
+        { service: service.name, userKey },
+        'Returning cached service instance',
+      );
+      return cache.get(cacheKey) as T;
+    }
+
+    const instance = new service(resolvedHeaders);
+    cache.set(cacheKey, instance);
+    return instance;
+  }
+
+  public static async get<T extends BaseService>(
+    service: ServiceConstructor<T>,
+  ): Promise<T> {
+    return this.getCachedService(service, headers());
+  }
+
+  public static getSync<T extends BaseService>(
+    service: ServiceConstructor<T>,
+    headers: AppHeaders,
+  ): T {
+    const userKey = this.getUserKey(headers);
+    const logger = serverLoggerWithHeaders(headers);
+
+    if (!userKey) {
+      logger.debug({ service: service.name }, 'No user token, skipping cache');
+      return new service(headers);
+    }
+
+    const cache = this.getServiceCacheForRequest(headers);
+    const cacheKey = `${service.name}:${userKey}`;
+
+    if (cache.has(cacheKey)) {
+      logger.debug(
+        { service: service.name, userKey },
+        'Returning cached service instance',
+      );
+      return cache.get(cacheKey) as T;
+    }
+
+    const instance = new service(headers);
+    cache.set(cacheKey, instance);
+
+    return instance;
+  }
+}
+
+export const getSync = <T extends BaseService>(
+  service: ServiceConstructor<T>,
+  headers: AppHeaders,
+): T => {
+  return ServiceFactory.getSync(service, headers);
+};
+
+export const get = async <T extends BaseService>(
+  service: ServiceConstructor<T>,
+): Promise<T> => {
+  return ServiceFactory.get(service);
+};

@@ -21,7 +21,7 @@ import { MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export async function Header() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 border-b sticky top-0 shadow-md bg-background max-w-screen">
