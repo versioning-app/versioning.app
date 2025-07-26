@@ -6,7 +6,7 @@ import { WorkspaceService } from '@/services/workspace.service';
 import { changeSlugSchema } from '@/validation/workspace';
 
 export const changeSlugAction = workspaceAction
-  .schema(changeSlugSchema)
+  .inputSchema(changeSlugSchema)
   .action(async ({ parsedInput: { slug } }) => {
     const logger = await serverLogger({ name: 'changeSlugAction' });
 

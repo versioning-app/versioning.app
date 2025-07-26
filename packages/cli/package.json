@@ -27,15 +27,15 @@
 		"ink-spinner": "^5.0.0",
 		"json-parse-better-errors": "^1.0.2",
 		"pastel": "^2.0.2",
-		"react": "^18.3.1",
+		"react": "^19.1.0",
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^3.0.1",
 		"@types/json-parse-better-errors": "^1.0.3",
-		"@types/react": "^18.3.23",
+		"@types/react": "^19.1.8",
 		"chalk": "^5.4.1",
-		"eslint-plugin-react": "^7.37.1",
+		"eslint-plugin-react": "^7.37.5",
 		"eslint-plugin-react-hooks": "^4.6.2",
 		"ink-testing-library": "^4.0.0",
 		"prettier": "^3.6.2",

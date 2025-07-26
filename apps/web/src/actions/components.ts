@@ -16,7 +16,7 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createComponentAction = workspaceAction
-  .schema(createComponentSchema)
+  .inputSchema(createComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createComponentAction' });
 
@@ -32,7 +32,7 @@ export const createComponentAction = workspaceAction
   });
 
 export const deleteComponentAction = workspaceAction
-  .schema(deleteComponentSchema)
+  .inputSchema(deleteComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteComponentAction' });
 
@@ -48,7 +48,7 @@ export const deleteComponentAction = workspaceAction
   });
 
 export const createComponentVersionAction = workspaceAction
-  .schema(createComponentVersionSchema)
+  .inputSchema(createComponentVersionSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createComponentVersionAction' });
 
@@ -66,7 +66,7 @@ export const createComponentVersionAction = workspaceAction
   });
 
 export const deleteComponentVersionAction = workspaceAction
-  .schema(deleteComponentVersionSchema)
+  .inputSchema(deleteComponentVersionSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteComponentVersionAction' });
 
@@ -84,7 +84,7 @@ export const deleteComponentVersionAction = workspaceAction
   });
 
 export const createReleaseComponentAction = workspaceAction
-  .schema(createReleaseComponentSchema)
+  .inputSchema(createReleaseComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createReleaseComponentAction' });
 

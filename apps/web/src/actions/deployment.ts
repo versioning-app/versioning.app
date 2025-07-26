@@ -11,7 +11,7 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createDeploymentAction = workspaceAction
-  .schema(createDeploymentsSchema)
+  .inputSchema(createDeploymentsSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'createDeploymentAction' });
 
@@ -27,7 +27,7 @@ export const createDeploymentAction = workspaceAction
   });
 
 export const deleteDeploymentAction = workspaceAction
-  .schema(deleteDeploymentsSchema)
+  .inputSchema(deleteDeploymentsSchema)
   .action(async ({ parsedInput, ctx }) => {
     const logger = await serverLogger({ name: 'deleteEnvironmentAction' });
 
