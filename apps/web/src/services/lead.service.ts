@@ -1,12 +1,13 @@
 import { db } from '@/database/db';
 import { Lead, leads, NewLead } from '@/database/schema';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { eq } from 'drizzle-orm';
 import 'server-only';
 
 export class LeadService extends CrudRepository<typeof leads> {
-  public constructor() {
-    super(db, leads, 'id');
+  public constructor(headers: AppHeaders) {
+    super(headers, db, leads, 'id');
   }
 
   public async create(newLead: Pick<NewLead, 'email'>): Promise<Lead> {

@@ -41,7 +41,7 @@ export function InputForm<
   fieldConfig?: FieldConfig<z.infer<Schema>>;
 }) {
   const router = useRouter();
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<AppErrorJson>();
   const [values, setValues] = useState<Partial<z.infer<typeof schema>>>({});

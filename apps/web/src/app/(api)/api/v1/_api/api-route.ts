@@ -8,7 +8,7 @@ export const apiRoute = async (
   route: (request: NextRequest) => Promise<any>,
   successStatusCode = 200,
 ) => {
-  const logger = serverLogger({ source: request.url });
+  const logger = await serverLogger({ source: request.url });
 
   logger.debug({ request }, 'API route');
 

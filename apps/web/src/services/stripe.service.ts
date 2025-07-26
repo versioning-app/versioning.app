@@ -4,10 +4,13 @@ import { ErrorCodes } from '@/lib/error/error-codes';
 import { stripe } from '@/lib/stripe/stripe';
 import { getURL } from '@/lib/utils';
 import { BaseService } from '@/services/base.service';
+import { getSync } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
+import { type AppHeaders } from '@/types/headers';
 import { Stripe } from 'stripe';
 
 export class StripeService extends BaseService {
+  private _workspaceService: WorkspaceService | undefined;
   public static WEBHOOK_EVENTS = new Set([
     'product.created',
     'product.updated',
@@ -19,10 +22,15 @@ export class StripeService extends BaseService {
     'customer.subscription.deleted',
   ]);
 
-  public constructor(
-    private readonly workspaceService: WorkspaceService = new WorkspaceService(),
-  ) {
-    super();
+  public constructor(headers: AppHeaders) {
+    super(headers);
+  }
+
+  private get workspaceService(): WorkspaceService {
+    if (!this._workspaceService) {
+      this._workspaceService = getSync(WorkspaceService, this.headers);
+    }
+    return this._workspaceService;
   }
 
   public async createOrRetrieveCustomer() {

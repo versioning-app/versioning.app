@@ -17,7 +17,8 @@ export const createApprovalGroupAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating approval group');
 
-    const resource = await get(ApprovalGroupService).create(parsedInput);
+    const approvalGroupService = await get(ApprovalGroupService);
+    const resource = await approvalGroupService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_APPROVAL_GROUPS));
@@ -32,7 +33,8 @@ export const deleteApprovalGroupAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting approval group');
 
-    await get(ApprovalGroupService).delete(parsedInput.id);
+    const approvalGroupService = await get(ApprovalGroupService);
+    await approvalGroupService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_APPROVAL_GROUPS));

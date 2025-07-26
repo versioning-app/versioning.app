@@ -45,7 +45,8 @@ export const actionClient = createSafeActionClient({
 });
 
 export const workspaceAction = actionClient.use(async ({ next, ctx }) => {
-  const workspace = await get(WorkspaceService).currentWorkspace();
+  const workspaceService = await get(WorkspaceService);
+  const workspace = await workspaceService.currentWorkspace();
 
   if (!workspace) {
     throw new AppError('No workspace found', ErrorCodes.WORKSPACE_NOT_FOUND);

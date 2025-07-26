@@ -37,7 +37,7 @@ import * as React from 'react';
 
 export function CommandMenu({ ...props }: AlertDialogProps) {
   const router = useRouter();
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
 
   const {
     signOut,

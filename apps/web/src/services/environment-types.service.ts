@@ -1,13 +1,14 @@
 import { NewEnvironmentType, environment_types } from '@/database/schema';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, eq } from 'drizzle-orm';
 import 'server-only';
 
 export class EnvironmentTypesService extends WorkspaceScopedRepository<
   typeof environment_types
 > {
-  public constructor() {
-    super(environment_types);
+  public constructor(headers: AppHeaders) {
+    super(headers, environment_types);
   }
 
   public async create(

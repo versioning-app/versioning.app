@@ -13,7 +13,7 @@ export const createBillingPortalSession = async () => {
 
   logger.debug('Creating billing portal session');
 
-  const stripeService = get(StripeService);
+  const stripeService = await get(StripeService);
   await stripeService.createOrRetrieveCustomer();
   const { url } = await stripeService.createBillingPortalSession();
 
@@ -27,7 +27,7 @@ export const createCheckoutSession = workspaceAction
 
     logger.debug({ priceId }, 'Creating checkout session');
 
-    const stripeService = get(StripeService);
+    const stripeService = await get(StripeService);
     const price = await stripeService.getPriceById(priceId);
     const session = await stripeService.createCheckoutSession(price);
 

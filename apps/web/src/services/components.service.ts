@@ -1,13 +1,14 @@
 import { NewComponent, components } from '@/database/schema';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, eq } from 'drizzle-orm';
 import 'server-only';
 
 export class ComponentsService extends WorkspaceScopedRepository<
   typeof components
 > {
-  public constructor() {
-    super(components);
+  public constructor(headers: AppHeaders) {
+    super(headers, components);
   }
 
   public async create(

@@ -14,7 +14,8 @@ export const createApiKeyAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Creating API Key');
 
-    const resource = await get(ApiKeysService).create(parsedInput);
+    const apiKeysService = await get(ApiKeysService);
+    const resource = await apiKeysService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_API_KEYS));
@@ -29,7 +30,8 @@ export const deleteApiKeyAction = workspaceAction
 
     logger.debug({ parsedInput }, 'Deleting API Key');
 
-    await get(ApiKeysService).delete(parsedInput.id);
+    const apiKeysService = await get(ApiKeysService);
+    await apiKeysService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_API_KEYS));
