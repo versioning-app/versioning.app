@@ -6,10 +6,7 @@ import { Workspace, members, workspaces } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { redis } from '@/lib/redis';
-import { CURRENT_PERMISSIONS_VERSION } from '@/permissions/config';
 import { BaseService } from '@/services/base.service';
-import { PermissionsService } from '@/services/permissions.service';
-import { get } from '@/services/service-factory';
 import { type AppHeaders } from '@/types/headers';
 import { AuthObject } from '@clerk/backend';
 import { SignedInAuthObject } from '@clerk/backend/internal';
@@ -56,7 +53,7 @@ export class WorkspaceService extends BaseService {
 
     this.logger.debug('Getting workspace ID from session');
 
-    const { userId, orgId, sessionClaims } = auth();
+    const { userId, orgId, sessionClaims } = await auth();
 
     return this.getWorkspaceIdFromAuth({
       userId,
@@ -71,7 +68,7 @@ export class WorkspaceService extends BaseService {
     email: string;
     name: string;
   }> {
-    const { orgId } = auth();
+    const { orgId } = await auth();
 
     if (!orgId) {
       throw new AppError(
@@ -139,7 +136,7 @@ export class WorkspaceService extends BaseService {
     email: string;
     name: string;
   }> {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       throw new AppError(
@@ -179,7 +176,7 @@ export class WorkspaceService extends BaseService {
     email: string;
     name: string;
   }> {
-    const { userId, orgId } = auth();
+    const { userId, orgId } = await auth();
 
     if (!userId) {
       throw new AppError(
@@ -454,13 +451,15 @@ export class WorkspaceService extends BaseService {
 
     this.logger.debug({ slug }, 'Changing workspace slug');
 
+    const currentClerkId = await this.currentClerkId();
+
     const updatedWorkspaces = await db
       .update(workspaces)
       .set({ slug })
       .where(
         and(
           eq(workspaces.id, workspace.id),
-          eq(workspaces.clerkId, this.currentClerkId),
+          eq(workspaces.clerkId, currentClerkId),
         ),
       )
       .returning();
@@ -472,7 +471,7 @@ export class WorkspaceService extends BaseService {
       );
     }
 
-    const { orgId, userId } = auth();
+    const { orgId, userId } = await auth();
 
     await this.linkWorkspaceToClerk({
       workspaceId: workspace.id,
@@ -510,8 +509,8 @@ export class WorkspaceService extends BaseService {
     return slug;
   }
 
-  public get currentClerkId(): string {
-    const { orgId, userId } = auth();
+  public async currentClerkId(): Promise<string> {
+    const { orgId, userId } = await auth();
 
     if (!userId) {
       throw new AppError(
