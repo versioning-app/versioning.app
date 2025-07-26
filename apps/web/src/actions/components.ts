@@ -18,7 +18,7 @@ import { revalidatePath } from 'next/cache';
 export const createComponentAction = workspaceAction
   .schema(createComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createComponentAction' });
+    const logger = await serverLogger({ name: 'createComponentAction' });
 
     logger.debug({ parsedInput }, 'Creating component');
 
@@ -33,7 +33,7 @@ export const createComponentAction = workspaceAction
 export const deleteComponentAction = workspaceAction
   .schema(deleteComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteComponentAction' });
+    const logger = await serverLogger({ name: 'deleteComponentAction' });
 
     logger.debug({ parsedInput }, 'Deleting component');
 
@@ -48,7 +48,7 @@ export const deleteComponentAction = workspaceAction
 export const createComponentVersionAction = workspaceAction
   .schema(createComponentVersionSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createComponentVersionAction' });
+    const logger = await serverLogger({ name: 'createComponentVersionAction' });
 
     logger.debug({ parsedInput }, 'Creating component version');
 
@@ -65,7 +65,7 @@ export const createComponentVersionAction = workspaceAction
 export const deleteComponentVersionAction = workspaceAction
   .schema(deleteComponentVersionSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteComponentVersionAction' });
+    const logger = await serverLogger({ name: 'deleteComponentVersionAction' });
 
     logger.debug({ parsedInput }, 'Deleting component version');
 
@@ -82,7 +82,7 @@ export const deleteComponentVersionAction = workspaceAction
 export const createReleaseComponentAction = workspaceAction
   .schema(createReleaseComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createReleaseComponentAction' });
+    const logger = await serverLogger({ name: 'createReleaseComponentAction' });
 
     logger.debug({ parsedInput }, 'Creating component version');
 

@@ -14,6 +14,7 @@ import {
 } from 'drizzle-orm';
 import { PgUpdateSetSource, type PgTable } from 'drizzle-orm/pg-core';
 import { CrudRepository } from './crud-repository.service';
+import { AppHeaders } from '@/types/headers';
 
 export abstract class WorkspaceScopedRepository<
   M extends PgTable,
@@ -22,11 +23,12 @@ export abstract class WorkspaceScopedRepository<
   private readonly workspaceService: WorkspaceService;
 
   public constructor(
+    headers: AppHeaders,
     public readonly schema: M,
     db?: typeof AppDb,
     primaryKey?: ID,
   ) {
-    super(db ?? AppDb, schema, primaryKey ?? ('id' as ID));
+    super(headers, db ?? AppDb, schema, primaryKey ?? ('id' as ID));
     this.workspaceService = get(WorkspaceService);
   }
 

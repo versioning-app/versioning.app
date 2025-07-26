@@ -13,7 +13,7 @@ import { revalidatePath } from 'next/cache';
 export const createApprovalGroupAction = workspaceAction
   .schema(createApprovalGroupSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createApprovalGroup' });
+    const logger = await serverLogger({ name: 'createApprovalGroup' });
 
     logger.debug({ parsedInput }, 'Creating approval group');
 
@@ -28,7 +28,7 @@ export const createApprovalGroupAction = workspaceAction
 export const deleteApprovalGroupAction = workspaceAction
   .schema(deleteApprovalGroupSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteApprovalGroupSchema' });
+    const logger = await serverLogger({ name: 'deleteApprovalGroupSchema' });
 
     logger.debug({ parsedInput }, 'Deleting approval group');
 

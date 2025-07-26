@@ -64,10 +64,12 @@ export default async function DashboardLayout({
     return redirect('?permissionsUpdated=true', RedirectType.replace);
   }
 
-  const layout = cookies().get(`${StorageKeys.COOKIE_STORAGE_PREFIX}:layout`);
+  const layout = (await cookies()).get(
+    `${StorageKeys.COOKIE_STORAGE_PREFIX}:layout`,
+  );
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
-  const collapsed = cookies().get(
+  const collapsed = (await cookies()).get(
     `${StorageKeys.COOKIE_STORAGE_PREFIX}:collapsed`,
   );
   const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
