@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 
-export function EmbeddablePricing() {
-  const { userId, orgId, orgPermissions } = auth();
+export async function EmbeddablePricing() {
+  const { userId, orgId, orgPermissions } = await auth();
 
   if (orgId && !orgPermissions?.includes('org:sys_profile:manage')) {
     return (

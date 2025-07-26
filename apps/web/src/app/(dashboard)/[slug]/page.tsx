@@ -6,7 +6,7 @@ import { auth } from '@clerk/nextjs/server';
 export const revalidate = 0;
 
 export default async function Dashboard() {
-  const { orgId, sessionClaims } = auth();
+  const { orgId, sessionClaims } = await auth();
 
   const workspaceService = await get(WorkspaceService);
   const workspaceId = await workspaceService.currentWorkspaceId();

@@ -7,7 +7,6 @@ export default async function Settings({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { orgId } = auth();
 
   return (
     <div>

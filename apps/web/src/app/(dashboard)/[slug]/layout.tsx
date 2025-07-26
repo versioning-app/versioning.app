@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   searchParams?: URLSearchParams;
 }>) {
   const { slug } = await params;
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
 
   if (!userId) {
     return redirect(Navigation.HOME);

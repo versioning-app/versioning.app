@@ -22,7 +22,7 @@ export async function evaluatePermission(
 
   if (roleIds.length === 0) {
     // Use current user's roles if no roles are selected
-    const currentMember = await membersService.currentMember;
+    const currentMember = await membersService.currentMember();
     const currentRoles = await membersService.getCurrentRoles(currentMember);
     permissions = await permissionsService.getCurrentPermissions();
   } else {
