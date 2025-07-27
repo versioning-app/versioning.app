@@ -20,13 +20,14 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createReleaseAction = workspaceAction
-  .schema(createReleaseSchema)
+  .inputSchema(createReleaseSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createReleaseAction' });
+    const logger = await serverLogger({ name: 'createReleaseAction' });
 
     logger.debug({ parsedInput }, 'Creating release');
 
-    const resource = await get(ReleaseService).create(parsedInput);
+    const releaseService = await get(ReleaseService);
+    const resource = await releaseService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_RELEASES));
@@ -35,13 +36,14 @@ export const createReleaseAction = workspaceAction
   });
 
 export const deleteReleaseAction = workspaceAction
-  .schema(deleteReleaseSchema)
+  .inputSchema(deleteReleaseSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteReleaseAction' });
+    const logger = await serverLogger({ name: 'deleteReleaseAction' });
 
     logger.debug({ parsedInput }, 'Deleting release');
 
-    await get(ReleaseService).delete(parsedInput.id);
+    const releaseService = await get(ReleaseService);
+    await releaseService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_RELEASES));
@@ -50,13 +52,14 @@ export const deleteReleaseAction = workspaceAction
   });
 
 export const createReleaseStrategyAction = workspaceAction
-  .schema(createReleaseStrategySchema)
+  .inputSchema(createReleaseStrategySchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createReleaseStrategyAction' });
+    const logger = await serverLogger({ name: 'createReleaseStrategyAction' });
 
     logger.debug({ parsedInput }, 'Creating release strategy');
 
-    const resource = await get(ReleaseStrategiesService).create(parsedInput);
+    const releaseStrategiesService = await get(ReleaseStrategiesService);
+    const resource = await releaseStrategiesService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -67,13 +70,14 @@ export const createReleaseStrategyAction = workspaceAction
   });
 
 export const deleteReleaseStrategyAction = workspaceAction
-  .schema(deleteReleaseStrategySchema)
+  .inputSchema(deleteReleaseStrategySchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteReleaseStrategyAction' });
+    const logger = await serverLogger({ name: 'deleteReleaseStrategyAction' });
 
     logger.debug({ parsedInput }, 'Deleting release strategy');
 
-    await get(ReleaseStrategiesService).delete(parsedInput.id);
+    const releaseStrategiesService = await get(ReleaseStrategiesService);
+    await releaseStrategiesService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -84,13 +88,16 @@ export const deleteReleaseStrategyAction = workspaceAction
   });
 
 export const createReleaseStrategyStepAction = workspaceAction
-  .schema(createReleaseStrategyStepSchema)
+  .inputSchema(createReleaseStrategyStepSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createReleaseStrategyStepAction' });
+    const logger = await serverLogger({
+      name: 'createReleaseStrategyStepAction',
+    });
 
     logger.debug({ parsedInput }, 'Creating release strategy step');
 
-    const resource = await get(ReleaseStrategyStepService).create(parsedInput);
+    const releaseStrategyStepService = await get(ReleaseStrategyStepService);
+    const resource = await releaseStrategyStepService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -101,13 +108,16 @@ export const createReleaseStrategyStepAction = workspaceAction
   });
 
 export const deleteReleaseStrategyStepAction = workspaceAction
-  .schema(deleteReleaseStrategyStepSchema)
+  .inputSchema(deleteReleaseStrategyStepSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteReleaseStrategyStepAction' });
+    const logger = await serverLogger({
+      name: 'deleteReleaseStrategyStepAction',
+    });
 
     logger.debug({ parsedInput }, 'Deleting release strategy step');
 
-    await get(ReleaseStrategyStepService).delete(parsedInput.id);
+    const releaseStrategyStepService = await get(ReleaseStrategyStepService);
+    await releaseStrategyStepService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
 
@@ -119,13 +129,14 @@ export const deleteReleaseStrategyStepAction = workspaceAction
   });
 
 export const createReleaseStepAction = workspaceAction
-  .schema(createReleaseStepSchema)
+  .inputSchema(createReleaseStepSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createReleaseStepAction' });
+    const logger = await serverLogger({ name: 'createReleaseStepAction' });
 
     logger.debug({ parsedInput }, 'Creating release step');
 
-    const resource = await get(ReleaseStepService).create(parsedInput);
+    const releaseStepService = await get(ReleaseStepService);
+    const resource = await releaseStepService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STEPS));
@@ -134,13 +145,14 @@ export const createReleaseStepAction = workspaceAction
   });
 
 export const deleteReleaseStepAction = workspaceAction
-  .schema(deleteReleaseStepSchema)
+  .inputSchema(deleteReleaseStepSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteReleaseStepAction' });
+    const logger = await serverLogger({ name: 'deleteReleaseStepAction' });
 
     logger.debug({ parsedInput }, 'Deleting release step');
 
-    await get(ReleaseStepService).delete(parsedInput.id);
+    const releaseStepService = await get(ReleaseStepService);
+    await releaseStepService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_RELEASE_STEPS));

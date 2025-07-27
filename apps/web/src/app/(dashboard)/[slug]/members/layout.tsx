@@ -1,13 +1,15 @@
 import DashboardPageLayout from '@/components/dashboard/layouts/page-layout';
 import { Navigation } from '@/config/navigation';
 
-export default function MembersLayout({
+export default async function MembersLayout({
   children,
-  params: { slug },
+  params,
 }: {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   return (
     <DashboardPageLayout
       slug={slug}

@@ -5,12 +5,13 @@ import { ReleaseComponentService } from '@/services/release-component.service';
 import { ReleaseService } from '@/services/release.service';
 import { get } from '@/services/service-factory';
 
-export default async function ComponentVersion({
-  params: { slug },
+export default async function ReleaseComponents({
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const releases = await get(ReleaseService).findAll();
+  const { slug } = await params;
+  const releases = await (await get(ReleaseService)).findAll();
 
   if (!releases?.length) {
     return (
@@ -23,7 +24,8 @@ export default async function ComponentVersion({
     );
   }
 
-  const releaseComponents = await get(ReleaseComponentService).findAll();
+  const releaseComponentsService = await get(ReleaseComponentService);
+  const releaseComponents = await releaseComponentsService.findAll();
 
   return (
     <List

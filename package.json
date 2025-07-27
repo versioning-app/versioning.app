@@ -16,10 +16,10 @@
     "lint": "yarn turbo lint",
     "release": "yarn build:packages && changeset publish"
   },
-  "packageManager": "yarn@4.3.1",
+  "packageManager": "yarn@4.9.2",
   "devDependencies": {
-    "@changesets/cli": "^2.27.9",
-    "syncpack": "^12.4.0",
-    "turbo": "^2.2.1"
+    "@changesets/cli": "^2.29.5",
+    "syncpack": "^13.0.4",
+    "turbo": "^2.5.5"
   }
 }

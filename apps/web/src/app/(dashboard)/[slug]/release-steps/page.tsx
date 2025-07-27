@@ -4,12 +4,14 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { ReleaseStepService } from '@/services/release-steps.service';
 import { get } from '@/services/service-factory';
 
-export default async function ReleaseStrategyStepsPage({
-  params: { slug },
+export default async function ReleaseSteps({
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const releaseSteps = await get(ReleaseStepService).findAll();
+  const { slug } = await params;
+  const releaseStepsService = await get(ReleaseStepService);
+  const releaseSteps = await releaseStepsService.findAll();
 
   return (
     <List

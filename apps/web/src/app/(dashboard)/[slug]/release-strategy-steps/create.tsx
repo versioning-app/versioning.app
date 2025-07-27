@@ -8,11 +8,13 @@ import { ReleaseStrategyStepService } from '@/services/release-strategy-steps.se
 import { get } from '@/services/service-factory';
 
 export default async function NewReleaseStrategyStep({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const environments = await get(EnvironmentsService).findAll();
+  const { slug } = await params;
+  const environmentsService = await get(EnvironmentsService);
+  const environments = await environmentsService.findAll();
 
   if (!environments?.length) {
     return (
@@ -25,7 +27,8 @@ export default async function NewReleaseStrategyStep({
     );
   }
 
-  const approvalGroups = await get(ApprovalGroupService).findAll();
+  const approvalGroupsService = await get(ApprovalGroupService);
+  const approvalGroups = await approvalGroupsService.findAll();
 
   if (!approvalGroups?.length) {
     return (
@@ -38,7 +41,8 @@ export default async function NewReleaseStrategyStep({
     );
   }
 
-  const releaseStrategies = await get(ReleaseStrategiesService).findAll();
+  const releaseStrategiesService = await get(ReleaseStrategiesService);
+  const releaseStrategies = await releaseStrategiesService.findAll();
 
   if (!releaseStrategies?.length) {
     return (
@@ -51,7 +55,8 @@ export default async function NewReleaseStrategyStep({
     );
   }
 
-  const releaseStrategySteps = await get(ReleaseStrategyStepService).findAll();
+  const releaseStrategyStepsService = await get(ReleaseStrategyStepService);
+  const releaseStrategySteps = await releaseStrategyStepsService.findAll();
 
   return (
     <CreateReleaseStrategyStepForm

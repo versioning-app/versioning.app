@@ -3,7 +3,7 @@ import { get } from '@/services/service-factory';
 import { StripeService } from '@/services/stripe.service';
 
 export default async function Billing() {
-  const stripeService = get(StripeService);
+  const stripeService = await get(StripeService);
   const prices = await stripeService.getAllPrices();
   return (
     <div>

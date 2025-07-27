@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.15",
-    "eslint-config-turbo": "^2.2.0"
+    "eslint-config-next": "^15.4.4",
+    "eslint-config-turbo": "^2.5.5"
   }
 }

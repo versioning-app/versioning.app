@@ -3,24 +3,35 @@ import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { EnvironmentTypesService } from '@/services/environment-types.service';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { eq } from 'drizzle-orm';
 import 'server-only';
 import { NewEnvironment } from '../database/schema';
+import { getSync } from '@/services/service-factory';
 
 export class EnvironmentsService extends WorkspaceScopedRepository<
   typeof environments
 > {
-  private readonly environmentTypesService;
-  public constructor() {
-    super(environments);
+  private _environmentTypesService: EnvironmentTypesService | undefined;
 
-    this.environmentTypesService = new EnvironmentTypesService();
+  public constructor(headers: AppHeaders) {
+    super(headers, environments);
+  }
+
+  private get environmentTypesService(): EnvironmentTypesService {
+    if (!this._environmentTypesService) {
+      this._environmentTypesService = getSync(
+        EnvironmentTypesService,
+        this.headers,
+      );
+    }
+    return this._environmentTypesService;
   }
 
   public async create(
     newEnvironment: Pick<NewEnvironment, 'name' | 'typeId' | 'description'>,
   ): Promise<Environment> {
-    if (!(await this.environmentTypesService.findOne(newEnvironment.typeId))) {
+    if (!this.environmentTypesService.findOne(newEnvironment.typeId)) {
       throw new AppError(
         'Environment type not found',
         ErrorCodes.RESOURCE_NOT_FOUND,

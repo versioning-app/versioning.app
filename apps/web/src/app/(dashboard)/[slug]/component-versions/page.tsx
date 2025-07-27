@@ -4,12 +4,14 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { ComponentVersionService } from '@/services/component-version.service';
 import { get } from '@/services/service-factory';
 
-export default async function ComponentVersion({
-  params: { slug },
+export default async function ComponentVersions({
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const componentVersions = await get(ComponentVersionService).findAll();
+  const { slug } = await params;
+  const componentVersionsService = await get(ComponentVersionService);
+  const componentVersions = await componentVersionsService.findAll();
 
   return (
     <List

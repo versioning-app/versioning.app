@@ -1,11 +1,12 @@
 import { NewRelease, Release, releases } from '@/database/schema';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
+import { type AppHeaders } from '@/types/headers';
 import { eq, sql } from 'drizzle-orm';
 import 'server-only';
 
 export class ReleaseService extends WorkspaceScopedRepository<typeof releases> {
-  public constructor() {
-    super(releases);
+  public constructor(headers: AppHeaders) {
+    super(headers, releases);
   }
 
   public async create(

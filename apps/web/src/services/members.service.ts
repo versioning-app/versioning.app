@@ -1,15 +1,10 @@
-import {
-  Member,
-  member_roles,
-  members,
-  NewMember,
-  Role,
-  roles,
-} from '@/database/schema';
+import { Member, members, NewMember, Role } from '@/database/schema';
 import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { RolesService } from '@/services/roles.service';
+import { getSync } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { auth } from '@clerk/nextjs/server';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import 'server-only';
@@ -17,13 +12,13 @@ import 'server-only';
 export class MembersService extends WorkspaceScopedRepository<typeof members> {
   private readonly rolesService: RolesService;
 
-  public constructor() {
-    super(members);
-    this.rolesService = new RolesService();
+  public constructor(headers: AppHeaders) {
+    super(headers, members);
+    this.rolesService = getSync(RolesService, headers);
   }
 
-  public get currentMember(): Promise<Member> {
-    const currentAuth = auth();
+  public async currentMember(): Promise<Member> {
+    const currentAuth = await auth();
 
     const { userId } = currentAuth;
 
@@ -38,7 +33,7 @@ export class MembersService extends WorkspaceScopedRepository<typeof members> {
   }
 
   public async getCurrentRoles(member?: Member): Promise<Role[]> {
-    const currentMember = member ?? (await this.currentMember);
+    const currentMember = member ?? (await this.currentMember());
 
     if (!currentMember) {
       throw new AppError(

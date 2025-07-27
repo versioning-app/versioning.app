@@ -25,8 +25,9 @@
 	},
 	"include": [
 		"src",
-		"globals.d.ts"
-, "../../apps/web/src/lib/type.ts"	],
+		"globals.d.ts",
+		"../../apps/web/src/lib/type.ts"
+	],
 	"exclude": [
 		"node_modules"
 	]

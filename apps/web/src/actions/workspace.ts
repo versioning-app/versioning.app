@@ -6,13 +6,13 @@ import { WorkspaceService } from '@/services/workspace.service';
 import { changeSlugSchema } from '@/validation/workspace';
 
 export const changeSlugAction = workspaceAction
-  .schema(changeSlugSchema)
+  .inputSchema(changeSlugSchema)
   .action(async ({ parsedInput: { slug } }) => {
-    const logger = serverLogger({ name: 'changeSlugAction' });
+    const logger = await serverLogger({ name: 'changeSlugAction' });
 
     logger.debug({ changeSlugAction }, 'Attempting to change slug');
 
-    const workspaceService = get(WorkspaceService);
+    const workspaceService = await get(WorkspaceService);
 
     const updated = await workspaceService.changeSlug({ slug });
     logger.debug({ updated }, 'Slug changed successfully');

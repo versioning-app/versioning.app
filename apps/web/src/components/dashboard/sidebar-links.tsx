@@ -161,7 +161,7 @@ export const NavigationItemMappings: Record<
 } as const;
 
 export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const rawPath = usePathname();
 
   const path = `/${rawPath.split('/').slice(2).join('/')}`;
@@ -182,7 +182,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
   };
 
   return (
-    <>
+    <div key={slug}>
       {Object.entries(NavigationItemMappings).map(
         ([key, { links, titles }], index) => (
           <>
@@ -203,6 +203,6 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
           </>
         ),
       )}
-    </>
+    </div>
   );
 }

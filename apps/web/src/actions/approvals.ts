@@ -11,13 +11,14 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createApprovalGroupAction = workspaceAction
-  .schema(createApprovalGroupSchema)
+  .inputSchema(createApprovalGroupSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createApprovalGroup' });
+    const logger = await serverLogger({ name: 'createApprovalGroup' });
 
     logger.debug({ parsedInput }, 'Creating approval group');
 
-    const resource = await get(ApprovalGroupService).create(parsedInput);
+    const approvalGroupService = await get(ApprovalGroupService);
+    const resource = await approvalGroupService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_APPROVAL_GROUPS));
@@ -26,13 +27,14 @@ export const createApprovalGroupAction = workspaceAction
   });
 
 export const deleteApprovalGroupAction = workspaceAction
-  .schema(deleteApprovalGroupSchema)
+  .inputSchema(deleteApprovalGroupSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteApprovalGroupSchema' });
+    const logger = await serverLogger({ name: 'deleteApprovalGroupSchema' });
 
     logger.debug({ parsedInput }, 'Deleting approval group');
 
-    await get(ApprovalGroupService).delete(parsedInput.id);
+    const approvalGroupService = await get(ApprovalGroupService);
+    await approvalGroupService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_APPROVAL_GROUPS));

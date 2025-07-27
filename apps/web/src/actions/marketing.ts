@@ -10,9 +10,9 @@ import { registerInterestSchema } from '@/validation/marketing';
 import { verify } from 'hcaptcha';
 
 export const registerInterestAction = action
-  .schema(registerInterestSchema)
+  .inputSchema(registerInterestSchema)
   .action(async ({ parsedInput }) => {
-    const logger = serverLogger({ name: 'registerInterestAction' });
+    const logger = await serverLogger({ name: 'registerInterestAction' });
 
     logger.debug({ parsedInput }, 'Registering interest');
 
@@ -49,7 +49,8 @@ export const registerInterestAction = action
 
     logger.debug('Captcha verification successful');
 
-    const lead = await get(LeadService).create({ email: parsedInput.email });
+    const leadService = await get(LeadService);
+    const lead = await leadService.create({ email: parsedInput.email });
 
     if (!lead) {
       throw new AppError(

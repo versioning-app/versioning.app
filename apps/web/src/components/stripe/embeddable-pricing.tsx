@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 
-export function EmbeddablePricing() {
-  const { userId, orgId, orgPermissions } = auth();
+export async function EmbeddablePricing() {
+  const { userId, orgId, orgPermissions } = await auth();
 
   if (orgId && !orgPermissions?.includes('org:sys_profile:manage')) {
     return (
@@ -17,11 +17,11 @@ export function EmbeddablePricing() {
 
   return (
     <div className="min-h-96">
-      <stripe-pricing-table
+      {/* <stripe-pricing-table
         pricing-table-id={process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID}
         publishable-key={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
         client-reference-id={`clerk-${userId}.${orgId}`}
-      />
+      /> */}
     </div>
   );
 }

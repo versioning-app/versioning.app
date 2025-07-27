@@ -1,13 +1,11 @@
 import { db as AppDb } from '@/database/db';
-import { AppError } from '@/lib/error/app.error';
-import { ErrorCodes } from '@/lib/error/error-codes';
 import { QueryLimits } from '@/services/repository/base-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
+import { AppHeaders } from '@/types/headers';
 import {
   InferInsertModel,
   InferSelectModel,
-  Many,
   SQLWrapper,
   and,
   eq,
@@ -22,12 +20,13 @@ export abstract class WorkspaceScopedRepository<
   private readonly workspaceService: WorkspaceService;
 
   public constructor(
+    headers: AppHeaders,
     public readonly schema: M,
     db?: typeof AppDb,
     primaryKey?: ID,
   ) {
-    super(db ?? AppDb, schema, primaryKey ?? ('id' as ID));
-    this.workspaceService = get(WorkspaceService);
+    super(headers, db ?? AppDb, schema, primaryKey ?? ('id' as ID));
+    this.workspaceService = getSync(WorkspaceService, headers);
   }
 
   public get currentWorkspaceId(): Promise<string> {

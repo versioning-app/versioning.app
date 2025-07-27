@@ -11,13 +11,14 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createDeploymentAction = workspaceAction
-  .schema(createDeploymentsSchema)
+  .inputSchema(createDeploymentsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createDeploymentAction' });
+    const logger = await serverLogger({ name: 'createDeploymentAction' });
 
     logger.debug({ parsedInput }, 'Creating deployment');
 
-    const resource = await get(DeploymentsService).create(parsedInput);
+    const deploymentsService = await get(DeploymentsService);
+    const resource = await deploymentsService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
@@ -26,13 +27,14 @@ export const createDeploymentAction = workspaceAction
   });
 
 export const deleteDeploymentAction = workspaceAction
-  .schema(deleteDeploymentsSchema)
+  .inputSchema(deleteDeploymentsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteEnvironmentAction' });
+    const logger = await serverLogger({ name: 'deleteEnvironmentAction' });
 
     logger.debug({ parsedInput }, 'Deleting deployment');
 
-    await get(DeploymentsService).delete(parsedInput.id);
+    const deploymentsService = await get(DeploymentsService);
+    await deploymentsService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_DEPLOYMENTS));

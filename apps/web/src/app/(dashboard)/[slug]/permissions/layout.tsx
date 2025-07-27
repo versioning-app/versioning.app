@@ -4,18 +4,18 @@ import DashboardPageLayout from '@/components/dashboard/layouts/page-layout';
 import { Navigation } from '@/config/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function PermissionsLayout({
   children,
-  params: { slug },
 }: {
   children: React.ReactNode;
-  params: { slug: string };
 }) {
+  const params = useParams<{ slug: string }>();
+  const slug = params?.slug ?? ''; // safer fallback
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState<string>('evaluator');
+  const [activeTab, setActiveTab] = useState('evaluator');
 
   useEffect(() => {
     if (pathname.endsWith('/details')) {
