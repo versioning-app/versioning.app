@@ -14,12 +14,14 @@
     "dev": "yarn turbo dev",
     "docs:deploy": "yarn turbo docs:deploy",
     "lint": "yarn turbo lint",
+    "setup:public-routes": "yarn dlx tsx scripts/generate-public-routes.ts",
     "release": "yarn build:packages && changeset publish"
   },
   "packageManager": "yarn@4.9.2",
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
     "syncpack": "^13.0.4",
+    "tsx": "^4.20.3",
     "turbo": "^2.5.5"
   }
 }
