@@ -185,9 +185,8 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
     <div key={slug}>
       {Object.entries(NavigationItemMappings).map(
         ([key, { links, titles }], index) => (
-          <>
+          <div key={key}>
             <Nav
-              key={key}
               title={titles?.sidebar}
               isCollapsed={isCollapsed}
               links={links.map((link) =>
@@ -200,7 +199,7 @@ export function DashboardLinks({ isCollapsed }: { isCollapsed: boolean }) {
             {index < Object.entries(NavigationItemMappings).length - 1 && (
               <Separator />
             )}
-          </>
+          </div>
         ),
       )}
     </div>

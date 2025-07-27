@@ -1,5 +1,7 @@
 // app/cookies/page.tsx
 
+import Link from 'next/link';
+
 export default function CookiePolicyPage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-10 text-sm text-gray-800 dark:text-gray-200">
@@ -77,12 +79,12 @@ export default function CookiePolicyPage() {
         <p>
           If you have any questions about our use of cookies, please contact us
           at:{' '}
-          <a
+          <Link
             href="mailto:privacy@versioning.app"
             className="text-blue-600 underline"
           >
             privacy@versioning.app
-          </a>
+          </Link>
           .
         </p>
       </Section>

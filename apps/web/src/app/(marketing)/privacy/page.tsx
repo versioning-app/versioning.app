@@ -1,5 +1,7 @@
 // app/privacy/page.tsx
 
+import Link from 'next/link';
+
 export default function PrivacyPage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-10 text-sm text-gray-800 dark:text-gray-200">
@@ -19,9 +21,9 @@ export default function PrivacyPage() {
         <p>
           By using the Service, you agree to the collection and use of
           information in accordance with this policy. Please also read our{' '}
-          <a href="/terms" className="text-blue-600 underline">
+          <Link href="/terms" className="text-blue-600 underline">
             Terms of Service
-          </a>
+          </Link>
           .
         </p>
       </Section>
@@ -46,9 +48,9 @@ export default function PrivacyPage() {
             <strong>Cookies and Tracking Technologies:</strong> We use cookies
             and similar technologies to track activity on our Service and store
             certain information. Please see our{' '}
-            <a href="/cookies" className="text-blue-600 underline">
+            <Link href="/cookies" className="text-blue-600 underline">
               Cookie Policy
-            </a>{' '}
+            </Link>{' '}
             for more details.
           </li>
         </ul>
@@ -152,12 +154,12 @@ export default function PrivacyPage() {
         <p>
           If you have any questions about this Privacy Policy, please contact us
           at:{' '}
-          <a
+          <Link
             href="mailto:privacy@versioning.app"
             className="text-blue-600 underline"
           >
             privacy@versioning.app
-          </a>
+          </Link>
           .
         </p>
       </Section>

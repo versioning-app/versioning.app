@@ -332,7 +332,7 @@ export default function BigCalendar({
                     : 'bg-muted text-card-foreground',
                   (isSelected(day) || isToday(day)) && 'font-semibold',
                   !isSelected(day) && isToday(day) && 'text-primary',
-                  'relative py-2 px-3 min-h-24'
+                  'relative py-2 px-3 min-h-24',
                 )}
                 onClick={() => updateDate(day)}
               >
@@ -342,7 +342,7 @@ export default function BigCalendar({
                     isSelected(day) &&
                       'flex h-6 w-6 items-center justify-center rounded-full bg-primary select-none text-primary-foreground',
                     isSelected(day) && isToday(day) && 'bg-primary select-none',
-                    isSelected(day) && isToday(day) && 'bg-primary select-none'
+                    isSelected(day) && isToday(day) && 'bg-primary select-none',
                   )}
                 >
                   {getDate(day).toString()}
@@ -392,7 +392,7 @@ export default function BigCalendar({
                     !sameMonth(day) &&
                     !isToday(day) &&
                     'text-muted-foreground',
-                  'flex h-14 flex-col py-2 px-3 hover:bg-card/80 hover:dark:bg-gray-900/80 focus:z-10 min-h-24'
+                  'flex h-14 flex-col py-2 px-3 hover:bg-card/80 hover:dark:bg-gray-900/80 focus:z-10 min-h-24',
                 )}
                 onClick={() => updateDate(day)}
               >
@@ -402,7 +402,7 @@ export default function BigCalendar({
                     isSelected(day) &&
                       'flex h-6 w-6 items-center justify-center rounded-full bg-primary select-none',
                     isSelected(day) && isToday(day) && 'bg-primary select-none',
-                    'ml-auto'
+                    'ml-auto',
                   )}
                 >
                   {getDate(day).toString()}
