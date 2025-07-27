@@ -9,8 +9,7 @@
     "swizzle": "PORT=3050 docusaurus swizzle",
     "clear": "PORT=3050 docusaurus clear",
     "serve": "PORT=3050 docusaurus serve",
-    "surge": "surge",
-    "deploy": "yarn build && surge build/ docs.versioning.app",
+    "deploy": "yarn build",
     "docs:deploy": "yarn deploy",
     "write-translations": "PORT=3050 docusaurus write-translations",
     "write-heading-ids": "PORT=3050 docusaurus write-heading-ids",
@@ -29,7 +28,6 @@
     "@docusaurus/module-type-aliases": "3.8.1",
     "@docusaurus/tsconfig": "3.8.1",
     "@docusaurus/types": "3.8.1",
-    "surge": "^0.24.6",
     "typescript": "^5.8.3"
   },
   "browserslist": {
