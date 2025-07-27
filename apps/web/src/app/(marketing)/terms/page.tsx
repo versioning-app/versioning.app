@@ -6,7 +6,7 @@ export default function TermsPage() {
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
 
       <p className="mb-8">
-        Effective Date: <strong>2025-07-27</strong>
+        Effective Date: <strong>July 27, 2025</strong>
       </p>
 
       <Section title="1. Use of the Service">
@@ -16,15 +16,20 @@ export default function TermsPage() {
           <a href="/privacy" className="text-blue-600 underline">
             Privacy Policy
           </a>
+          , our{' '}
+          <a href="/cookies" className="text-blue-600 underline">
+            Cookie Policy
+          </a>
           , and all applicable laws and regulations. You are responsible for
           your conduct, your data, and ensuring your use is lawful.
         </p>
         <p>
-          <strong>Self-hosting:</strong> Use of the software via self-hosted
-          deployments is permitted only for individuals and{' '}
-          <u>small businesses</u>. Medium and large enterprises must obtain a
-          commercial license from versioning.app, even if self-hosting. Please
-          contact us for licensing inquiries.
+          <strong>Self-hosting:</strong> For deployments outside of the official
+          versioning.app platforms, use of the software via self-hosting is
+          permitted **only for non-commercial purposes** by individuals and{' '}
+          <u>small businesses</u>. Medium and large enterprises, or any entity
+          wishing to use the software for commercial purposes, must obtain a
+          commercial license from versioning.app, even if self-hosting.
         </p>
         <p>
           For the purposes of this license, small businesses are defined as an
@@ -46,32 +51,64 @@ export default function TermsPage() {
 
       <Section title="2. Account Registration">
         <p>
-          To access certain features, you may be required to register an
-          account. You must provide accurate information and keep your
-          credentials secure. You are responsible for all activity under your
-          account.
+          To access certain features on our official platform, you may be
+          required to register an account. You must provide accurate information
+          and keep your credentials secure. You are responsible for all activity
+          under your account.
         </p>
       </Section>
 
       <Section title="3. Intellectual Property & Licensing">
         <p>
           Unless stated otherwise, all content and functionality on this
-          platform is © 2024–2025 versioning.app. Source code may be licensed
-          under AGPL-3.0 with non-commercial restrictions. Use of this hosted
-          service does not grant rights to use or distribute the source code
-          without a commercial license. Refer to our GitHub source code for
-          details.
+          platform is © 2024–2025 versioning.app. The source code for this
+          software is made available under a modified AGPL-3.0 license with
+          strict non-commercial restrictions. Use of this hosted service does
+          not grant any rights to use, modify, or distribute the source code
+          without a separate commercial license. Refer to our GitHub repository
+          for full source code licensing details.
         </p>
       </Section>
 
-      <Section title="4. Restrictions">
+      <Section title="4. Custom Agreements">
+        <p>
+          Notwithstanding the terms laid out in this document, we may offer
+          custom terms of service, commercial licenses, or enterprise agreements
+          to qualifying entities. If you are a medium or large enterprise, or
+          have specific use cases not covered by these standard terms, please
+          contact us to discuss a tailored agreement.
+        </p>
+        <p>
+          In the event a custom agreement is executed, its terms shall supersede
+          any and all other terms and licenses, including but not limited to
+          these Terms of Service and any open-source licenses governing the
+          source code. The custom agreement will exclusively govern your rights
+          and obligations regarding access to the Service, use of the source
+          code, and all other related matters.
+        </p>
+        <p>
+          All custom agreements must be in writing and signed by an authorized
+          representative of versioning.app to be considered valid. Please direct
+          all such inquiries to{' '}
+          <a
+            href="mailto:license@versioning.app"
+            className="text-blue-600 underline"
+          >
+            license@versioning.app
+          </a>
+          .
+        </p>
+      </Section>
+
+      <Section title="5. Restrictions">
         <ul className="list-disc list-inside space-y-2">
           <li>
             Do not use the Service for commercial or competitive purposes
-            without written consent.
+            without explicit written consent.
           </li>
           <li>
-            Do not resell, sublicense, or provide access to third parties.
+            Do not resell, sublicense, or provide access to third parties
+            without a valid commercial agreement.
           </li>
           <li>
             Do not interfere with or degrade the performance or integrity of the
@@ -93,7 +130,7 @@ export default function TermsPage() {
         </ul>
       </Section>
 
-      <Section title="5. Modifications">
+      <Section title="6. Modifications">
         <p>
           We reserve the right to modify or discontinue any part of the Service
           at any time without notice. Continued use after changes implies
@@ -101,7 +138,7 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section title="6. Termination">
+      <Section title="7. Termination">
         <p>
           We may suspend or terminate your access at any time, with or without
           notice, if you breach these terms or if required by law. Upon
@@ -109,29 +146,29 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section title="7. Disclaimer of Warranties">
+      <Section title="8. Disclaimer of Warranties">
         <p>
           The Service is provided “as is” and “as available” with no warranties,
           express or implied. We do not guarantee uptime, security, or accuracy.
         </p>
       </Section>
 
-      <Section title="8. Limitation of Liability">
+      <Section title="9. Limitation of Liability">
         <p>
           versioning.app shall not be liable for indirect, incidental, or
-          consequential damages. Total liability is limited to the amount (if
-          any) paid to us in the 12 months prior to the claim.
+          consequential damages. Our total liability is limited to the amount
+          (if any) you paid to us in the 12 months prior to the claim.
         </p>
       </Section>
 
-      <Section title="9. Governing Law">
+      <Section title="10. Governing Law">
         <p>
           These Terms are governed by the laws of England and Wales. Disputes
           will be resolved in the courts of England.
         </p>
       </Section>
 
-      <Section title="10. Contact">
+      <Section title="11. Contact">
         <p>
           For legal notices or licensing questions, contact us at{' '}
           <a
@@ -145,7 +182,7 @@ export default function TermsPage() {
       </Section>
 
       <p className="text-xs mt-12 text-gray-500 dark:text-gray-400">
-        Last updated: 2025-07-27
+        Last updated: July 27, 2025
       </p>
     </main>
   );
