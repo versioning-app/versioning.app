@@ -9,11 +9,11 @@ import { createCheckoutSessionSchema } from '@/validation/billing';
 import { redirect } from 'next/navigation';
 
 export const createBillingPortalSession = async () => {
-  const logger = serverLogger({ name: 'createBillingPortalSession' });
+  const logger = await serverLogger({ name: 'createBillingPortalSession' });
 
   logger.debug('Creating billing portal session');
 
-  const stripeService = get(StripeService);
+  const stripeService = await get(StripeService);
   await stripeService.createOrRetrieveCustomer();
   const { url } = await stripeService.createBillingPortalSession();
 
@@ -21,13 +21,13 @@ export const createBillingPortalSession = async () => {
 };
 
 export const createCheckoutSession = workspaceAction
-  .schema(createCheckoutSessionSchema)
+  .inputSchema(createCheckoutSessionSchema)
   .action(async ({ parsedInput: { priceId } }) => {
-    const logger = serverLogger({ name: 'createCheckoutSession' });
+    const logger = await serverLogger({ name: 'createCheckoutSession' });
 
     logger.debug({ priceId }, 'Creating checkout session');
 
-    const stripeService = get(StripeService);
+    const stripeService = await get(StripeService);
     const price = await stripeService.getPriceById(priceId);
     const session = await stripeService.createCheckoutSession(price);
 

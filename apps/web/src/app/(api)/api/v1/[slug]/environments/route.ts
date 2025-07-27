@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export const GET = (request: NextRequest) =>
   apiRoute(request, async () => {
-    const environments = await get(EnvironmentsService).findAll();
+    const environmentsService = await get(EnvironmentsService);
+    const environments = await environmentsService.findAll();
     return environments;
   });

@@ -13,13 +13,14 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createEnvironmentTypeAction = workspaceAction
-  .schema(createEnvironmentTypeSchema)
+  .inputSchema(createEnvironmentTypeSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createEnvironmentType' });
+    const logger = await serverLogger({ name: 'createEnvironmentType' });
 
     logger.debug({ parsedInput }, 'Creating environment type');
 
-    const resource = await get(EnvironmentTypesService).create(parsedInput);
+    const environmentTypesService = await get(EnvironmentTypesService);
+    const resource = await environmentTypesService.create(parsedInput);
 
     const { slug } = ctx.workspace;
 
@@ -31,13 +32,14 @@ export const createEnvironmentTypeAction = workspaceAction
   });
 
 export const deleteEnvironmentTypeAction = workspaceAction
-  .schema(deleteEnvironmentSchema)
+  .inputSchema(deleteEnvironmentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteEnvironmentType' });
+    const logger = await serverLogger({ name: 'deleteEnvironmentType' });
 
     logger.debug({ parsedInput }, 'Deleting environment type');
 
-    await get(EnvironmentTypesService).delete(parsedInput.id);
+    const environmentTypesService = await get(EnvironmentTypesService);
+    await environmentTypesService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
 
@@ -49,13 +51,14 @@ export const deleteEnvironmentTypeAction = workspaceAction
   });
 
 export const createEnvironmentAction = workspaceAction
-  .schema(createEnvironmentSchema)
+  .inputSchema(createEnvironmentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createEnvironmentAction' });
+    const logger = await serverLogger({ name: 'createEnvironmentAction' });
 
     logger.debug({ parsedInput }, 'Creating environment');
 
-    const resource = await get(EnvironmentsService).create(parsedInput);
+    const environmentsService = await get(EnvironmentsService);
+    const resource = await environmentsService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));
@@ -64,13 +67,14 @@ export const createEnvironmentAction = workspaceAction
   });
 
 export const deleteEnvironmentAction = workspaceAction
-  .schema(deleteEnvironmentSchema)
+  .inputSchema(deleteEnvironmentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteEnvironmentAction' });
+    const logger = await serverLogger({ name: 'deleteEnvironmentAction' });
 
     logger.debug({ parsedInput }, 'Deleting environment');
 
-    await get(EnvironmentsService).delete(parsedInput.id);
+    const environmentsService = await get(EnvironmentsService);
+    await environmentsService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_ENVIRONMENTS));

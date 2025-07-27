@@ -3,11 +3,12 @@ import { ReleaseService } from '@/services/release.service';
 import { get } from '@/services/service-factory';
 
 export default async function OverviewPage({
-  params: { slug, id },
+  params,
 }: {
-  params: { slug: string; id: string };
+  params: Promise<{ slug: string; id: string }>;
 }) {
-  const releaseService = get(ReleaseService);
+  const { slug, id } = await params;
+  const releaseService = await get(ReleaseService);
   const overviews = await releaseService.getOverview(id);
 
   return (

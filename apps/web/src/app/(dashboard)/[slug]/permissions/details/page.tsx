@@ -18,10 +18,10 @@ import {
 } from '@/components/ui/accordion';
 
 export default async function PermissionDetails() {
-  const memberService = get(MembersService);
-  const permissionsService = get(PermissionsService);
+  const memberService = await get(MembersService);
+  const permissionsService = await get(PermissionsService);
 
-  const member = await memberService.currentMember;
+  const member = await memberService.currentMember();
   const roles = await memberService.getCurrentRoles();
   const allPermissions = await permissionsService.findAll();
   const currentPermissions = await permissionsService.getCurrentPermissions();

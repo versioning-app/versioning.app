@@ -23,15 +23,16 @@ const clerk = clerkMiddleware(async (auth, req, event) => {
     return NextResponse.next();
   }
 
-  auth().protect();
+  await auth.protect();
 
-  const { userId, orgId, sessionClaims } = auth();
+  const { userId, orgId, sessionClaims } = await auth();
 
   if (!userId) {
-    return auth().redirectToSignIn({ returnBackUrl: req.url });
+    return (await auth()).redirectToSignIn({ returnBackUrl: req.url });
   }
 
-  await get(WorkspaceService).ensureWorkspace({
+  const workspaceService = await get(WorkspaceService);
+  await workspaceService.ensureWorkspace({
     userId,
     orgId,
     sessionClaims,

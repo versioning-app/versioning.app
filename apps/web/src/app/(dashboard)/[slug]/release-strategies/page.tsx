@@ -4,12 +4,13 @@ import { Navigation, dashboardRoute } from '@/config/navigation';
 import { ReleaseStrategiesService } from '@/services/release-strategies.service';
 import { get } from '@/services/service-factory';
 
-export default async function ReleaseStrategiesPage({
-  params: { slug },
+export default async function ReleaseStrategies({
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const releaseStrategiesService = get(ReleaseStrategiesService);
+  const { slug } = await params;
+  const releaseStrategiesService = await get(ReleaseStrategiesService);
   const releaseStrategies = await releaseStrategiesService.findAll();
 
   return (

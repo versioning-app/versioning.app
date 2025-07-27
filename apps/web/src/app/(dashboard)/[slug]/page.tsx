@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { get } from '@/services/service-factory';
 import { WorkspaceService } from '@/services/workspace.service';
 import { auth } from '@clerk/nextjs/server';
@@ -5,9 +6,10 @@ import { auth } from '@clerk/nextjs/server';
 export const revalidate = 0;
 
 export default async function Dashboard() {
-  const { orgId, sessionClaims } = auth();
+  const { orgId, sessionClaims } = await auth();
 
-  const workspaceId = await get(WorkspaceService).currentWorkspaceId();
+  const workspaceService = await get(WorkspaceService);
+  const workspaceId = await workspaceService.currentWorkspaceId();
 
   return (
     <div>
@@ -19,7 +21,18 @@ export default async function Dashboard() {
           : 'your dashboard'}
         {`, ${sessionClaims?.firstName}`}
       </p>
-      <div className="grid grid-col-6"></div>
+      <div className="grid grid-col-6">
+        <div className="col-span-6 md:col-span-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Current Workspace</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>{workspaceId}</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

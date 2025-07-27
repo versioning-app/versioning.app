@@ -6,19 +6,31 @@ import { EnvironmentsService } from '@/services/environments.service';
 import { ReleaseStepService } from '@/services/release-steps.service';
 import { QueryLimits } from '@/services/repository/base-repository.service';
 import { CrudRepository } from '@/services/repository/crud-repository.service';
-import { get } from '@/services/service-factory';
+import { getSync } from '@/services/service-factory';
+import { type AppHeaders } from '@/types/headers';
 import { InferSelectModel, and, eq, inArray } from 'drizzle-orm';
 import 'server-only';
 
 export class DeploymentsService extends CrudRepository<typeof deployments> {
-  private releaseStepService: ReleaseStepService;
-  private environmentsService: EnvironmentsService;
+  private _releaseStepService: ReleaseStepService | undefined;
+  private _environmentsService: EnvironmentsService | undefined;
 
-  public constructor() {
-    super(db, deployments, 'id');
+  public constructor(headers: AppHeaders) {
+    super(headers, db, deployments, 'id');
+  }
 
-    this.releaseStepService = get(ReleaseStepService);
-    this.environmentsService = get(EnvironmentsService);
+  private get releaseStepService(): ReleaseStepService {
+    if (!this._releaseStepService) {
+      this._releaseStepService = getSync(ReleaseStepService, this.headers);
+    }
+    return this._releaseStepService;
+  }
+
+  private get environmentsService(): EnvironmentsService {
+    if (!this._environmentsService) {
+      this._environmentsService = getSync(EnvironmentsService, this.headers);
+    }
+    return this._environmentsService;
   }
 
   public async findAll() {

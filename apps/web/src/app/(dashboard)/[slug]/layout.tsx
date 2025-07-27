@@ -17,19 +17,21 @@ export const revalidate = 0;
 
 export default async function DashboardLayout({
   children,
-  params: { slug },
+  params,
+  searchParams,
 }: Readonly<{
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
   searchParams?: URLSearchParams;
 }>) {
-  const { userId, orgId } = auth();
+  const { slug } = await params;
+  const { userId, orgId } = await auth();
 
   if (!userId) {
     return redirect(Navigation.HOME);
   }
 
-  const workspaceService = get(WorkspaceService);
+  const workspaceService = await get(WorkspaceService);
 
   const workspace = await workspaceService.currentWorkspace({
     userId,
@@ -44,7 +46,7 @@ export default async function DashboardLayout({
     return redirect(dashboardRoute(workspace.slug));
   }
 
-  const permissionsService = get(PermissionsService);
+  const permissionsService = await get(PermissionsService);
 
   const permissionsUpdated =
     await permissionsService.linkPermissionsToWorkspace(workspace);
@@ -64,10 +66,12 @@ export default async function DashboardLayout({
     return redirect('?permissionsUpdated=true', RedirectType.replace);
   }
 
-  const layout = cookies().get(`${StorageKeys.COOKIE_STORAGE_PREFIX}:layout`);
+  const layout = (await cookies()).get(
+    `${StorageKeys.COOKIE_STORAGE_PREFIX}:layout`,
+  );
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
-  const collapsed = cookies().get(
+  const collapsed = (await cookies()).get(
     `${StorageKeys.COOKIE_STORAGE_PREFIX}:collapsed`,
   );
   const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;

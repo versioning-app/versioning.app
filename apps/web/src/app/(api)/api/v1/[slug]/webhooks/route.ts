@@ -4,7 +4,7 @@ import { AppError } from '@/lib/error/app.error';
 import { ErrorCodes } from '@/lib/error/error-codes';
 import { ReleaseService } from '@/services/release.service';
 import { get } from '@/services/service-factory';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +23,8 @@ export const POST = (request: NextRequest) =>
 
     switch (type.toUpperCase()) {
       case 'LIST':
-        const releases = await get(ReleaseService).findAll();
+        const releaseService = await get(ReleaseService);
+        const releases = await releaseService.findAll();
         return releases;
       case 'PING':
         return { message: 'PONG' };

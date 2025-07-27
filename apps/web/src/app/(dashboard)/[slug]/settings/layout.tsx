@@ -1,15 +1,15 @@
-import { Button } from '@/components/ui/button';
 import { Navigation, dashboardRoute } from '@/config/navigation';
-import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ComponentsLayout({
+export default async function SettingsLayout({
   children,
-  params: { slug },
+  params,
 }: {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   return (
     <div>
       <div className="flex">

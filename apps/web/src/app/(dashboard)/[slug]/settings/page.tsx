@@ -2,11 +2,11 @@ import { ChangeSlugForm } from '@/components/dashboard/workspace';
 import { auth } from '@clerk/nextjs/server';
 
 export default async function Settings({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { orgId } = auth();
+  const { slug } = await params;
 
   return (
     <div>
