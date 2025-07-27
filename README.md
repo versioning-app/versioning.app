@@ -17,8 +17,8 @@ Software versioning, made simple.
 
 ## Maintainers
 
-- [Cal](https://github.com/calxcymru)
+- [Callum Morris](https://github.com/calxcymru)
 
 ## License
 
-See [LICENSE](LICENSE) for license terms, conditions, and warranties. 
+See [LICENSE.md](LICENSE.md) for license terms, conditions, and warranties. 
