@@ -16,13 +16,14 @@ import {
 import { revalidatePath } from 'next/cache';
 
 export const createComponentAction = workspaceAction
-  .schema(createComponentSchema)
+  .inputSchema(createComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createComponentAction' });
+    const logger = await serverLogger({ name: 'createComponentAction' });
 
     logger.debug({ parsedInput }, 'Creating component');
 
-    const resource = await get(ComponentsService).create(parsedInput);
+    const componentsService = await get(ComponentsService);
+    const resource = await componentsService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
@@ -31,13 +32,14 @@ export const createComponentAction = workspaceAction
   });
 
 export const deleteComponentAction = workspaceAction
-  .schema(deleteComponentSchema)
+  .inputSchema(deleteComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteComponentAction' });
+    const logger = await serverLogger({ name: 'deleteComponentAction' });
 
     logger.debug({ parsedInput }, 'Deleting component');
 
-    await get(ComponentsService).delete(parsedInput.id);
+    const componentsService = await get(ComponentsService);
+    await componentsService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(dashboardRoute(slug, Navigation.DASHBOARD_COMPONENTS));
@@ -46,13 +48,14 @@ export const deleteComponentAction = workspaceAction
   });
 
 export const createComponentVersionAction = workspaceAction
-  .schema(createComponentVersionSchema)
+  .inputSchema(createComponentVersionSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createComponentVersionAction' });
+    const logger = await serverLogger({ name: 'createComponentVersionAction' });
 
     logger.debug({ parsedInput }, 'Creating component version');
 
-    const resource = await get(ComponentVersionService).create(parsedInput);
+    const componentVersionService = await get(ComponentVersionService);
+    const resource = await componentVersionService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -63,13 +66,14 @@ export const createComponentVersionAction = workspaceAction
   });
 
 export const deleteComponentVersionAction = workspaceAction
-  .schema(deleteComponentVersionSchema)
+  .inputSchema(deleteComponentVersionSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'deleteComponentVersionAction' });
+    const logger = await serverLogger({ name: 'deleteComponentVersionAction' });
 
     logger.debug({ parsedInput }, 'Deleting component version');
 
-    await get(ComponentVersionService).delete(parsedInput.id);
+    const componentVersionService = await get(ComponentVersionService);
+    await componentVersionService.delete(parsedInput.id);
 
     const { slug } = ctx.workspace;
     revalidatePath(
@@ -80,13 +84,14 @@ export const deleteComponentVersionAction = workspaceAction
   });
 
 export const createReleaseComponentAction = workspaceAction
-  .schema(createReleaseComponentSchema)
+  .inputSchema(createReleaseComponentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const logger = serverLogger({ name: 'createReleaseComponentAction' });
+    const logger = await serverLogger({ name: 'createReleaseComponentAction' });
 
     logger.debug({ parsedInput }, 'Creating component version');
 
-    const resource = await get(ReleaseComponentService).create(parsedInput);
+    const releaseComponentService = await get(ReleaseComponentService);
+    const resource = await releaseComponentService.create(parsedInput);
 
     const { slug } = ctx.workspace;
     revalidatePath(

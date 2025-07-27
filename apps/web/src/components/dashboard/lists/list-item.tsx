@@ -16,6 +16,7 @@ import {
   pluralize,
   prettyPrint,
 } from '@/lib/utils';
+import { ActionTypeFn } from '@/types/action';
 import { ColumnDef } from '@tanstack/react-table';
 import { TrashIcon } from 'lucide-react';
 import { SafeActionFn } from 'next-safe-action';
@@ -123,7 +124,7 @@ export function List<T extends Listable>({
   resources?: T[];
   resourceName?: string;
   actions?: {
-    delete?: SafeActionFn<any, any, any, any, any, any>;
+    delete?: ActionTypeFn<any>;
   };
 }) {
   const router = useRouter();

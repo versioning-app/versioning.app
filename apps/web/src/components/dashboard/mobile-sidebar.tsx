@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation';
 import React from 'react';
 
 export function MobileSidebar() {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const [open, setOpen] = React.useState(false);
 
   return (

@@ -18,6 +18,8 @@ import { SystemRoles } from '@/permissions/defaults';
 import { MembersService } from '@/services/members.service';
 import { WorkspaceScopedRepository } from '@/services/repository/workspace-scoped-repository.service';
 import { RolesService } from '@/services/roles.service';
+import { getSync } from '@/services/service-factory';
+import { AppHeaders } from '@/types/headers';
 import { and, eq, inArray } from 'drizzle-orm';
 import multimatch from 'multimatch';
 import { revalidatePath } from 'next/cache';
@@ -29,10 +31,10 @@ export class PermissionsService extends WorkspaceScopedRepository<
   private _rolesService: RolesService | undefined;
   private readonly membersService: MembersService;
 
-  public constructor() {
-    super(permissions);
+  public constructor(headers: AppHeaders) {
+    super(headers, permissions);
 
-    this.membersService = new MembersService();
+    this.membersService = getSync(MembersService, headers);
   }
 
   /**
@@ -40,7 +42,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
    */
   private get rolesService() {
     if (!this._rolesService) {
-      this._rolesService = new RolesService();
+      this._rolesService = getSync(RolesService, this.headers);
     }
     return this._rolesService;
   }
@@ -140,7 +142,7 @@ export class PermissionsService extends WorkspaceScopedRepository<
   public async getCurrentPermissions() {
     const allPermissions = await this.findAll();
 
-    const member = await this.membersService.currentMember;
+    const member = await this.membersService.currentMember();
 
     const permissionPromises = [
       this.getPermissionsForMembers([member.id], allPermissions),

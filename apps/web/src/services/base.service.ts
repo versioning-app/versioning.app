@@ -1,7 +1,11 @@
-import { serverLogger } from '@/lib/logger/server';
+import { serverLoggerWithHeaders } from '@/lib/logger/server';
+import { type AppHeaders } from '@/types/headers';
 
 export abstract class BaseService {
-  public constructor() {
+  protected readonly headers: AppHeaders;
+
+  public constructor(headers: AppHeaders) {
+    this.headers = headers;
     this.initialise();
   }
 
@@ -10,10 +14,10 @@ export abstract class BaseService {
   }
 
   public get logger() {
-    return serverLogger({ name: this.serviceName });
+    return serverLoggerWithHeaders(this.headers, { name: this.serviceName });
   }
 
   public initialise() {
-    this.logger.debug('Service initialized');
+    this.logger.trace('Service initialized');
   }
 }

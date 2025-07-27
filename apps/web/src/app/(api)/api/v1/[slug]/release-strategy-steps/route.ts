@@ -7,8 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export const GET = (request: NextRequest) =>
   apiRoute(request, async () => {
-    const releaseStrategySteps = await get(
-      ReleaseStrategyStepService,
-    ).findAll();
+    const releaseStrategyStepsService = await get(ReleaseStrategyStepService);
+    const releaseStrategySteps = await releaseStrategyStepsService.findAll();
     return releaseStrategySteps;
   });

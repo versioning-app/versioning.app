@@ -5,11 +5,13 @@ import { ComponentsService } from '@/services/components.service';
 import { get } from '@/services/service-factory';
 
 export default async function Components({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const components = await get(ComponentsService).findAll();
+  const { slug } = await params;
+  const componentsService = await get(ComponentsService);
+  const components = await componentsService.findAll();
 
   return (
     <List

@@ -5,11 +5,14 @@ import { ApprovalGroupService } from '@/services/approval-group.service';
 import { get } from '@/services/service-factory';
 
 export default async function ComponentVersion({
-  params: { slug, id },
+  params,
 }: {
-  params: { slug: string; id: string };
+  params: Promise<{ slug: string; id: string }>;
 }) {
-  const approvalGroups = await get(ApprovalGroupService).findAll();
+  const { slug } = await params;
+
+  const approvalGroupsService = await get(ApprovalGroupService);
+  const approvalGroups = await approvalGroupsService.findAll();
 
   return (
     <List

@@ -23,7 +23,7 @@ function DefaultParent({ children }: { children: React.ReactNode }) {
 }
 
 export default function AutoFormObject<
-  SchemaType extends z.ZodObject<any, any>
+  SchemaType extends z.ZodObject<any, any>,
 >({
   schema,
   form,
@@ -127,7 +127,7 @@ export default function AutoFormObject<
 
         return (
           <FormField
-            control={form.control}
+            control={form.control as any}
             name={key}
             key={key}
             render={({ field }) => {
