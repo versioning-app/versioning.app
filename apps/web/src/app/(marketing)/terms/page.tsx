@@ -2,11 +2,11 @@
 
 export default function TermsPage() {
   return (
-    <main className="max-w-3xl mx-auto px-4 py-10 text-sm text-gray-800">
+    <main className="max-w-3xl mx-auto px-4 py-10 text-sm text-gray-800 dark:text-gray-200">
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
 
       <p className="mb-8">
-        Effective Date: <strong>[Insert Date]</strong>
+        Effective Date: <strong>2025-07-27</strong>
       </p>
 
       <Section title="1. Use of the Service">
@@ -18,6 +18,29 @@ export default function TermsPage() {
           </a>
           , and all applicable laws and regulations. You are responsible for
           your conduct, your data, and ensuring your use is lawful.
+        </p>
+        <p>
+          <strong>Self-hosting:</strong> Use of the software via self-hosted
+          deployments is permitted only for individuals and{' '}
+          <u>small businesses</u>. Medium and large enterprises must obtain a
+          commercial license from versioning.app, even if self-hosting. Please
+          contact us for licensing inquiries.
+        </p>
+        <p>
+          For the purposes of this license, small businesses are defined as an
+          entity that has either:
+          <br />
+          <ul className="list-disc list-inside">
+            <li>Less than 250 employees</li>
+            <li>Annual revenues of less than £1,000,000 GBP</li>
+          </ul>
+          <br />
+          Medium and large enterprises are defined as an entity that has either:
+          <br />
+          <ul className="list-disc list-inside">
+            <li>250 or more employees</li>
+            <li>Annual revenues of £1,000,000 GBP or more</li>
+          </ul>
         </p>
       </Section>
 
@@ -36,7 +59,8 @@ export default function TermsPage() {
           platform is © 2024–2025 versioning.app. Source code may be licensed
           under AGPL-3.0 with non-commercial restrictions. Use of this hosted
           service does not grant rights to use or distribute the source code
-          without a commercial license.
+          without a commercial license. Refer to our GitHub source code for
+          details.
         </p>
       </Section>
 
@@ -120,7 +144,9 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <p className="text-xs mt-12 text-gray-500">Last updated: [Insert Date]</p>
+      <p className="text-xs mt-12 text-gray-500 dark:text-gray-400">
+        Last updated: 2025-07-27
+      </p>
     </main>
   );
 }

@@ -361,6 +361,11 @@ export function Footer() {
             </p>
             <ul className="flex gap-4 mt-4">
               <li>
+                <UnderlinedLink href={Navigation.TERMS}>
+                  Terms of Service
+                </UnderlinedLink>
+              </li>
+              <li>
                 <UnderlinedLink href={Navigation.PRIVACY}>
                   Privacy Policy
                 </UnderlinedLink>
