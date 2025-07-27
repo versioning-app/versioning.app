@@ -10431,6 +10431,7 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^2.29.5"
     syncpack: "npm:^13.0.4"
+    tsx: "npm:^4.20.3"
     turbo: "npm:^2.5.5"
   languageName: unknown
   linkType: soft
