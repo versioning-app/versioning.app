@@ -167,8 +167,8 @@ export function CommandMenu({ ...props }: AlertDialogProps) {
           <CommandSeparator />
           {Object.entries(NavigationItemMappings).map(
             ([key, { links, titles }]) => (
-              <>
-                <CommandGroup key={key} heading={titles?.commandMenu}>
+              <div key={key}>
+                <CommandGroup heading={titles?.commandMenu}>
                   {links.map((link, index) => (
                     <RouterCommandItem
                       key={index}
@@ -179,7 +179,7 @@ export function CommandMenu({ ...props }: AlertDialogProps) {
                   ))}
                 </CommandGroup>
                 <CommandSeparator />
-              </>
+              </div>
             ),
           )}
 

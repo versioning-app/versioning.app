@@ -37,7 +37,7 @@ export const Node = ({ data }: NodeProps) => {
           </Badge>
         </div>
         <div>
-          <p className="text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground">
             {data?.release_step_finalized_at ? (
               <div className="flex">
                 <div>
@@ -53,7 +53,7 @@ export const Node = ({ data }: NodeProps) => {
             ) : (
               'Not yet finalised'
             )}
-          </p>
+          </div>
         </div>
       </div>
 

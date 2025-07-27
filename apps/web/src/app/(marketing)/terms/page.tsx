@@ -1,5 +1,7 @@
 // app/terms/page.tsx
 
+import Link from 'next/link';
+
 export default function TermsPage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-10 text-sm text-gray-800 dark:text-gray-200">
@@ -13,13 +15,13 @@ export default function TermsPage() {
         <p>
           You may use the Service only in compliance with these Terms of
           Service, our{' '}
-          <a href="/privacy" className="text-blue-600 underline">
+          <Link href="/privacy" className="text-blue-600 underline">
             Privacy Policy
-          </a>
+          </Link>
           , our{' '}
-          <a href="/cookies" className="text-blue-600 underline">
+          <Link href="/cookies" className="text-blue-600 underline">
             Cookie Policy
-          </a>
+          </Link>
           , and all applicable laws and regulations. You are responsible for
           your conduct, your data, and ensuring your use is lawful.
         </p>

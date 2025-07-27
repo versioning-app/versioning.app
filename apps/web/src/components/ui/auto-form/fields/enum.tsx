@@ -56,7 +56,7 @@ export default function AutoFormEnum({
             {values.map(([value, label]) => (
               <SelectItem
                 value={isLabelValue(label) ? label.value : label}
-                key={value}
+                key={JSON.stringify(value)}
               >
                 {isLabelValue(label) ? label.label : label}
               </SelectItem>
