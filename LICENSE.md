@@ -2,8 +2,7 @@
 
 Copyright © 2024–2025 versioning.app
 
-This software is licensed under the **GNU Affero General Public License version 3.0 (AGPL-3.0)**  
-with the following additional terms and restrictions:
+This software is made source available under a **modified GNU Affero General Public License version 3.0 (AGPL-3.0)** with the following additional terms and restrictions:
 
 ---
 
@@ -23,9 +22,9 @@ You may **not** use this software or any derivative works for **commercial purpo
 Self-hosting this software is permitted **only for individuals and small businesses**  
 Medium and large enterprises **must obtain a commercial license** from versioning.app even if they self-host the software.
 
-For the purposes of this license, small businesses are defined as those with less than 250 employees or annual revenues of less than £1M GBP. 
+For the purposes of this license, small businesses are defined as those with less than 250 employees or annual revenues of less than £1,000,000 GBP. 
 
-Medium and large enterprises are defined as those with 250 or more employees or annual revenues of £1M GBP or more.
+Medium and large enterprises are defined as those with 250 or more employees or annual revenues of £1,000,000 GBP or more.
 
 ---
 
@@ -44,11 +43,25 @@ For commercial licensing inquiries, please contact:
 
 ---
 
+### Commercial License Supersedes
+
+In the event that you obtain a separate commercial license from versioning.app, the terms of that commercial license shall supersede the terms of this license and any additional terms listed herein. The commercial license will exclusively govern your rights and obligations regarding access to, use of, and distribution of the software and its source code.
+
+---
+
 ### Reservation of Rights
 
 versioning.app reserves the right to modify or relicense future versions of this project under different terms, including more permissive or commercial licenses.
 
 This does **not** apply retroactively to versions already released under AGPL-3.0.
+
+---
+
+### No Automated Data Mining / AI Training
+
+You may not use this codebase, or any part thereof, to train or fine-tune machine learning or artificial intelligence models without **explicit written permission** from versioning.app.
+
+Automated scraping, crawling, or data mining of this repository for the purpose of training AI models is **strictly prohibited**.
 
 ---
 
