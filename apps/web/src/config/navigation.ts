@@ -1,8 +1,13 @@
-export const Navigation = {
+export const PUBLIC_ROUTES = {
+  COOKIES: '/cookies',
   HOME: '/home',
   PRICING: '/pricing',
   PRIVACY: '/privacy',
-  COOKIES: '/cookies',
+  TERMS: '/terms',
+} as const;
+
+export const Navigation = {
+  ...PUBLIC_ROUTES,
   // Requires authentication, if not will redirect to HOME
   DASHBOARD_ROOT: '/',
   DASHBOARD_COMPONENTS: '/components',
@@ -72,6 +77,24 @@ export const DisallowedSlugs = [
   ...AlphabetArray,
   ...NumberArray,
   'new',
+  'policy',
+  'policy-terms',
+  'policy-privacy',
+  'policy-cookies',
+  'policies',
+  'legal',
+  'legals',
+  'superuser',
+  'superadmin',
+  'monitor',
+  'analytics',
+  'graphql',
+  'rest',
+  'mcp',
+  'mcp-api',
+  'sse',
+  'websocket',
+  'websockets',
   'settings',
   'billing',
   'integrations',

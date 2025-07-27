@@ -6,13 +6,12 @@ import { WorkspaceService } from '@/services/workspace.service';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 
+import { PUBLIC_ROUTES } from '@/config/navigation';
+
 const isPublicRoute = createRouteMatcher([
+  ...Object.values(PUBLIC_ROUTES),
   '/',
-  '/home',
-  '/pricing',
   '/about',
-  '/privacy',
-  '/cookies',
   '/api/billing/webhooks/stripe',
 ]);
 
