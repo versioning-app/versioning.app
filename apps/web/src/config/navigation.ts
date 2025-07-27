@@ -1,8 +1,13 @@
-export const Navigation = {
+export const PUBLIC_ROUTES = {
+  COOKIES: '/cookies',
   HOME: '/home',
   PRICING: '/pricing',
   PRIVACY: '/privacy',
-  COOKIES: '/cookies',
+  TERMS: '/terms',
+} as const;
+
+export const Navigation = {
+  ...PUBLIC_ROUTES,
   // Requires authentication, if not will redirect to HOME
   DASHBOARD_ROOT: '/',
   DASHBOARD_COMPONENTS: '/components',
