@@ -224,6 +224,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@autoform/core@npm:*":
+  version: 3.0.0
+  resolution: "@autoform/core@npm:3.0.0"
+  checksum: 10c0/f0b00524b1128aa60805733f7cff9743d3f2b119cb5f7c69ec48277100547aade09e2cea17bd6bd7d345996d3b0534a17e8ad26eca77950750c776d1e6bf74e4
+  languageName: node
+  linkType: hard
+
+"@autoform/react@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@autoform/react@npm:4.0.0"
+  dependencies:
+    "@autoform/core": "npm:*"
+  peerDependencies:
+    "@hookform/resolvers": ^3.9.0
+    react: ^16.8.0 || ^17 || ^18 || ^19
+    react-hook-form: ^7
+  checksum: 10c0/9b1d6a4b42122dc19bcc1381b686248ece45ae10738b9c93351176122c63b03237a76ddfb5e26d33536b4e2685f9b2dbce41d7408b601710d8d5ce44eaaf0622
+  languageName: node
+  linkType: hard
+
+"@autoform/zod@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@autoform/zod@npm:4.0.0"
+  peerDependencies:
+    zod: ^3
+  checksum: 10c0/34e9ca0e7fc02b10409f12b7da4c78d8be2ec0e9358ed66fc0067db7c1964cb2371ca5517d63548c9f0784baaa20afe3d7626dc282eda71d673d27f67726c744
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.26.2, @babel/code-frame@npm:^7.27.1":
   version: 7.27.1
   resolution: "@babel/code-frame@npm:7.27.1"
@@ -10628,6 +10657,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@versioning.app/web@workspace:apps/web"
   dependencies:
+    "@autoform/react": "npm:^4.0.0"
+    "@autoform/zod": "npm:^4.0.0"
     "@clerk/backend": "npm:^2.6.0"
     "@clerk/nextjs": "npm:^6.27.1"
     "@clerk/themes": "npm:2.4.2"

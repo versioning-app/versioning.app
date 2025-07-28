@@ -1,7 +1,6 @@
 'use client';
 
-import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
-import { FieldConfig } from '@/components/ui/auto-form/types';
+import { AutoForm } from '@/components/ui/autoform';
 import { NavigationItem, dashboardRoute } from '@/config/navigation';
 import { parseServerError } from '@/lib/actions/parse-server-error';
 import { AppErrorJson } from '@/lib/error/app.error';
@@ -11,8 +10,10 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { ZodProvider } from '@autoform/zod';
+import { FieldConfig } from '@autoform/react';
 
-export function InputForm<Schema extends z.AnyZodObject>({
+export function InputForm<Schema extends z.ZodObject>({
   schema,
   action,
   resource = 'Resource',
@@ -29,7 +30,6 @@ export function InputForm<Schema extends z.AnyZodObject>({
   const { slug } = useParams<{ slug: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<AppErrorJson>();
-  const [values, setValues] = useState<Partial<z.infer<Schema>>>({});
 
   const onSubmit = async (values: z.infer<Schema>) => {
     setSubmitting(true);
@@ -64,30 +64,25 @@ export function InputForm<Schema extends z.AnyZodObject>({
     if (data) {
       toast.success(`${resource} created`);
       setError(undefined);
-      setValues({});
       console.log('postSubmitLink', postSubmitLink);
       router.push(dashboardRoute(slug, postSubmitLink));
       router.refresh();
     }
   };
 
+  const schemaProvider = new ZodProvider(schema);
+
   return (
     <>
       <p className="text-xl font-bold mb-4">Create {resource}</p>
-      <AutoForm
-        formSchema={schema}
-        values={values}
-        onValuesChange={setValues}
-        onSubmit={onSubmit}
-        fieldConfig={fieldConfig}
-      >
-        <AutoFormSubmit disabled={submitting}>
-          {submitting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            `Create ${resource}`
-          )}
-        </AutoFormSubmit>
+      <AutoForm schema={schemaProvider} onSubmit={onSubmit}>
+        {/* <AutoFormSubmit disabled={submitting}> */}
+        {submitting ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          `Create ${resource}`
+        )}
+        {/* </AutoFormSubmit> */}
         {error && <p className="text-destructive">{error?.message}</p>}
       </AutoForm>
     </>
